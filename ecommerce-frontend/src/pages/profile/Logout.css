@@ -1,0 +1,439 @@
+/* ================================
+   LOGOUT CONTAINER
+================================ */
+
+.logout-container {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  padding-top: 35px;
+  padding-bottom: 60px;
+
+  box-sizing: border-box;
+  background: #ffffff;
+}
+
+
+/* ================================
+   LOGOUT CARD
+================================ */
+
+.logout-card {
+  width: 590px;
+  max-width: calc(100% - 40px);
+
+  min-height: 540px;
+
+  background: #ffffff;
+
+  border-radius: 22px;
+
+  padding: 70px 45px 45px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.10),
+    0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ================================
+   MESSAGE
+================================ */
+
+.logout-message {
+  width: 100%;
+  max-width: 430px;
+
+  margin: 0 auto 25px;
+
+  color: #1f2937;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 15px;
+
+  font-weight: 500;
+
+  line-height: 1.25;
+
+  text-align: center;
+}
+
+
+/* ================================
+   HEADING
+================================ */
+
+.logout-heading {
+  margin: 0 0 25px;
+
+  color: #1f2937;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  text-align: center;
+}
+
+
+/* ================================
+   ILLUSTRATION
+================================ */
+
+.logout-illustration {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  margin: 15px auto 25px;
+}
+
+.logout-illustration svg {
+  width: 180px;
+  height: 180px;
+}
+
+
+/* ================================
+   LOGOUT BUTTON
+================================ */
+
+.logout-action-btn {
+  width: 160px;
+  height: 32px;
+
+  margin: 0 auto;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(
+    to right,
+    #000000,
+    #666666
+  );
+
+  color: #ffffff;
+
+  border: none;
+
+  border-radius: 18px;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  transition: all 0.2s ease;
+}
+
+
+/* ================================
+   BUTTON HOVER
+================================ */
+
+.logout-action-btn:hover {
+  background: linear-gradient(
+    to right,
+    #111111,
+    #555555
+  );
+
+  transform: translateY(-1px);
+}
+
+
+/* ================================
+   BUTTON ACTIVE
+================================ */
+
+.logout-action-btn:active {
+  transform: translateY(0);
+}
+
+
+/* ================================
+   POPUP OVERLAY
+================================ */
+
+.logout-popup-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  z-index: 9999;
+}
+
+
+/* ================================
+   CONFIRMATION POPUP
+================================ */
+
+.logout-popup {
+  width: 100%;
+  max-width: 380px;
+
+  background: #ffffff;
+
+  border-radius: 18px;
+
+  padding: 30px;
+
+  text-align: center;
+
+  box-sizing: border-box;
+
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+
+  animation: logoutPopupShow 0.2s ease;
+}
+
+
+/* ================================
+   POPUP ICON
+================================ */
+
+.logout-popup-icon {
+  width: 50px;
+  height: 50px;
+
+  margin: 0 auto 15px;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 50%;
+
+  background: #eef3f8;
+
+  color: #395b83;
+
+  font-size: 24px;
+
+  font-weight: 700;
+}
+
+
+/* ================================
+   POPUP TITLE
+================================ */
+
+.logout-popup h2 {
+  margin: 0 0 10px;
+
+  color: #222222;
+
+  font-size: 21px;
+
+  font-weight: 700;
+}
+
+
+/* ================================
+   POPUP MESSAGE
+================================ */
+
+.logout-popup p {
+  margin: 0 auto 25px;
+
+  color: #666666;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+
+/* ================================
+   POPUP ACTIONS
+================================ */
+
+.logout-popup-actions {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 10px;
+}
+
+
+/* ================================
+   CANCEL
+================================ */
+
+.logout-cancel-btn {
+  width: 120px;
+  height: 42px;
+
+  background: #070707;
+
+  color: #dbdbdb;
+
+  border: 1px solid #395b83;
+
+  border-radius: 9px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.logout-cancel-btn:hover {
+  background: #353636;
+}
+
+
+/* ================================
+   CONFIRM LOGOUT
+================================ */
+
+.logout-confirm-btn {
+  width: 120px;
+  height: 42px;
+
+  background: #000000;
+
+  color: #ffffff;
+
+  border: none;
+
+  border-radius: 9px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.logout-confirm-btn:hover {
+  background: #3b3b3b;
+}
+
+
+/* ================================
+   POPUP ANIMATION
+================================ */
+
+@keyframes logoutPopupShow {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+/* ================================
+   TABLET
+================================ */
+
+@media (max-width: 768px) {
+
+  .logout-container {
+    padding-top: 30px;
+  }
+
+  .logout-card {
+    width: 90%;
+    min-height: 500px;
+
+    padding: 55px 30px 35px;
+  }
+
+  .logout-message {
+    font-size: 14px;
+  }
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 480px) {
+
+  .logout-container {
+    padding-top: 20px;
+  }
+
+  .logout-card {
+    width: calc(100% - 20px);
+
+    min-height: 480px;
+
+    padding: 45px 20px 30px;
+
+    border-radius: 18px;
+  }
+
+  .logout-message {
+    font-size: 13px;
+  }
+
+  .logout-heading {
+    font-size: 17px;
+  }
+
+  .logout-illustration svg {
+    width: 160px;
+    height: 160px;
+  }
+
+  .logout-action-btn {
+    width: 155px;
+    height: 32px;
+
+    font-size: 12px;
+  }
+
+  .logout-popup-actions {
+    flex-direction: column;
+  }
+
+  .logout-cancel-btn,
+  .logout-confirm-btn {
+    width: 100%;
+  }
+}

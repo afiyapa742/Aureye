@@ -1,0 +1,382 @@
+/* ==========================================
+   COUPON PAGE
+========================================== */
+
+.coupon-page {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+
+  padding: 30px 20px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+}
+
+
+/* ==========================================
+   COUPON BOX
+========================================== */
+
+.coupon-box {
+  width: 100%;
+  max-width: 760px;
+
+  background: #ffffff;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.18);
+
+  padding: 22px 32px 25px;
+
+  box-sizing: border-box;
+}
+
+
+/* ==========================================
+   HEADING
+========================================== */
+
+.coupon-heading {
+  margin: 0 0 18px;
+
+  font-size: 19px;
+
+  font-weight: 500;
+
+  color: #222222;
+
+  text-decoration: underline;
+
+  text-underline-offset: 3px;
+}
+
+
+/* ==========================================
+   COUPON LIST
+========================================== */
+
+.coupon-list {
+  width: 100%;
+}
+
+
+/* ==========================================
+   COUPON ITEM
+========================================== */
+
+.coupon-item {
+  width: 100%;
+
+  min-height: 62px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 20px;
+
+  padding: 12px 4px;
+
+  border-bottom: 1px solid #999999;
+
+  box-sizing: border-box;
+}
+
+.coupon-item:last-child {
+  border-bottom: none;
+}
+
+
+/* ==========================================
+   LEFT
+========================================== */
+
+.coupon-left {
+  flex: 1;
+
+  min-width: 0;
+}
+
+
+/* ==========================================
+   COUPON TITLE
+========================================== */
+
+.coupon-title {
+  font-size: 12px;
+
+  font-weight: 600;
+
+  color: #4d5488;
+
+  margin-bottom: 6px;
+}
+
+
+/* ==========================================
+   DESCRIPTION
+========================================== */
+
+.coupon-description {
+  font-size: 9px;
+
+  color: #333333;
+
+  line-height: 1.5;
+}
+
+
+/* ==========================================
+   FIRST ORDER
+========================================== */
+
+.first-order {
+  color: #16852e;
+
+  font-weight: 600;
+}
+
+
+/* ==========================================
+   RIGHT
+========================================== */
+
+.coupon-right {
+  width: 160px;
+
+  flex-shrink: 0;
+
+  text-align: right;
+}
+
+
+/* ==========================================
+   VALID DATE
+========================================== */
+
+.coupon-valid {
+  font-size: 9px;
+
+  color: #777777;
+
+  margin-bottom: 7px;
+}
+
+
+/* ==========================================
+   COUPON CODE
+========================================== */
+
+.coupon-code {
+  font-size: 9px;
+
+  font-weight: 700;
+
+  color: #222222;
+
+  letter-spacing: 0.4px;
+}
+
+
+/* ==========================================
+   PAGINATION
+========================================== */
+
+.coupon-pagination {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  margin-top: 24px;
+}
+
+
+/* ==========================================
+   PAGE NUMBER
+========================================== */
+
+.coupon-page-number {
+  width: 24px;
+
+  height: 24px;
+
+  border: none;
+
+  background: transparent;
+
+  border-radius: 50%;
+
+  color: #111111;
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.coupon-page-number:hover {
+  background: #eeeeee;
+}
+
+.coupon-page-number.active {
+  background: #eeeeee;
+
+  font-weight: 700;
+}
+
+
+/* ==========================================
+   ARROWS
+========================================== */
+
+.coupon-arrow {
+  width: 25px;
+
+  height: 25px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #000000;
+
+  color: #ffffff;
+
+  font-size: 20px;
+
+  line-height: 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  cursor: pointer;
+
+  padding: 0;
+}
+
+.coupon-arrow:hover:not(:disabled) {
+  background: #333333;
+}
+
+.coupon-arrow:disabled {
+  opacity: 0.35;
+
+  cursor: not-allowed;
+}
+
+
+/* ==========================================
+   EMPTY
+========================================== */
+
+.no-coupons {
+  text-align: center;
+
+  padding: 50px 10px;
+
+  font-size: 14px;
+
+  color: #777777;
+}
+
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.coupon-loading {
+  text-align: center;
+
+  padding: 50px 10px;
+
+  font-size: 14px;
+
+  color: #777777;
+}
+
+
+/* ==========================================
+   ERROR
+========================================== */
+
+.coupon-error {
+  text-align: center;
+
+  padding: 50px 10px;
+
+  font-size: 14px;
+
+  color: #d32f2f;
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+
+  .coupon-page {
+    padding: 20px 10px;
+  }
+
+  .coupon-box {
+    padding: 20px 18px;
+
+    border-radius: 13px;
+  }
+
+  .coupon-heading {
+    font-size: 18px;
+  }
+
+  .coupon-item {
+    gap: 10px;
+
+    padding: 13px 2px;
+  }
+
+  .coupon-title {
+    font-size: 11px;
+  }
+
+  .coupon-description {
+    font-size: 8px;
+  }
+
+  .coupon-right {
+    width: 115px;
+  }
+
+  .coupon-valid {
+    font-size: 8px;
+  }
+
+  .coupon-code {
+    font-size: 8px;
+  }
+}

@@ -1,0 +1,476 @@
+/* ==========================================
+   OVERLAY
+========================================== */
+
+.address-popup-overlay {
+
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  z-index: 9999;
+
+  padding: 20px;
+
+}
+
+
+/* ==========================================
+   POPUP
+========================================== */
+
+.address-popup {
+
+  width: 100%;
+
+  max-width: 520px;
+
+  max-height: 85vh;
+
+  background: #ffffff;
+
+  border-radius: 8px;
+
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+
+  overflow: hidden;
+
+  animation: addressPopupOpen 0.2s ease;
+
+}
+
+
+@keyframes addressPopupOpen {
+
+  from {
+
+    opacity: 0;
+
+    transform: translateY(15px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform: translateY(0);
+
+  }
+
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.address-popup-header {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 20px 22px;
+
+  border-bottom: 1px solid #eeeeee;
+
+}
+
+
+.address-popup-header h2 {
+
+  margin: 0;
+
+  font-size: 20px;
+
+  font-weight: 600;
+
+  color: #222222;
+
+}
+
+
+.address-close-btn {
+
+  width: 36px;
+
+  height: 36px;
+
+  border: none;
+
+  background: transparent;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  cursor: pointer;
+
+  border-radius: 50%;
+
+  color: #555555;
+
+}
+
+
+.address-close-btn:hover {
+
+  background: #f5f5f5;
+
+}
+
+
+/* ==========================================
+   CONTENT
+========================================== */
+
+.address-popup-content {
+
+  padding: 20px;
+
+  max-height: 65vh;
+
+  overflow-y: auto;
+
+}
+
+
+/* ==========================================
+   ADDRESS LIST
+========================================== */
+
+.address-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+}
+
+
+/* ==========================================
+   ADDRESS ITEM
+========================================== */
+
+.address-item {
+
+  display: flex;
+
+  gap: 14px;
+
+  padding: 17px;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+
+}
+
+
+.address-item:hover {
+
+  border-color: #222222;
+
+}
+
+
+.address-item.selected-address {
+
+  border: 2px solid #222222;
+
+  background: #fafafa;
+
+}
+
+
+/* ==========================================
+   RADIO
+========================================== */
+
+.address-radio {
+
+  padding-top: 4px;
+
+}
+
+
+.radio-dot {
+
+  width: 18px;
+
+  height: 18px;
+
+  border: 1.5px solid #999999;
+
+  border-radius: 50%;
+
+  display: block;
+
+  position: relative;
+
+}
+
+
+.radio-dot.active {
+
+  border-color: #222222;
+
+}
+
+
+.radio-dot.active::after {
+
+  content: "";
+
+  position: absolute;
+
+  width: 8px;
+
+  height: 8px;
+
+  background: #222222;
+
+  border-radius: 50%;
+
+  top: 50%;
+
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+}
+
+
+/* ==========================================
+   ADDRESS DETAILS
+========================================== */
+
+.address-details {
+
+  flex: 1;
+
+}
+
+
+.address-top {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 7px;
+
+}
+
+
+.address-top h3 {
+
+  margin: 0;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color: #222222;
+
+}
+
+
+.address-details p {
+
+  margin: 3px 0;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+
+  color: #666666;
+
+}
+
+
+.address-phone {
+
+  margin-top: 8px !important;
+
+  color: #333333 !important;
+
+}
+
+
+/* ==========================================
+   DEFAULT BADGE
+========================================== */
+
+.default-badge {
+
+  font-size: 11px;
+
+  padding: 3px 8px;
+
+  border-radius: 12px;
+
+  background: #eeeeee;
+
+  color: #444444;
+
+}
+
+
+/* ==========================================
+   ADD ADDRESS BUTTON
+========================================== */
+
+.add-address-btn {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  width: 100%;
+
+  padding: 12px 16px;
+
+  margin-top: 16px;
+
+  border: 1px solid #222222;
+
+  background: #ffffff;
+
+  color: #222222;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  border-radius: 4px;
+
+  transition: 0.2s ease;
+
+}
+
+
+.add-address-btn:hover {
+
+  background: #222222;
+
+  color: #ffffff;
+
+}
+
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.address-loading {
+
+  text-align: center;
+
+  padding: 40px 10px;
+
+  color: #777777;
+
+}
+
+
+/* ==========================================
+   NO ADDRESS
+========================================== */
+
+.no-address {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 35px 10px;
+
+  text-align: center;
+
+  color: #777777;
+
+}
+
+
+.no-address p {
+
+  margin: 12px 0 5px;
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+
+  .address-popup {
+
+    max-width: 100%;
+
+    border-radius: 6px;
+
+  }
+
+
+  .address-popup-header {
+
+    padding: 16px;
+
+  }
+
+
+  .address-popup-header h2 {
+
+    font-size: 18px;
+
+  }
+
+
+  .address-popup-content {
+
+    padding: 15px;
+
+  }
+
+
+  .address-item {
+
+    padding: 14px;
+
+  }
+
+}

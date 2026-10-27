@@ -1,0 +1,306 @@
+/* Main Page */
+
+.material-page {
+  width: 100%;
+  background: #ffffff;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+
+/* Header */
+
+.material-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.material-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.material-header p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+
+/* Add Button */
+
+.material-add-btn {
+  border: none;
+  background: #55a7e8;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.material-add-btn:hover {
+  background: #4096d8;
+}
+
+
+/* Search */
+
+.material-search-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 0;
+}
+
+.material-search-section input {
+  width: 300px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  outline: none;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.material-search-section input:focus {
+  border-color: #55a7e8;
+}
+
+
+/* Clear Button */
+
+.material-clear-btn {
+  height: 40px;
+  border: none;
+  background: #ef2929;
+  color: white;
+  padding: 0 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.material-clear-btn:hover {
+  background: #d91f1f;
+}
+
+
+/* Table Container */
+
+.material-table-container {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 5px;
+}
+
+
+/* Table */
+
+.material-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 850px;
+}
+
+.material-table th {
+  background: #f8fafc;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.material-table td {
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #4b5563;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.material-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+
+/* Material Name */
+
+.material-name {
+  font-weight: 500;
+  color: #1f2937 !important;
+}
+
+
+/* Status */
+
+.material-status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.material-status.active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.material-status.inactive {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+
+/* Actions */
+
+.material-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.material-edit-btn,
+.material-delete-btn {
+  border: none;
+  padding: 7px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.material-edit-btn {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.material-edit-btn:hover {
+  background: #bae6fd;
+}
+
+.material-delete-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.material-delete-btn:hover {
+  background: #fecaca;
+}
+
+
+/* Pagination */
+
+.material-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 0;
+}
+
+.material-pagination button {
+  height: 36px;
+  min-width: 36px;
+  padding: 0 12px;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.material-pagination button:hover:not(:disabled) {
+  border-color: #55a7e8;
+  color: #55a7e8;
+}
+
+.material-pagination button.active {
+  background: #55a7e8;
+  color: white;
+  border-color: #55a7e8;
+}
+
+.material-pagination button:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+
+/* ========================= */
+/* Responsive */
+/* ========================= */
+
+@media (max-width: 768px) {
+
+  .material-page {
+    padding: 16px;
+  }
+
+  .material-header {
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .material-header h2 {
+    font-size: 19px;
+  }
+
+  .material-add-btn {
+    white-space: nowrap;
+  }
+
+  .material-search-section {
+    width: 100%;
+  }
+
+  .material-search-section input {
+    width: 100%;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .material-page {
+    padding: 12px;
+  }
+
+  .material-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .material-add-btn {
+    width: 100%;
+  }
+
+  .material-search-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .material-search-section input {
+    width: 100%;
+  }
+
+  .material-clear-btn {
+    width: 100%;
+  }
+
+  .material-table-container {
+    border-radius: 4px;
+  }
+
+  .material-pagination {
+    padding: 16px 0;
+  }
+}

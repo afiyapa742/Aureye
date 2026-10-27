@@ -1,0 +1,39 @@
+
+.offer-announcement-track {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  animation: offer-marquee 30s linear infinite;
+  will-change: transform;
+}
+
+.offer-announcement-content {
+  display: flex;
+  flex: 0 0 100vw;
+  width: 100vw;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  color: #f7f5f2;
+  background-color:#0f1925 ;
+  font-size: 13px;
+  border-bottom: 1px solid #c9a96e;
+}
+
+@keyframes offer-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.offer-announcement:hover .offer-announcement-track {
+  animation-play-state: paused;
+}

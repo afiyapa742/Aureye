@@ -1,0 +1,265 @@
+/* ==============================
+   LOGIN PAGE
+================================ */
+
+.login-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f7fb;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+
+/* ==============================
+   LOGIN CARD
+================================ */
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ==============================
+   HEADING
+================================ */
+
+.login-card h1 {
+  margin: 0 0 30px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+  color: #222222;
+}
+
+
+/* ==============================
+   FORM
+================================ */
+
+.login-card form {
+  width: 100%;
+}
+
+
+/* ==============================
+   LABEL
+================================ */
+
+.login-card label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333333;
+}
+
+
+/* ==============================
+   INPUT
+================================ */
+
+.login-card input {
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  margin-bottom: 20px;
+  border: 1px solid #d9dce3;
+  border-radius: 7px;
+  outline: none;
+  font-size: 14px;
+  box-sizing: border-box;
+  background: #ffffff;
+  transition: border-color 0.2s ease;
+}
+
+.login-card input:focus {
+  border-color: #2563eb;
+}
+
+
+/* ==============================
+   PASSWORD WRAPPER
+================================ */
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+
+/* Password input */
+
+.password-wrapper input {
+  padding-right: 45px;
+}
+
+
+/* ==============================
+   EYE BUTTON
+================================ */
+
+.login-eye-toggle {
+  position: absolute;
+  right: 12px;
+  top: 0;
+  height: 46px;
+  width: 30px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: none;
+  background: transparent;
+  color: #666666;
+  cursor: pointer;
+  padding: 0;
+}
+
+.login-eye-toggle:hover {
+  color: #222222;
+}
+
+
+/* ==============================
+   FORGOT PASSWORD
+================================ */
+
+.forgot-password {
+  text-align: right;
+  margin: -5px 0 22px;
+  font-size: 13px;
+  color: #2563eb;
+  cursor: pointer;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+
+/* ==============================
+   LOGIN BUTTON
+================================ */
+
+.login-button {
+  width: 100%;
+  height: 46px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: #2563eb;
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.login-button:hover {
+  background: #1d4ed8;
+}
+
+.login-button:active {
+  transform: scale(0.98);
+}
+
+
+/* ==============================
+   MESSAGE
+================================ */
+
+.login-message {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 14px;
+  color: #16a34a;
+}
+
+
+/* ==============================
+   TABLET
+================================ */
+
+@media (max-width: 768px) {
+
+  .login-card {
+    max-width: 400px;
+    padding: 32px;
+  }
+
+  .login-card h1 {
+    font-size: 28px;
+  }
+}
+
+
+/* ==============================
+   MOBILE
+================================ */
+
+@media (max-width: 480px) {
+
+  .login-page {
+    padding: 15px;
+  }
+
+  .login-card {
+    padding: 25px 20px;
+    border-radius: 10px;
+  }
+
+  .login-card h1 {
+    font-size: 25px;
+    margin-bottom: 25px;
+  }
+
+  .login-card input {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .login-eye-toggle {
+    height: 44px;
+  }
+
+  .login-button {
+    height: 44px;
+  }
+}
+
+
+/* ==============================
+   SMALL MOBILE
+================================ */
+
+@media (max-width: 360px) {
+
+  .login-page {
+    padding: 10px;
+  }
+
+  .login-card {
+    padding: 22px 16px;
+  }
+
+  .login-card h1 {
+    font-size: 23px;
+  }
+}

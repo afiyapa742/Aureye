@@ -1,0 +1,1202 @@
+/* =========================================
+   OFFER PAGE
+========================================= */
+
+.offer-page {
+  width: 100%;
+  min-height: 100vh;
+
+  background: #f8fafc;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  color: #111827;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   TOP BAR
+========================================= */
+
+.offer-topbar {
+  width: 100%;
+  height: 42px;
+
+  background: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  padding: 0 25px;
+
+  box-sizing: border-box;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.offer-topbar-right {
+  display: flex;
+  align-items: center;
+
+  gap: 22px;
+
+  color: #222222;
+}
+
+.offer-profile {
+  width: 34px;
+  height: 34px;
+
+  border-radius: 50%;
+
+  overflow: hidden;
+}
+
+.offer-profile img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.offer-content {
+  width: 100%;
+
+  padding: 35px 40px 30px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   STATISTICS
+========================================= */
+
+.offer-stat-container {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 18px;
+
+  margin-bottom: 38px;
+}
+
+.offer-stat-card {
+  min-height: 125px;
+
+  padding: 25px 20px;
+
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border: 1px solid #e1e5eb;
+
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+
+  transition: all 0.2s ease;
+}
+
+.offer-stat-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.07);
+}
+
+.offer-stat-card span {
+  font-size: 16px;
+
+  font-weight: 500;
+
+  margin-bottom: 12px;
+
+  letter-spacing: 0.3px;
+}
+
+.offer-stat-card strong {
+  font-size: 34px;
+
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+
+/* =========================================
+   TOTAL OFFER - BLUE
+========================================= */
+
+.offer-stat-card.total {
+  border-top: 3px solid #365378;
+}
+
+.offer-stat-card.total span {
+  color: #365378;
+}
+
+.offer-stat-card.total strong {
+  color: #1e3a5f;
+}
+
+
+/* =========================================
+   ACTIVE OFFER - GREEN
+========================================= */
+
+.offer-stat-card.active {
+  border-top: 3px solid #16a34a;
+}
+
+.offer-stat-card.active span {
+  color: #15803d;
+}
+
+.offer-stat-card.active strong {
+  color: #15803d;
+}
+
+
+/* =========================================
+   UPCOMING OFFER - BLUE
+========================================= */
+
+.offer-stat-card.upcoming {
+  border-top: 3px solid #2563eb;
+}
+
+.offer-stat-card.upcoming span {
+  color: #2563eb;
+}
+
+.offer-stat-card.upcoming strong {
+  color: #1d4ed8;
+}
+
+
+/* =========================================
+   EXPIRED OFFER - RED
+========================================= */
+
+.offer-stat-card.expired {
+  border-top: 3px solid #dc2626;
+}
+
+.offer-stat-card.expired span {
+  color: #dc2626;
+}
+
+.offer-stat-card.expired strong {
+  color: #b91c1c;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.offer-error {
+  width: 100%;
+
+  margin-bottom: 20px;
+
+  padding: 12px 15px;
+
+  box-sizing: border-box;
+
+  border-radius: 8px;
+
+  background: #fef2f2;
+
+  border: 1px solid #fecaca;
+
+  color: #b91c1c;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   TOOLBAR
+========================================= */
+
+.offer-toolbar {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 30px;
+
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.offer-search {
+  width: 490px;
+
+  height: 58px;
+
+  border: 1px solid #cfd6df;
+
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  display: flex;
+
+  align-items: center;
+
+  padding: 0 18px;
+
+  box-sizing: border-box;
+
+  color: #667085;
+
+  transition: all 0.2s ease;
+}
+
+.offer-search:focus-within {
+  border-color: #365378;
+
+  box-shadow: 0 0 0 3px rgba(54, 83, 120, 0.08);
+}
+
+.offer-search svg {
+  flex-shrink: 0;
+
+  color: #667085;
+}
+
+.offer-search input {
+  width: 100%;
+
+  height: 100%;
+
+  border: none;
+
+  outline: none;
+
+  padding: 0 12px;
+
+  font-size: 16px;
+
+  color: #111827;
+
+  background: transparent;
+
+  box-sizing: border-box;
+}
+
+.offer-search input::placeholder {
+  color: #8a94a6;
+}
+
+
+/* =========================================
+   CREATE OFFER BUTTON
+========================================= */
+
+.create-offer-btn {
+  height: 44px;
+
+  min-width: 145px;
+
+  padding: 0 20px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #365378;
+
+  color: #ffffff;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.create-offer-btn:hover {
+  background: #2d4665;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================
+   TABLE WRAPPER
+========================================= */
+
+.offer-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+
+  padding: 0;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border: 1px solid #e1e5eb;
+
+  border-radius: 16px;
+
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.offer-table {
+  width: 100%;
+
+  min-width: 850px;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+
+  background: #ffffff;
+
+  border-radius: 16px;
+
+  overflow: hidden;
+}
+
+
+/* =========================================
+   TABLE HEADER
+========================================= */
+
+.offer-table thead {
+  background: #f8fafc;
+}
+
+.offer-table th {
+  height: 58px;
+
+  padding: 0 20px;
+
+  text-align: left;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  color: #667085;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   TABLE BODY
+========================================= */
+
+.offer-table td {
+  height: 65px;
+
+  padding: 0 20px;
+
+  font-size: 14px;
+
+  color: #374151;
+
+  border-bottom: 1px solid #edf0f4;
+
+  box-sizing: border-box;
+
+  vertical-align: middle;
+}
+
+.offer-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.offer-table tbody tr:hover {
+  background: #fafbfc;
+}
+
+.offer-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* =========================================
+   TABLE COLUMNS
+========================================= */
+
+.offer-table th:nth-child(1),
+.offer-table td:nth-child(1) {
+  width: 19%;
+}
+
+.offer-table th:nth-child(2),
+.offer-table td:nth-child(2) {
+  width: 14%;
+}
+
+.offer-table th:nth-child(3),
+.offer-table td:nth-child(3) {
+  width: 13%;
+}
+
+.offer-table th:nth-child(4),
+.offer-table td:nth-child(4) {
+  width: 15%;
+}
+
+.offer-table th:nth-child(5),
+.offer-table td:nth-child(5) {
+  width: 15%;
+}
+
+.offer-table th:nth-child(6),
+.offer-table td:nth-child(6) {
+  width: 12%;
+}
+
+.offer-table th:nth-child(7),
+.offer-table td:nth-child(7) {
+  width: 12%;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.offer-status {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 82px;
+
+  height: 32px;
+
+  padding: 0 12px;
+
+  border-radius: 8px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  box-sizing: border-box;
+}
+
+
+/* ACTIVE */
+
+.offer-status.active {
+  color: #15803d;
+
+  background: #ecfdf3;
+
+  border: 1px solid #86efac;
+}
+
+
+/* UPCOMING */
+
+.offer-status.upcoming {
+  color: #2563eb;
+
+  background: #eff6ff;
+
+  border: 1px solid #93c5fd;
+}
+
+
+/* EXPIRED */
+
+.offer-status.expired {
+  color: #dc2626;
+
+  background: #fef2f2;
+
+  border: 1px solid #fca5a5;
+}
+
+
+/* =========================================
+   ACTION BUTTONS
+========================================= */
+
+.offer-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.offer-edit-btn,
+.offer-delete-btn {
+  width: 38px;
+
+  height: 38px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #ffffff;
+
+  cursor: pointer;
+
+  border-radius: 7px;
+
+  padding: 0;
+
+  transition: all 0.2s ease;
+}
+
+
+/* EDIT */
+
+.offer-edit-btn {
+  color: #365378;
+
+  border: 1px solid #cbd5e1;
+}
+
+.offer-edit-btn:hover {
+  background: #365378;
+
+  color: #ffffff;
+
+  border-color: #365378;
+}
+
+
+/* DELETE */
+
+.offer-delete-btn {
+  color: #dc2626;
+
+  border: 1px solid #fecaca;
+}
+
+.offer-delete-btn:hover {
+  background: #dc2626;
+
+  color: #ffffff;
+
+  border-color: #dc2626;
+}
+
+
+/* =========================================
+   NO DATA
+========================================= */
+
+.offer-no-data {
+  text-align: center !important;
+
+  padding: 55px 20px !important;
+
+  color: #9ca3af !important;
+
+  font-size: 14px !important;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.offer-loading {
+  min-height: 220px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #6b7280;
+
+  font-size: 14px;
+
+  background: #ffffff;
+
+  border-radius: 12px;
+}
+
+
+/* =========================================
+   PAGINATION
+========================================= */
+
+.offer-pagination {
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 30px;
+
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   PREVIOUS / NEXT
+========================================= */
+
+.pagination-arrow {
+  height: 40px;
+
+  min-width: 100px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 14px;
+
+  background: #ffffff;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 8px;
+
+  color: #374151;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  transition: all 0.2s ease;
+}
+
+.pagination-arrow:hover:not(:disabled) {
+  background: #f8fafc;
+
+  border-color: #365378;
+
+  color: #365378;
+}
+
+.pagination-arrow:disabled {
+  color: #9ca3af;
+
+  background: #f8fafc;
+
+  border-color: #e5e7eb;
+
+  cursor: not-allowed;
+
+  opacity: 1;
+}
+
+
+/* =========================================
+   PAGE NUMBERS
+========================================= */
+
+.pagination-number {
+  width: 40px;
+
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 0;
+
+  background: #ffffff;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 8px;
+
+  color: #374151;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  transition: all 0.2s ease;
+}
+
+.pagination-number:hover {
+  background: #f8fafc;
+
+  border-color: #365378;
+
+  color: #365378;
+}
+
+
+/* =========================================
+   ACTIVE PAGE
+========================================= */
+
+.pagination-number.selected {
+  background: #365378;
+
+  border-color: #365378;
+
+  color: #ffffff;
+
+  font-weight: 600;
+
+  box-shadow: 0 3px 8px rgba(54, 83, 120, 0.2);
+}
+
+.pagination-number.selected:hover {
+  background: #365378;
+
+  border-color: #365378;
+
+  color: #ffffff;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.offer-footer {
+  width: 100%;
+
+  margin-top: 35px;
+
+  padding-bottom: 20px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 25px;
+
+  font-size: 11px;
+
+  color: #667085;
+}
+
+
+/* =========================================
+   DELETE / SUCCESS / ERROR MODALS
+========================================= */
+
+.coupon-modal-overlay {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: rgba(15, 23, 42, 0.5);
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  z-index: 9999;
+}
+
+.coupon-modal {
+  width: 100%;
+
+  max-width: 420px;
+
+  padding: 30px;
+
+  background: #ffffff;
+
+  border-radius: 16px;
+
+  text-align: center;
+
+  box-sizing: border-box;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+
+  animation: offerModalShow 0.2s ease-out;
+}
+
+@keyframes offerModalShow {
+  from {
+    opacity: 0;
+
+    transform: translateY(10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* =========================================
+   MODAL ICON
+========================================= */
+
+.coupon-modal-icon {
+  width: 58px;
+
+  height: 58px;
+
+  margin: 0 auto 18px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 28px;
+
+  font-weight: 700;
+}
+
+.delete-icon {
+  background: #fef2f2;
+
+  color: #dc2626;
+}
+
+.success-icon {
+  background: #ecfdf3;
+
+  color: #16a34a;
+}
+
+
+/* =========================================
+   MODAL TEXT
+========================================= */
+
+.coupon-modal h2 {
+  margin: 0 0 12px;
+
+  color: #111827;
+
+  font-size: 23px;
+
+  font-weight: 700;
+}
+
+.coupon-modal p {
+  margin: 0 auto 25px;
+
+  max-width: 330px;
+
+  color: #667085;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================
+   MODAL BUTTONS
+========================================= */
+
+.coupon-modal-actions {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+}
+
+.modal-cancel-btn,
+.modal-delete-btn,
+.modal-success-btn {
+  width: 125px;
+
+  height: 42px;
+
+  padding: 0;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  transition: all 0.2s ease;
+}
+
+
+/* CANCEL */
+
+.modal-cancel-btn {
+  background: #ffffff;
+
+  color: #374151;
+
+  border: 1px solid #d1d5db;
+}
+
+.modal-cancel-btn:hover {
+  background: #f9fafb;
+
+  border-color: #9ca3af;
+}
+
+
+/* DELETE */
+
+.modal-delete-btn {
+  background: #dc2626;
+
+  color: #ffffff;
+
+  border: 1px solid #dc2626;
+}
+
+.modal-delete-btn:hover {
+  background: #b91c1c;
+
+  border-color: #b91c1c;
+}
+
+
+/* SUCCESS / OK */
+
+.modal-success-btn {
+  background: #365378;
+
+  color: #ffffff;
+
+  border: 1px solid #365378;
+}
+
+.modal-success-btn:hover {
+  background: #2d4665;
+
+  border-color: #2d4665;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
+
+  .offer-content {
+    padding: 30px 25px;
+  }
+
+  .offer-stat-container {
+    gap: 15px;
+  }
+
+  .offer-table th,
+  .offer-table td {
+    padding-left: 15px;
+
+    padding-right: 15px;
+  }
+}
+
+
+@media (max-width: 900px) {
+
+  .offer-stat-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .offer-toolbar {
+    gap: 15px;
+  }
+
+  .offer-search {
+    width: 70%;
+  }
+}
+
+
+@media (max-width: 750px) {
+
+  .offer-content {
+    padding: 25px 20px;
+  }
+
+  .offer-stat-container {
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 12px;
+  }
+
+  .offer-toolbar {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 15px;
+  }
+
+  .offer-search {
+    width: 100%;
+  }
+
+  .create-offer-btn {
+    width: 100%;
+  }
+
+  .offer-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .offer-table {
+    min-width: 850px;
+  }
+
+  .offer-footer {
+    flex-direction: column;
+
+    gap: 6px;
+  }
+
+  .offer-pagination {
+    justify-content: center;
+
+    margin-top: 25px;
+  }
+}
+
+
+@media (max-width: 450px) {
+
+  .offer-content {
+    padding: 20px 12px;
+  }
+
+  .offer-stat-container {
+    grid-template-columns: 1fr;
+  }
+
+  .offer-stat-card {
+    min-height: 110px;
+  }
+
+  .offer-pagination {
+    gap: 6px;
+  }
+
+  .pagination-arrow {
+    min-width: 80px;
+
+    height: 38px;
+  }
+
+  .pagination-number {
+    width: 38px;
+
+    height: 38px;
+  }
+
+  .coupon-modal {
+    padding: 25px 20px;
+  }
+
+  .coupon-modal-actions {
+    gap: 8px;
+  }
+
+  .modal-cancel-btn,
+  .modal-delete-btn,
+  .modal-success-btn {
+    width: 110px;
+  }
+}

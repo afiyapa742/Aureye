@@ -1,0 +1,510 @@
+/* =========================================
+   PAGE
+========================================= */
+
+.coupon-form-page {
+  width: 100%;
+  min-height: calc(100vh - 110px);
+
+  padding: 0 8px 30px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+}
+
+
+/* =========================================
+   FORM CARD
+========================================= */
+
+.coupon-form-card {
+  width: 100%;
+  max-width: 1000px;
+
+  margin: 0 auto;
+
+  padding: 22px 30px 27px;
+
+  box-sizing: border-box;
+
+  background: #e5e7eb;
+
+  border-radius: 5px;
+}
+
+.coupon-form-card h2 {
+  margin: 0 0 23px;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  color: #222;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.coupon-form-card form {
+  width: 100%;
+}
+
+.form-group {
+  width: 100%;
+
+  margin-bottom: 13px;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 5px;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  color: #222;
+}
+
+.form-group label span {
+  color: #111;
+}
+
+
+/* =========================================
+   INPUTS
+========================================= */
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  height: 32px;
+
+  padding: 0 20px;
+
+  box-sizing: border-box;
+
+  border: none;
+  border-radius: 6px;
+
+  outline: none;
+
+  background: #fffafa;
+
+  color: #555;
+
+  font-size: 11px;
+}
+
+.form-group input::placeholder {
+  color: #999;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  box-shadow: 0 0 0 1px #8bbce7;
+}
+
+.form-group input:disabled {
+  background: #eeeeee;
+  cursor: not-allowed;
+}
+
+
+/* =========================================
+   SMALL HELP TEXT
+========================================= */
+
+.form-group small {
+  display: block;
+
+  margin: 4px 0 0 5px;
+
+  font-size: 9px;
+
+  color: #555;
+}
+
+
+/* =========================================
+   TWO COLUMN ROW
+========================================= */
+
+.form-row {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 42px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   AMOUNT INPUT
+========================================= */
+
+.amount-input {
+  width: 100%;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+
+  background: #fffafa;
+
+  border-radius: 6px;
+
+  overflow: hidden;
+}
+
+.amount-input span {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #d1d1d1;
+
+  color: #333;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.amount-input input {
+  height: 32px;
+
+  border-radius: 0;
+
+  background: transparent;
+
+  padding-left: 10px;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.status-group {
+  max-width: 55%;
+}
+
+.status-group select {
+  appearance: auto;
+
+  cursor: pointer;
+}
+
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.coupon-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.cancel-btn,
+.save-btn {
+  min-width: 56px;
+  height: 24px;
+
+  border: none;
+  border-radius: 4px;
+
+  color: #ffffff;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #ff1111;
+}
+
+.cancel-btn:hover {
+  background: #dc0000;
+}
+
+.save-btn {
+  background: #00a84f;
+}
+
+.save-btn:hover {
+  background: #008b40;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.form-error {
+  width: 100%;
+
+  margin-top: 8px;
+  padding: 8px 10px;
+
+  box-sizing: border-box;
+
+  background: #ffe5e5;
+
+  border: 1px solid #ffbebe;
+
+  border-radius: 4px;
+
+  color: #d50000;
+
+  font-size: 10px;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.coupon-form-loading {
+  width: 100%;
+  min-height: 400px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: #777;
+
+  font-size: 13px;
+}
+
+
+/* =========================================
+   MODAL BACKGROUND
+========================================= */
+
+.coupon-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 5000;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  padding: 20px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   MODAL
+========================================= */
+
+.coupon-modal {
+  width: 100%;
+  max-width: 380px;
+
+  padding: 28px 25px 22px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border-radius: 10px;
+
+  text-align: center;
+
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.2);
+
+  animation: couponModalShow 0.2s ease;
+}
+
+@keyframes couponModalShow {
+
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+}
+
+
+/* =========================================
+   MODAL ICON
+========================================= */
+
+.modal-icon {
+  width: 48px;
+  height: 48px;
+
+  margin: 0 auto 12px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 50%;
+
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.modal-icon.success {
+  background: #e4f8ed;
+  color: #00a84f;
+}
+
+.modal-icon.error {
+  background: #ffe5e5;
+  color: #e00000;
+}
+
+.modal-icon.cancel {
+  background: #fff4d9;
+  color: #e09b00;
+}
+
+
+/* =========================================
+   MODAL TEXT
+========================================= */
+
+.coupon-modal h3 {
+  margin: 0 0 8px;
+
+  font-size: 17px;
+
+  color: #222;
+}
+
+.coupon-modal p {
+  margin: 0 auto;
+
+  max-width: 300px;
+
+  line-height: 1.5;
+
+  font-size: 12px;
+
+  color: #777;
+}
+
+
+/* =========================================
+   MODAL BUTTONS
+========================================= */
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 22px;
+}
+
+.modal-primary-btn,
+.modal-secondary-btn,
+.modal-danger-btn {
+  min-width: 80px;
+  height: 34px;
+
+  padding: 0 15px;
+
+  border-radius: 5px;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.modal-primary-btn {
+  border: none;
+
+  background: #69afe9;
+
+  color: #ffffff;
+}
+
+.modal-secondary-btn {
+  border: 1px solid #ddd;
+
+  background: #ffffff;
+
+  color: #555;
+}
+
+.modal-danger-btn {
+  border: none;
+
+  background: #ef4b5f;
+
+  color: #ffffff;
+}
+
+.modal-primary-btn:hover {
+  background: #4d9fdf;
+}
+
+.modal-secondary-btn:hover {
+  background: #f5f5f5;
+}
+
+.modal-danger-btn:hover {
+  background: #d93b4e;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+
+  .coupon-form-card {
+    padding: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+
+    gap: 0;
+  }
+
+  .status-group {
+    max-width: 100%;
+  }
+
+  .coupon-form-actions {
+    justify-content: flex-end;
+  }
+}

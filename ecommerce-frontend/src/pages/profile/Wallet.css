@@ -1,0 +1,330 @@
+
+.wallet-page {
+  width: 100%;
+  padding: 20px;
+  color: #292929;
+}
+
+.wallet-breadcrumb {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.wallet-container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.wallet-container > h2 {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 25px;
+}
+
+.wallet-balance-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+  margin-bottom: 35px;
+}
+
+.wallet-balance-icon {
+  width: 50px;
+  height: 50px;
+  background: #f4eee6;
+  color: #79552d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 22px;
+}
+
+.wallet-balance-card h3 {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0 0 8px;
+}
+
+.wallet-balance-card h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.wallet-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+
+.wallet-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  min-width: 650px;
+}
+
+.wallet-table thead {
+  background: #dedede;
+}
+
+.wallet-table th {
+  padding: 14px 10px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.wallet-table td {
+  padding: 13px 10px;
+  font-size: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.wallet-credit {
+  color: #22ad36;
+}
+
+.wallet-debit {
+  color: #e34b4b;
+}
+
+.wallet-empty {
+  padding: 30px !important;
+  color: #777;
+}
+
+.wallet-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.wallet-pagination button {
+  border: none;
+  background: #000;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.wallet-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.wallet-add-button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.wallet-add-button {
+  width: 155px;
+  padding: 12px;
+  background: #000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.wallet-add-button:hover {
+  background: #333;
+}
+
+/* ADD MONEY MODAL */
+
+.wallet-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 15px;
+}
+
+.wallet-add-modal {
+  width: 100%;
+  max-width: 430px;
+  background: #fff;
+  border-radius: 9px;
+  padding: 25px;
+  position: relative;
+  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15);
+}
+
+.wallet-add-modal h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 18px;
+  color: #222;
+}
+
+.wallet-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  border: none;
+  background: transparent;
+  font-size: 26px;
+  cursor: pointer;
+  color: #555;
+}
+
+.wallet-modal-close:disabled {
+  cursor: not-allowed;
+}
+
+.wallet-add-modal label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 7px;
+  color: #333;
+}
+
+.wallet-add-modal input {
+  width: 100%;
+  height: 42px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0 12px;
+  outline: none;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.wallet-add-modal input:focus {
+  border-color: #555;
+}
+
+.wallet-modal-or {
+  text-align: center;
+  font-size: 13px;
+  color: #777;
+  margin: 12px 0;
+}
+
+.wallet-quick-amounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.wallet-quick-amounts button {
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 5px;
+  padding: 7px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #333;
+}
+
+.wallet-quick-amounts button:hover,
+.wallet-quick-amounts button.wallet-quick-active {
+  border-color: #111;
+  background: #111;
+  color: #fff;
+}
+
+.wallet-payment-method {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.wallet-payment-method strong {
+  font-size: 14px;
+  color: #333;
+  padding-top: 10px;
+  white-space: nowrap;
+}
+
+.wallet-paypal-button {
+  width: 190px;
+  min-height: 40px;
+}
+
+.wallet-paypal-disabled {
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.wallet-payment-loading {
+  text-align: center;
+  font-size: 13px;
+  margin-top: 12px;
+  color: #555;
+}
+
+.wallet-payment-note {
+  font-size: 11px;
+  color: #777;
+  margin-top: 15px;
+  line-height: 1.5;
+}
+
+.wallet-error {
+  color: #d32f2f;
+  font-size: 13px;
+  margin-top: 12px;
+}
+
+@media (max-width: 480px) {
+  .wallet-add-modal {
+    padding: 22px 18px;
+  }
+
+  .wallet-quick-amounts {
+    justify-content: flex-start;
+  }
+
+  .wallet-payment-method {
+    flex-direction: column;
+  }
+
+  .wallet-paypal-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .wallet-page {
+    padding: 10px;
+  }
+
+  .wallet-container {
+    padding: 18px;
+  }
+
+  .wallet-balance-card {
+    padding: 18px;
+  }
+
+}

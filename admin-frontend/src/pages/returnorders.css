@@ -1,0 +1,732 @@
+/* =========================================
+   PAGE
+========================================= */
+
+.return-page {
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  padding: 30px;
+  box-sizing: border-box;
+  background: #f7f8fa;
+  color: #292929;
+}
+
+.return-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.return-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: #242424;
+}
+
+.return-header p {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: #777;
+}
+
+/* =========================================
+   STATS
+========================================= */
+
+.return-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.return-stat-card {
+  min-height: 100px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 21px;
+  font-weight: 600;
+}
+
+.stat-icon.blue { background: #e8f2ff; color: #4285d4; }
+.stat-icon.orange { background: #fff3df; color: #df941e; }
+.stat-icon.green { background: #e8f8ef; color: #24a05a; }
+.stat-icon.purple { background: #f1eaff; color: #8356d6; }
+
+.return-stat-card span {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 13px;
+  color: #777;
+}
+
+.return-stat-card strong {
+  display: block;
+  font-size: 24px;
+  color: #222;
+}
+
+/* =========================================
+   FILTER
+========================================= */
+
+.return-filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.search-box {
+  width: 420px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.search-box span {
+  margin-right: 10px;
+  font-size: 20px;
+  color: #777;
+}
+
+.search-box input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+}
+
+.return-filter select {
+  min-width: 170px;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  color: #555;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* =========================================
+   TABLE
+========================================= */
+
+.return-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+}
+
+.return-table {
+  width: 100%;
+  min-width: 1250px;
+  border-collapse: collapse;
+}
+
+.return-table th {
+  padding: 16px 14px;
+  text-align: left;
+  background: #fafafa;
+  border-bottom: 1px solid #e8e8e8;
+  color: #666;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.return-table td {
+  padding: 16px 14px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+  font-size: 13px;
+  color: #444;
+}
+
+.return-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.return-table tbody tr:hover {
+  background: #fcfcfc;
+}
+
+.empty-row {
+  text-align: center !important;
+  padding: 50px !important;
+  color: #888 !important;
+}
+
+/* =========================================
+   CUSTOMER / PRODUCT
+========================================= */
+
+.customer-cell,
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.customer-cell {
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 150px;
+}
+
+.customer-cell strong {
+  font-size: 13px;
+  color: #333;
+}
+
+.customer-cell span,
+.product-cell span {
+  font-size: 11px;
+  color: #888;
+}
+
+.product-cell {
+  min-width: 190px;
+}
+
+.product-cell img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 7px;
+  border: 1px solid #eee;
+  background: #f8f8f8;
+}
+
+.product-cell div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.product-cell strong {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.reason-text {
+  display: block;
+  max-width: 150px;
+  line-height: 1.4;
+  color: #666;
+}
+
+/* =========================================
+   BADGES
+========================================= */
+
+.payment-badge,
+.delivery-badge,
+.return-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.payment-badge.online {
+  background: #e9f2ff;
+  color: #3778c7;
+}
+
+.payment-badge.wallet {
+  background: #f2eaff;
+  color: #8052c8;
+}
+
+.payment-badge.cod {
+  background: #fff1df;
+  color: #c77a17;
+}
+
+.delivery-badge.delivered {
+  background: #e7f8ee;
+  color: #218a50;
+}
+
+.return-status.return_requested {
+  background: #fff2db;
+  color: #c57a14;
+}
+
+.return-status.return_approved {
+  background: #e9f1ff;
+  color: #3975c5;
+}
+
+.return-status.returned {
+  background: #e6f8ed;
+  color: #23884e;
+}
+
+/* =========================================
+   REFUND / ACTION
+========================================= */
+
+.refund-cell {
+  min-width: 130px;
+}
+
+.refund-cell strong {
+  display: block;
+  margin-top: 4px;
+}
+
+.refund-completed {
+  color: #219653;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.refund-waiting {
+  color: #c7831b;
+  font-size: 12px;
+}
+
+.refund-ready-text {
+  color: #6750c8;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.accept-btn,
+.refund-btn {
+  padding: 8px 13px;
+  border: none;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.accept-btn {
+  background: #299357;
+  color: #fff;
+}
+
+.accept-btn:hover {
+  background: #218248;
+}
+
+.refund-btn {
+  background: #6750c8;
+  color: #fff;
+}
+
+.refund-btn:hover {
+  background: #5742b0;
+}
+
+/* =========================================
+   PAGINATION
+========================================= */
+.return-pagination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+.pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pagination-buttons button {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #374151;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-buttons button:hover:not(:disabled):not(.active) {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.pagination-buttons button.active {
+  background: #111827;
+  border-color: #111827;
+  color: #fff;
+}
+
+.pagination-buttons button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-dots {
+  padding: 0 6px;
+  color: #6b7280;
+  user-select: none;
+}
+/* =========================================
+   MODALS
+========================================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+}
+
+.action-modal,
+.error-modal {
+  width: 100%;
+  max-width: 520px;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 30px;
+  position: relative;
+  background: #fff;
+  border-radius: 14px;
+  box-sizing: border-box;
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #f2f2f2;
+  color: #555;
+  font-size: 21px;
+  cursor: pointer;
+}
+
+.modal-heading,
+.refund-title {
+  text-align: center;
+}
+
+.accept-icon,
+.wallet-icon {
+  width: 55px;
+  height: 55px;
+  margin: 0 auto 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #e8f8ef;
+  color: #299357;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.wallet-icon {
+  background: #f1eaff;
+  color: #6750c8;
+}
+
+.modal-heading h2,
+.refund-title h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.modal-heading p,
+.refund-title p {
+  margin: 0 0 20px;
+  color: #777;
+  font-size: 13px;
+}
+
+.modal-product {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 15px;
+  margin-bottom: 18px;
+  background: #fafafa;
+  border-radius: 10px;
+}
+
+.modal-product img {
+  width: 62px;
+  height: 62px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.modal-product h3 {
+  margin: 0 0 5px;
+  font-size: 15px;
+}
+
+.modal-product p {
+  margin: 0;
+  color: #777;
+  font-size: 12px;
+}
+
+.modal-details,
+.refund-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.modal-details > div,
+.refund-summary > div {
+  padding: 12px;
+  background: #f8f8f8;
+  border-radius: 8px;
+}
+
+.modal-details span,
+.refund-summary span {
+  display: block;
+  margin-bottom: 5px;
+  color: #888;
+  font-size: 11px;
+}
+
+.modal-details strong,
+.refund-summary strong {
+  font-size: 13px;
+}
+
+.return-notice,
+.refund-price-notice,
+.wallet-notice {
+  display: flex;
+  gap: 10px;
+  padding: 13px;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  background: #f4f7ff;
+  color: #49618c;
+}
+
+.return-notice p,
+.refund-price-notice p,
+.wallet-notice p {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 12px;
+}
+
+.confirm-text {
+  margin: 0 0 18px;
+  color: #444;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.refund-amount {
+  color: #6750c8;
+  font-size: 17px !important;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn,
+.sure-accept-btn,
+.sure-refund-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #eee;
+  color: #555;
+}
+
+.sure-accept-btn {
+  background: #299357;
+  color: #fff;
+}
+
+.sure-refund-btn {
+  background: #6750c8;
+  color: #fff;
+}
+
+.cancel-btn:disabled,
+.sure-accept-btn:disabled,
+.sure-refund-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-modal {
+  max-width: 400px;
+  text-align: center;
+}
+
+.error-icon {
+  width: 55px;
+  height: 55px;
+  margin: 0 auto 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #ffe8eb;
+  color: #d93648;
+  font-size: 27px;
+  font-weight: 700;
+}
+
+.error-modal h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.error-modal p {
+  margin: 0 0 20px;
+  line-height: 1.5;
+  color: #666;
+  font-size: 13px;
+}
+
+.error-ok-btn {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 7px;
+  background: #d93648;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
+  .return-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .return-filter {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .return-filter select {
+    width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .return-page {
+    padding: 20px 15px;
+  }
+
+  .return-header h1 {
+    font-size: 22px;
+  }
+
+  .return-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .return-pagination {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .pagination-buttons {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .action-modal {
+    padding: 22px;
+    max-height: 94vh;
+  }
+
+  .modal-details,
+  .refund-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .cancel-btn,
+  .sure-accept-btn,
+  .sure-refund-btn {
+    width: 100%;
+  }
+}

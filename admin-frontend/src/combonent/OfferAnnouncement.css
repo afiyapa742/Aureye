@@ -1,0 +1,231 @@
+/* =========================================
+   OFFER ANNOUNCEMENT BAR
+========================================= */
+
+.offer-announcement {
+  width: 100%;
+  height: 48px;
+
+  background: #1f2d3d;
+
+  color: #ffffff;
+
+  border-top: 1px solid #d4a72c;
+  border-bottom: 1px solid #d4a72c;
+
+  display: flex;
+  align-items: center;
+
+  overflow: hidden;
+
+  position: relative;
+
+  z-index: 20;
+}
+
+
+/* =========================================
+   TRACK
+========================================= */
+
+.offer-announcement-track {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.offer-announcement-content {
+  width: max-content;
+
+  display: flex;
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  padding: 0 30px;
+
+  white-space: nowrap;
+
+  animation: offerAnnouncementMove 18s linear
+    infinite;
+}
+
+
+/* =========================================
+   ICON
+========================================= */
+
+.offer-announcement-icon {
+  color: #d4a72c;
+
+  font-size: 17px;
+
+  display: flex;
+  align-items: center;
+}
+
+
+/* =========================================
+   OFFER NAME
+========================================= */
+
+.offer-announcement-name {
+  font-size: 14px;
+
+  font-weight: 500;
+
+  letter-spacing: 0.4px;
+
+  color: #ffffff;
+}
+
+
+/* =========================================
+   SEPARATOR
+========================================= */
+
+.offer-announcement-separator {
+  color: #d4a72c;
+
+  font-size: 16px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================
+   DISCOUNT
+========================================= */
+
+.offer-announcement-discount {
+  color: #d4a72c;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.6px;
+}
+
+
+/* =========================================
+   DOT
+========================================= */
+
+.offer-announcement-dot {
+  color: #d4a72c;
+
+  font-size: 18px;
+
+  margin-left: 3px;
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.offer-announcement-message {
+  color: #ffffff;
+
+  font-size: 13px;
+
+  opacity: 0.9;
+
+  letter-spacing: 0.3px;
+}
+
+
+/* =========================================
+   ANIMATION
+========================================= */
+
+@keyframes offerAnnouncementMove {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+
+/* =========================================
+   HOVER
+========================================= */
+
+.offer-announcement:hover
+  .offer-announcement-content {
+  animation-play-state: paused;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+  .offer-announcement {
+    height: 42px;
+  }
+
+  .offer-announcement-content {
+    gap: 7px;
+
+    padding: 0 20px;
+  }
+
+  .offer-announcement-name {
+    font-size: 12px;
+  }
+
+  .offer-announcement-discount {
+    font-size: 13px;
+  }
+
+  .offer-announcement-message {
+    font-size: 11px;
+  }
+
+  .offer-announcement-icon {
+    font-size: 14px;
+  }
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+  .offer-announcement {
+    height: 40px;
+  }
+
+  .offer-announcement-content {
+    gap: 6px;
+  }
+
+  .offer-announcement-name {
+    font-size: 11px;
+  }
+
+  .offer-announcement-discount {
+    font-size: 12px;
+  }
+
+  .offer-announcement-message {
+    font-size: 10px;
+  }
+}

@@ -1,0 +1,240 @@
+/* =========================================
+   TOP NAVBAR
+========================================= */
+
+.top-navbar {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  right: 0;
+
+  height: 70px;
+
+  background-color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  padding: 0 25px;
+
+  box-sizing: border-box;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  z-index: 1000;
+}
+
+
+/* =========================================
+   RIGHT SIDE
+========================================= */
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+
+/* =========================================
+   ICON BUTTON
+========================================= */
+
+.navbar-icon {
+  width: 40px;
+  height: 40px;
+
+  border: none;
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  color: #555;
+
+  border-radius: 50%;
+
+  transition: 0.2s ease;
+}
+
+.navbar-icon:hover {
+  background-color: #f3f4f6;
+  color: #d4a537;
+}
+
+
+/* =========================================
+   PROFILE
+========================================= */
+
+.navbar-profile {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 5px 10px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.navbar-profile:hover {
+  background-color: #f7f7f7;
+}
+
+
+/* =========================================
+   PROFILE IMAGE
+========================================= */
+
+.navbar-profile img {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  border: 2px solid #d4a537;
+
+  background-color: #eeeeee;
+}
+
+
+/* =========================================
+   PROFILE INFORMATION
+========================================= */
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+}
+
+
+.profile-name {
+  font-size: 14px;
+
+  font-weight: 600;
+
+  color: #333333;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 768px) {
+
+  .top-navbar {
+    left: 200px;
+
+    height: 65px;
+
+    padding: 0 18px;
+  }
+
+  .navbar-right {
+    gap: 12px;
+  }
+
+  .navbar-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .navbar-profile {
+    padding: 4px 7px;
+  }
+
+  .navbar-profile img {
+    width: 38px;
+    height: 38px;
+  }
+
+  .profile-name {
+    font-size: 13px;
+  }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+  .top-navbar {
+    left: 180px;
+
+    height: 60px;
+
+    padding: 0 10px;
+  }
+
+  .navbar-right {
+    gap: 5px;
+  }
+
+  .navbar-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .navbar-profile {
+    gap: 5px;
+
+    padding: 3px;
+  }
+
+  .navbar-profile img {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* Hide Admin text on small mobile */
+
+  .profile-info {
+    display: none;
+  }
+}
+
+
+/* =========================================
+   VERY SMALL MOBILE
+========================================= */
+
+@media (max-width: 360px) {
+
+  .top-navbar {
+    left: 160px;
+
+    padding: 0 6px;
+  }
+
+  .navbar-right {
+    gap: 2px;
+  }
+
+  .navbar-profile img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .navbar-icon {
+    width: 30px;
+    height: 30px;
+  }
+}

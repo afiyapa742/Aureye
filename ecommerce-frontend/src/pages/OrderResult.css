@@ -1,0 +1,566 @@
+/* ==========================================
+   ORDER RESULT / SUCCESS PAGE
+========================================== */
+
+.order-success-page {
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 28px 24px 60px;
+  background: #f6f7f9;
+  color: #222;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.order-success-container {
+  width: 100%;
+  max-width: 1680px;
+  margin: 0 auto;
+}
+
+/* ==========================================
+   CHECKOUT PROGRESS TRACKER
+========================================== */
+
+.success-checkout-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  margin: 0 auto 38px;
+}
+
+.success-checkout-steps .checkout-step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.success-checkout-steps .step-circle {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #222;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.success-checkout-steps .checkout-step span {
+  color: #dca52c;
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.success-checkout-steps .step-line {
+  width: 120px;
+  height: 2px;
+  flex-shrink: 1;
+  background: #d5d5d5;
+}
+
+.success-checkout-steps .step-line.completed {
+  background: #222;
+}
+
+
+
+
+
+
+
+
+/* ==========================================
+   HIDE EXTRA SECTIONS NOT IN FIGMA
+========================================== */
+
+.success-breadcrumb,
+.success-hero,
+.success-main-column,
+.success-sidebar {
+  display: none;
+}
+
+/* ==========================================
+   MAIN FIGMA LAYOUT
+========================================== */
+
+.figma-order-success {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  align-items: center;
+  gap: 35px;
+  width: 100%;
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 2px 12px 0;
+  box-sizing: border-box;
+}
+
+/* ==========================================
+   LEFT SIDE
+========================================== */
+
+.figma-success-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding: 4px 0 0;
+  text-align: center;
+}
+
+.figma-success-left h1 {
+  margin: 0 0 14px;
+  color: #242424;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.figma-success-description {
+  margin: 0;
+  color: #383838;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* ==========================================
+   SUCCESS ILLUSTRATION
+========================================== */
+
+.figma-success-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 350px;
+  height: 200px;
+  margin: 15px auto 0;
+  overflow: hidden;
+}
+
+.figma-success-illustration svg {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: 100%;
+  max-height: 190px;
+}
+
+/* ==========================================
+   EMAIL MESSAGE
+========================================== */
+
+.figma-email-note {
+  max-width: 390px;
+  margin: -2px 0 14px;
+  color: #333333;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 10px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ==========================================
+   ACTION BUTTONS
+========================================== */
+
+.figma-success-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.figma-view-button,
+.figma-continue-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 27px;
+  padding: 0 13px;
+  border-radius: 5px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.figma-view-button {
+  border: 1px solid #24587d;
+  background: #24587d;
+  color: #ffffff;
+}
+
+.figma-view-button:hover {
+  background: #173f5b;
+}
+
+.figma-continue-button {
+  border: 1px solid #b9b18a;
+  background: #ffffff;
+  color: #222222;
+}
+
+.figma-continue-button:hover {
+  background: #f8f5e9;
+}
+
+/* ==========================================
+   RIGHT PAYMENT SUCCESS CARD
+========================================== */
+
+.figma-payment-card {
+  width: 100%;
+  min-width: 0;
+  padding: 28px 24px 24px;
+  box-sizing: border-box;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 7px 28px rgba(0, 0, 0, 0.065);
+}
+
+/* ==========================================
+   PAYMENT SUCCESS ICON
+========================================== */
+
+.figma-payment-status-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  background: #e9edf3;
+  color: #ffffff;
+}
+
+.figma-payment-status-icon svg {
+  width: 21px;
+  height: 21px;
+  padding: 4px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: #405b82;
+}
+
+/* ==========================================
+   PAYMENT TITLE
+========================================== */
+
+.figma-payment-card h2 {
+  margin: 0 0 23px;
+  color: #777777;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* ==========================================
+   PAYMENT DETAILS DIVIDERS
+========================================== */
+
+.figma-payment-divider {
+  width: 100%;
+  height: 1px;
+  margin: 0 0 15px;
+  background: #eeeeee;
+}
+
+.figma-amount-divider {
+  margin: 12px 0 14px;
+}
+
+/* ==========================================
+   PAYMENT INFORMATION ROWS
+========================================== */
+
+.figma-payment-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.figma-payment-row span {
+  flex: 0 0 auto;
+  color: #888888;
+  font-weight: 400;
+}
+
+.figma-payment-row strong {
+  max-width: 65%;
+  color: #292929;
+  font-size: 10px;
+  font-weight: 500;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   AMOUNT ROW
+========================================== */
+
+.figma-amount-row {
+  margin-bottom: 2px;
+}
+
+.figma-amount-row span {
+  color: #777777;
+}
+
+.figma-amount-row strong {
+  color: #222222;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ==========================================
+   LOADING AND ERROR
+========================================== */
+
+.order-success-loading,
+.order-success-error {
+  max-width: 420px;
+  margin: 65px auto;
+  padding: 30px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.order-success-loading p,
+.order-success-error p {
+  color: #666666;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.success-loader {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #e5e5e5;
+  border-top-color: #222222;
+  border-radius: 50%;
+  animation: success-spin 0.8s linear infinite;
+}
+
+.success-primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border: 1px solid #222222;
+  border-radius: 5px;
+  background: #222222;
+  color: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+@keyframes success-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 760px) {
+  .order-success-page {
+    padding: 10px 16px 35px;
+  }
+
+  .figma-order-success {
+    grid-template-columns: minmax(0, 1fr) 290px;
+    gap: 20px;
+    padding: 0;
+  }
+
+  .figma-success-left h1 {
+    font-size: 18px;
+  }
+
+  .figma-success-description {
+    font-size: 10px;
+  }
+
+  .figma-success-illustration {
+    height: 165px;
+  }
+
+  .figma-payment-card {
+    padding: 23px 18px;
+  }
+
+  .figma-payment-row {
+    font-size: 10px;
+  }
+
+  .figma-payment-row strong {
+    font-size: 9px;
+  }
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 560px) {
+  .order-success-page {
+    padding: 10px 12px 30px;
+  }
+
+  .success-checkout-steps {
+    max-width: 390px;
+    margin-bottom: 30px;
+  }
+
+  .success-checkout-steps .checkout-step {
+    flex-basis: 88px;
+  }
+
+  .success-checkout-steps .step-circle {
+    width: 31px;
+    height: 31px;
+    min-width: 31px;
+    font-size: 9px;
+  }
+
+  .success-checkout-steps .checkout-step span {
+    font-size: 8px;
+  }
+
+  .success-checkout-steps .step-line {
+    margin-top: 15px;
+  }
+
+  .figma-order-success {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+    max-width: 400px;
+    padding: 0 5px;
+  }
+
+  .figma-success-left {
+    order: 1;
+  }
+
+  .figma-success-left h1 {
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+
+  .figma-success-description {
+    max-width: 340px;
+    font-size: 11px;
+  }
+
+  .figma-success-illustration {
+    max-width: 300px;
+    height: 180px;
+    margin-top: 12px;
+  }
+
+  .figma-email-note {
+    font-size: 10px;
+  }
+
+  .figma-payment-card {
+    order: 2;
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    padding: 25px 22px;
+    border-radius: 16px;
+  }
+
+  .figma-payment-card h2 {
+    font-size: 13px;
+  }
+
+  .figma-payment-row {
+    margin-bottom: 14px;
+    font-size: 11px;
+  }
+
+  .figma-payment-row strong {
+    font-size: 10px;
+  }
+
+  .figma-amount-row strong {
+    font-size: 12px;
+  }
+}
+
+/* ==========================================
+   SMALL MOBILE
+========================================== */
+
+@media (max-width: 360px) {
+  .success-checkout-steps .checkout-step {
+    flex-basis: 76px;
+  }
+
+  .success-checkout-steps .step-line {
+    min-width: 18px;
+  }
+
+  .success-checkout-steps .checkout-step span {
+    font-size: 7px;
+  }
+
+  .figma-success-left h1 {
+    font-size: 18px;
+  }
+
+  .figma-success-actions {
+    gap: 6px;
+  }
+
+  .figma-view-button,
+  .figma-continue-button {
+    padding: 0 9px;
+    font-size: 8px;
+  }
+
+  .figma-payment-card {
+    padding: 22px 16px;
+  }
+}
+@media (max-width: 1000px) {
+  .success-main-grid { grid-template-columns: 1fr; }
+  .success-sidebar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .success-action-buttons, .success-support-note { grid-column: 1 / -1; }
+}
+
+@media (max-width: 700px) {
+  .tracking-timeline { gap: 0; }
+  .tracking-step-label { font-size: 10px; }
+  .tracking-step-marker { width: 32px; height: 32px; }
+  .tracking-connector { top: 15px; left: calc(50% + 17px); width: calc(100% - 25px); }
+}

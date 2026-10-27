@@ -1,0 +1,284 @@
+
+/* =========================================
+   SIDEBAR
+========================================= */
+
+.sidebar {
+  width: 230px;
+  height: 100vh;
+  background-color: #4b5869;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+/* =========================================
+   LOGO
+========================================= */
+
+.sidebar-logo {
+  width: 100%;
+  height: 90px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-bottom: 1px solid rgba(225, 216, 195, 0.25);
+  flex-shrink: 0;
+}
+
+.sidebar-logo img {
+  width: 120px;
+  max-height: 55px;
+  object-fit: contain;
+}
+
+
+/* =========================================
+   MENU
+========================================= */
+
+.sidebar-menu {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 20px 12px;
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   ALL MENU LINKS
+========================================= */
+
+.sidebar-menu a {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 13px 15px;
+  margin-bottom: 5px;
+
+  color: #daccab;
+  background: transparent;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  text-align: left;
+  text-decoration: none;
+
+  border: none;
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+
+/* =========================================
+   MENU HOVER
+========================================= */
+
+.sidebar-menu a:hover {
+  background-color: rgba(212, 165, 55, 0.15);
+  color: #dbc897;
+}
+
+
+/* =========================================
+   ACTIVE MENU
+========================================= */
+
+.sidebar-menu a.active {
+  background-color: #d3c095;
+  color: #2f3542;
+  font-weight: 600;
+}
+
+.sidebar-menu a.active:hover {
+  background-color: #f3e0b5;
+  color: #2f3542;
+}
+
+
+/* =========================================
+   LOGOUT BUTTON
+   Same style as other menu links
+========================================= */
+
+.sidebar-menu .sidebar-logout {
+  all: unset;
+
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 13px 15px;
+  margin-bottom: 5px;
+
+  color: #daccab;
+  background: transparent;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  text-align: left;
+
+  border: none;
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+
+/* =========================================
+   LOGOUT HOVER
+========================================= */
+
+.sidebar-menu .sidebar-logout:hover {
+  background-color: rgba(212, 165, 55, 0.15);
+  color: #dbc897;
+}
+
+
+/* =========================================
+   LOGOUT FOCUS
+========================================= */
+
+.sidebar-menu .sidebar-logout:focus-visible {
+  outline: 2px solid #d3c095;
+  outline-offset: -2px;
+}
+
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+.sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(232, 209, 155, 0.5);
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .sidebar-logo {
+    height: 70px;
+  }
+
+  .sidebar-logo img {
+    width: 105px;
+    max-height: 50px;
+  }
+
+  .sidebar-menu {
+    padding: 15px 10px;
+  }
+
+  .sidebar-menu a,
+  .sidebar-menu .sidebar-logout {
+    font-size: 13px;
+    padding: 11px 12px;
+    margin-bottom: 4px;
+  }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 180px;
+  }
+
+  .sidebar-logo {
+    height: 65px;
+  }
+
+  .sidebar-logo img {
+    width: 95px;
+    max-height: 45px;
+  }
+
+  .sidebar-menu {
+    padding: 12px 8px;
+  }
+
+  .sidebar-menu a,
+  .sidebar-menu .sidebar-logout {
+    font-size: 12px;
+    padding: 10px;
+    margin-bottom: 3px;
+  }
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 360px) {
+  .sidebar {
+    width: 165px;
+  }
+
+  .sidebar-logo {
+    height: 60px;
+  }
+
+  .sidebar-logo img {
+    width: 85px;
+    max-height: 40px;
+  }
+
+  .sidebar-menu {
+    padding: 10px 6px;
+  }
+
+  .sidebar-menu a,
+  .sidebar-menu .sidebar-logout {
+    font-size: 11px;
+    padding: 9px;
+    margin-bottom: 3px;
+  }
+}

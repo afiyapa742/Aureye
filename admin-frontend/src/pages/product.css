@@ -1,0 +1,700 @@
+/* =========================================
+   PRODUCT PAGE
+========================================= */
+
+.product-page {
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 35px 40px;
+
+  box-sizing: border-box;
+
+  background: #f8fafc;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 28px;
+}
+
+.product-header h1 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.product-header p {
+  margin: 6px 0 0;
+
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   ADD PRODUCT BUTTON
+========================================= */
+
+.add-product-btn {
+  height: 44px;
+
+  padding: 0 20px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #365378;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.add-product-btn:hover {
+  background: #2d4665;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================
+   PRODUCT STATS
+========================================= */
+
+.product-stats {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 18px;
+
+  margin-bottom: 25px;
+}
+
+.product-stat-card {
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+
+  padding: 20px 22px;
+
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+
+  transition: 0.2s ease;
+}
+
+.product-stat-card:hover {
+  transform: translateY(-1px);
+
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.06);
+}
+
+.product-stat-card h3 {
+  margin: 0 0 8px;
+
+  font-size: 14px;
+
+  font-weight: 500;
+}
+
+.product-stat-card p {
+  margin: 0;
+
+  font-size: 26px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================
+   TOTAL PRODUCTS - BLUE
+========================================= */
+
+.product-stat-card:nth-child(1) {
+  border-top: 3px solid #365378;
+}
+
+.product-stat-card:nth-child(1) h3 {
+  color: #365378;
+}
+
+.product-stat-card:nth-child(1) p {
+  color: #1e3a5f;
+}
+
+
+/* =========================================
+   ACTIVE PRODUCTS - GREEN
+========================================= */
+
+.product-stat-card:nth-child(2) {
+  border-top: 3px solid #16a34a;
+}
+
+.product-stat-card:nth-child(2) h3 {
+  color: #15803d;
+}
+
+.product-stat-card:nth-child(2) p {
+  color: #15803d;
+}
+
+
+/* =========================================
+   INACTIVE PRODUCTS - RED
+========================================= */
+
+.product-stat-card:nth-child(3) {
+  border-top: 3px solid #dc2626;
+}
+
+.product-stat-card:nth-child(3) h3 {
+  color: #dc2626;
+}
+
+.product-stat-card:nth-child(3) p {
+  color: #b91c1c;
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.product-search-section {
+  width: 100%;
+
+  display: flex;
+
+  justify-content: flex-start;
+
+  margin-bottom: 30px;
+}
+
+.product-search-section input {
+  width: 380px;
+
+  height: 52px;
+
+  padding: 0 18px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  color: #111827;
+
+  font-size: 15px;
+
+  outline: none;
+
+  box-sizing: border-box;
+
+  transition: 0.2s ease;
+}
+
+.product-search-section input::placeholder {
+  color: #777f8a;
+}
+
+.product-search-section input:focus {
+  border-color: #365378;
+
+  box-shadow: 0 0 0 3px rgba(54, 83, 120, 0.1);
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.product-error {
+  margin-bottom: 18px;
+
+  padding: 12px 15px;
+
+  border-radius: 8px;
+
+  background: #fef2f2;
+
+  border: 1px solid #fecaca;
+
+  color: #b91c1c;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   TABLE CONTAINER
+========================================= */
+
+.product-table-container {
+  width: 100%;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+
+  overflow-x: auto;
+
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.04);
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.product-table {
+  width: 100%;
+
+  min-width: 750px;
+
+  border-collapse: collapse;
+}
+
+.product-table thead {
+  background: #f8fafc;
+}
+
+.product-table th {
+  padding: 16px 28px;
+
+  text-align: left;
+
+  color: #6b7280;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.product-table td {
+  padding: 22px 28px;
+
+  color: #374151;
+
+  font-size: 14px;
+
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.product-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.product-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.product-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* =========================================
+   ACTIVE / INACTIVE DROPDOWN
+========================================= */
+
+.status-select-wrapper {
+  width: 175px;
+
+  height: 46px;
+
+  position: relative;
+
+  border-radius: 9px;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  transition: 0.2s ease;
+}
+
+
+/* ACTIVE */
+
+.status-select-wrapper.status-active {
+  background: #ecfdf3;
+
+  border: 1px solid #86efac;
+}
+
+.status-select-wrapper.status-active:hover {
+  border-color: #22c55e;
+
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.08);
+}
+
+
+/* INACTIVE */
+
+.status-select-wrapper.status-inactive {
+  background: #fef2f2;
+
+  border: 1px solid #fca5a5;
+}
+
+.status-select-wrapper.status-inactive:hover {
+  border-color: #ef4444;
+
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.08);
+}
+
+
+/* SELECT */
+
+.product-status-select {
+  width: 100%;
+
+  height: 100%;
+
+  padding: 0 35px 0 15px;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: inherit;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+}
+
+
+/* ACTIVE TEXT */
+
+.status-active .product-status-select {
+  color: #15803d;
+}
+
+
+/* INACTIVE TEXT */
+
+.status-inactive .product-status-select {
+  color: #dc2626;
+}
+
+
+/* DROPDOWN OPTIONS */
+
+.product-status-select option {
+  background: #ffffff;
+
+  color: #111827;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   ACTION BUTTONS
+========================================= */
+
+.product-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.product-edit-btn,
+.product-delete-btn {
+  height: 38px;
+
+  min-width: 70px;
+
+  padding: 0 14px;
+
+  border-radius: 7px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  transition: 0.2s ease;
+}
+
+
+/* EDIT */
+
+.product-edit-btn {
+  background: #f8fafc;
+
+  color: #365378;
+
+  border: 1px solid #cbd5e1;
+}
+
+.product-edit-btn:hover {
+  background: #365378;
+
+  color: #ffffff;
+
+  border-color: #365378;
+}
+
+
+/* DELETE */
+
+.product-delete-btn {
+  background: #ffffff;
+
+  color: #dc2626;
+
+  border: 1px solid #fecaca;
+}
+
+.product-delete-btn:hover {
+  background: #dc2626;
+
+  color: #ffffff;
+
+  border-color: #dc2626;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.product-loading {
+  min-height: 220px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   NO PRODUCTS
+========================================= */
+
+.no-products {
+  text-align: center !important;
+
+  padding: 45px 20px !important;
+
+  color: #9ca3af !important;
+
+  font-size: 14px !important;
+}
+
+
+/* =========================================
+   PAGINATION - CENTER
+========================================= */
+
+.product-pagination {
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 30px;
+
+  margin-bottom: 25px;
+}
+
+.product-pagination button {
+  min-width: 40px;
+
+  height: 40px;
+
+  padding: 0 12px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #374151;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  transition: 0.2s ease;
+}
+
+
+/* PREVIOUS / NEXT */
+
+.product-pagination button:first-child,
+.product-pagination button:last-child {
+  min-width: 100px;
+}
+
+
+/* HOVER */
+
+.product-pagination button:hover:not(:disabled) {
+  border-color: #365378;
+
+  color: #365378;
+
+  background: #f8fafc;
+}
+
+
+/* ACTIVE PAGE */
+
+.product-pagination button.active {
+  background: #365378;
+
+  border-color: #365378;
+
+  color: #ffffff;
+
+  box-shadow: 0 3px 8px rgba(54, 83, 120, 0.2);
+}
+
+
+/* DISABLED */
+
+.product-pagination button:disabled {
+  background: #f8fafc;
+
+  border-color: #e5e7eb;
+
+  color: #9ca3af;
+
+  cursor: not-allowed;
+
+  opacity: 1;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+  .product-page {
+    padding: 25px 20px;
+  }
+
+  .product-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .product-header {
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .product-search-section {
+    justify-content: flex-start;
+  }
+
+  .product-search-section input {
+    width: 360px;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .product-page {
+    padding: 20px 15px;
+  }
+
+  .product-header {
+    flex-direction: column;
+  }
+
+  .add-product-btn {
+    width: 100%;
+  }
+
+  .product-search-section {
+    justify-content: flex-start;
+  }
+
+  .product-search-section input {
+    width: 100%;
+  }
+
+  .product-pagination {
+    justify-content: center;
+
+    gap: 6px;
+  }
+
+  .product-pagination button {
+    min-width: 40px;
+
+    height: 38px;
+
+    padding: 0 9px;
+  }
+
+  .product-pagination button:first-child,
+  .product-pagination button:last-child {
+    min-width: 80px;
+  }
+}

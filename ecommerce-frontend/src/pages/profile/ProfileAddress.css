@@ -1,0 +1,150 @@
+.delivery-address-container {
+  width: 100%;
+  max-width: 850px;
+  font-family: inherit;
+}
+
+/* Breadcrumb Navigation */
+.address-breadcrumb {
+  font-size: 0.85rem;
+  color: #777;
+  margin-bottom: 20px;
+  text-transform: capitalize;
+}
+
+.address-breadcrumb .active {
+  color: #333;
+  font-weight: 500;
+}
+
+/* Main Outer Card Container */
+.address-content-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.address-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #222;
+  margin-bottom: 30px;
+}
+
+/* Grid Layout for Cards */
+.address-cards-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+/* Single Address Card Item */
+.single-address-card {
+  flex: 1;
+  min-width: 280px;
+  max-width: 340px;
+  background: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.user-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+}
+
+.icon-edit-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #222;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.address-line {
+  font-size: 0.88rem;
+  color: #444;
+  margin: 2px 0;
+}
+
+.address-block {
+  margin-top: 12px;
+  margin-bottom: 20px;
+}
+
+.address-block p {
+  font-size: 0.85rem;
+  color: #333;
+  margin: 1px 0;
+}
+
+/* Bottom Actions Row inside Card */
+.card-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.default-tag {
+  font-size: 0.72rem;
+  color: #999;
+}
+
+.delete-address-btn {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.delete-address-btn:hover {
+  opacity: 0.85;
+}
+
+/* Add New Address Button Wrapper */
+.add-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.add-new-address-btn {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 14px 28px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.add-new-address-btn:hover {
+  opacity: 0.88;
+}

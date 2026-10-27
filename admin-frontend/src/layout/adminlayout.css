@@ -1,0 +1,184 @@
+/* =========================================
+   ADMIN LAYOUT
+========================================= */
+
+.admin-layout {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+
+  margin: 0;
+  padding: 0;
+
+  background: #f7f7f7;
+
+  overflow-x: hidden;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   SIDEBAR SPACE
+========================================= */
+
+.sidebar {
+  width: 230px;
+  min-width: 230px;
+}
+
+
+/* =========================================
+   MAIN
+========================================= */
+
+.admin-main {
+  width: calc(100% - 230px);
+
+  min-width: 0;
+  min-height: 100vh;
+
+  margin-left: 230px;
+
+  padding: 0;
+
+  box-sizing: border-box;
+
+  overflow-x: hidden;
+}
+
+
+/* =========================================
+   TOP NAVBAR
+========================================= */
+
+.admin-navbar {
+  width: calc(100% - 230px);
+
+  height: 80px;
+
+  position: fixed;
+
+  left: 230px;
+  top: 0;
+
+  margin: 0;
+  padding: 0;
+
+  z-index: 900;
+
+  background: #ffffff;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   ADMIN CONTENT
+========================================= */
+
+.admin-content {
+  width: 100%;
+
+  min-width: 0;
+  max-width: none;
+
+  margin: 0;
+
+  padding: 80px 0 0 0;
+
+  box-sizing: border-box;
+
+  overflow-x: hidden;
+}
+
+
+/* =========================================
+   CONTENT CHILDREN
+========================================= */
+
+.admin-content > * {
+  width: 100%;
+
+  max-width: none;
+  min-width: 0;
+
+  margin-left: 0;
+  margin-right: 0;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   TABLES
+========================================= */
+
+.admin-content table {
+  max-width: 100%;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 768px) {
+
+  .sidebar {
+    width: 200px;
+    min-width: 200px;
+  }
+
+  .admin-main {
+    width: calc(100% - 200px);
+
+    margin-left: 200px;
+  }
+
+  .admin-navbar {
+    width: calc(100% - 200px);
+
+    left: 200px;
+  }
+
+  .admin-content {
+    width: 100%;
+
+    padding: 80px 0 0 0;
+  }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+  .sidebar {
+    display: none;
+
+    width: 0;
+    min-width: 0;
+  }
+
+  .admin-main {
+    width: 100%;
+
+    margin-left: 0;
+  }
+
+  .admin-navbar {
+    width: 100%;
+
+    left: 0;
+  }
+
+  .admin-content {
+    width: 100%;
+
+    padding: 80px 0 0 0;
+  }
+}

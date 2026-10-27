@@ -1,0 +1,871 @@
+/* ==========================================
+   PAGE
+========================================== */
+
+.admin-view-order-page {
+  width: 100%;
+  min-height: 100vh;
+
+  background: #ffffff;
+
+  color: #111111;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  box-sizing: border-box;
+}
+
+/* ==========================================
+   CONTAINER
+========================================== */
+
+.admin-view-order-container {
+  width: 100%;
+  max-width: 1100px;
+
+  margin: 0 auto;
+
+  padding: 20px 28px 35px;
+
+  box-sizing: border-box;
+}
+
+/* ==========================================
+   TITLE
+========================================== */
+
+.admin-view-order-title {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 55px;
+
+  margin-bottom: 28px;
+}
+
+.admin-view-order-title span {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-view-order-title strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ==========================================
+   SUMMARY
+========================================== */
+
+.admin-view-summary {
+  width: 100%;
+
+  min-height: 82px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(5, minmax(0, 1fr));
+
+  gap: 16px;
+
+  padding: 16px 17px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 3px 15px
+      rgba(0, 0, 0, 0.14);
+}
+
+.admin-view-summary > div {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+.admin-view-summary span {
+  font-size: 10px;
+  color: #333333;
+}
+
+.admin-view-summary strong {
+  font-size: 10px;
+
+  font-weight: 500;
+
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   ORDER ID
+========================================== */
+
+.admin-view-order-id {
+  margin: 26px 0 20px;
+
+  font-size: 16px;
+
+  font-weight: 500;
+}
+
+/* ==========================================
+   MAIN ROW
+========================================== */
+
+.admin-view-main-row {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    245px;
+
+  gap: 35px;
+
+  align-items: start;
+}
+
+/* ==========================================
+   PRODUCT
+========================================== */
+
+.admin-view-product {
+  display: grid;
+
+  grid-template-columns:
+    135px
+    minmax(0, 1fr);
+
+  gap: 28px;
+
+  min-width: 0;
+}
+
+.admin-view-product-image {
+  width: 135px;
+  height: 166px;
+
+  overflow: hidden;
+
+  background: #eeeeee;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-view-product-image img {
+  width: 135px;
+  height: 166px;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+.admin-view-product-image > div {
+  font-size: 11px;
+  color: #777777;
+}
+
+.admin-view-product-info {
+  min-width: 0;
+}
+
+.admin-view-product-info h2 {
+  margin: -7px 0 20px;
+
+  font-size: 18px;
+
+  font-weight: 600;
+}
+
+.admin-view-product-info p {
+  margin: 9px 0;
+
+  font-size: 11px;
+
+  line-height: 1.4;
+}
+
+.admin-view-product-info p span {
+  display: inline-block;
+
+  width: 65px;
+
+  color: #333333;
+}
+
+/* ==========================================
+   ACTION PANEL
+========================================== */
+
+.admin-view-action-panel {
+  min-width: 0;
+
+  border-left: 1px solid #777777;
+
+  padding-left: 18px;
+
+  box-sizing: border-box;
+}
+
+.admin-view-action-panel h3 {
+  margin: 0 0 8px;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+/* ==========================================
+   ESTIMATED DELIVERY
+========================================== */
+
+.admin-view-estimated-date {
+  margin-bottom: 13px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.admin-view-estimated-date span {
+  font-size: 9px;
+}
+
+.admin-view-estimated-date strong {
+  font-size: 9px;
+  font-weight: 600;
+}
+
+/* ==========================================
+   STATUS SELECT
+========================================== */
+
+.admin-view-action-panel select {
+  width: 100%;
+
+  height: 29px;
+
+  padding: 0 8px;
+
+  border: 1px solid #d7d7d7;
+
+  border-radius: 2px;
+
+  background: #ffffff;
+
+  font-size: 10px;
+
+  outline: none;
+
+  cursor: pointer;
+}
+
+/* ==========================================
+   UPDATE BUTTON
+========================================== */
+
+.admin-view-update-button {
+  width: 100%;
+
+  height: 29px;
+
+  margin-top: 8px;
+
+  border: none;
+
+  background: #000000;
+
+  color: #ffffff;
+
+  border-radius: 3px;
+
+  font-size: 9px;
+
+  cursor: pointer;
+}
+
+.admin-view-update-button:hover {
+  opacity: 0.85;
+}
+
+.admin-view-update-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   STATUS TEXT
+========================================== */
+
+.admin-view-status-text {
+  margin-top: 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  font-size: 10px;
+}
+
+.admin-view-status-text span {
+  color: #333333;
+}
+
+.admin-view-status-text strong {
+  font-weight: 500;
+}
+
+.admin-view-status-text strong.pending {
+  color: #d98a20;
+}
+
+.admin-view-status-text strong.confirmed {
+  color: #65ae30;
+}
+
+.admin-view-status-text strong.processing {
+  color: #65ae30;
+}
+
+.admin-view-status-text strong.shipped {
+  color: #d98a20;
+}
+
+.admin-view-status-text strong.out_for_delivery {
+  color: #d98a20;
+}
+
+.admin-view-status-text strong.delivered {
+  color: #4eaa31;
+}
+
+.admin-view-status-text strong.cancelled {
+  color: #f03a32;
+}
+
+/* ==========================================
+   STATUS DATE
+========================================== */
+
+.admin-view-status-date {
+  margin-top: 11px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+
+  font-size: 9px;
+
+  line-height: 1.35;
+}
+
+.admin-view-status-date strong {
+  font-size: 9px;
+  font-weight: 600;
+}
+
+/* ==========================================
+   CANCELLED SELECT DISPLAY
+========================================== */
+
+.admin-view-cancelled-select {
+  width: 100%;
+
+  height: 29px;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 2px;
+
+  display: flex;
+
+  align-items: center;
+
+  padding: 0 8px;
+
+  box-sizing: border-box;
+
+  font-size: 10px;
+
+  color: #ee3d35;
+
+  background: #ffffff;
+}
+
+/* ==========================================
+   DELIVERY DATE
+========================================== */
+
+.admin-view-delivery-box {
+  margin-top: 20px;
+
+  padding-top: 15px;
+
+  border-top: 1px solid #e5e5e5;
+}
+
+.admin-view-delivery-box label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  font-size: 9px;
+}
+
+.admin-view-delivery-box input {
+  width: 100%;
+
+  height: 29px;
+
+  padding: 0 7px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d7d7d7;
+
+  border-radius: 2px;
+
+  font-size: 10px;
+
+  outline: none;
+}
+
+.admin-view-delivery-box button {
+  width: 100%;
+
+  height: 29px;
+
+  margin-top: 7px;
+
+  border: 1px solid #111111;
+
+  background: #ffffff;
+
+  color: #111111;
+
+  border-radius: 3px;
+
+  font-size: 9px;
+
+  cursor: pointer;
+}
+
+.admin-view-delivery-box button:hover {
+  background: #111111;
+  color: #ffffff;
+}
+
+/* ==========================================
+   CANCELLATION DETAILS
+========================================== */
+
+.admin-cancellation-card {
+  width: 100%;
+
+  margin-top: 18px;
+
+  border: 1px solid #eeeeee;
+
+  border-radius: 4px;
+
+  padding: 10px;
+
+  box-sizing: border-box;
+}
+
+.admin-cancellation-card h3 {
+  margin: 0 0 8px;
+
+  color: #ed4038;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+.admin-cancellation-body {
+  background: #fff4f4;
+
+  border-radius: 5px;
+
+  padding: 10px;
+
+  box-sizing: border-box;
+}
+
+.admin-cancellation-body p {
+  margin: 6px 0;
+
+  display: grid;
+
+  grid-template-columns:
+    75px
+    minmax(0, 1fr);
+
+  gap: 5px;
+
+  font-size: 9px;
+
+  line-height: 1.4;
+}
+
+.admin-cancellation-body strong {
+  font-weight: 400;
+
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   SUCCESS
+========================================== */
+
+.admin-view-success {
+  margin-top: 15px;
+
+  padding: 9px 12px;
+
+  border-radius: 4px;
+
+  background: #eff9ec;
+
+  color: #4f9c36;
+
+  font-size: 10px;
+}
+
+/* ==========================================
+   ERROR
+========================================== */
+
+.admin-view-error-message {
+  margin-top: 15px;
+
+  padding: 9px 12px;
+
+  border-radius: 4px;
+
+  background: #fff1f1;
+
+  color: #d93025;
+
+  font-size: 10px;
+}
+
+/* ==========================================
+   TIMELINE
+========================================== */
+
+.admin-view-timeline-section {
+  width: 100%;
+
+  margin-top: 48px;
+}
+
+.admin-view-timeline-section h3 {
+  margin: 0 0 22px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.admin-view-timeline {
+  width: 100%;
+
+  display: flex;
+
+  align-items: flex-start;
+}
+
+.admin-view-step {
+  width: 100px;
+
+  flex-shrink: 0;
+
+  text-align: center;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.admin-view-circle {
+  width: 31px;
+  height: 31px;
+
+  border-radius: 50%;
+
+  border: 1px solid #d2d2d2;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #ffffff;
+
+  color: #777777;
+
+  font-size: 10px;
+}
+
+.admin-view-step.completed
+  .admin-view-circle {
+  border-color: #70c990;
+
+  color: #58b776;
+
+  background: #ffffff;
+}
+
+.admin-view-step.cancelled-step
+  .admin-view-circle {
+  border-color: #ff7770;
+
+  color: #f23d34;
+
+  background: #ffffff;
+}
+
+.admin-view-step > span {
+  margin-top: 8px;
+
+  font-size: 8px;
+
+  white-space: nowrap;
+}
+
+.admin-view-step small {
+  margin-top: 5px;
+
+  max-width: 90px;
+
+  font-size: 7px;
+
+  line-height: 1.3;
+
+  color: #777777;
+}
+
+.admin-view-line {
+  flex: 1;
+
+  height: 1px;
+
+  margin-top: 15px;
+
+  background: #dddddd;
+}
+
+.admin-view-line.completed {
+  background: #70c990;
+}
+
+.admin-view-line.cancelled-line.completed {
+  background: #ff7770;
+}
+
+/* ==========================================
+   BACK
+========================================== */
+
+.admin-view-back {
+  margin-top: 30px;
+}
+
+.admin-view-back button {
+  border: 1px solid #111111;
+
+  background: #ffffff;
+
+  color: #111111;
+
+  padding: 8px 15px;
+
+  border-radius: 3px;
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.admin-view-back button:hover {
+  background: #111111;
+  color: #ffffff;
+}
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.admin-view-order-loading {
+  min-height: 100vh;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  font-size: 14px;
+}
+
+/* ==========================================
+   ERROR PAGE
+========================================== */
+
+.admin-view-order-error {
+  min-height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.admin-view-order-error h2 {
+  margin: 0;
+
+  font-size: 20px;
+}
+
+.admin-view-order-error p {
+  margin: 0;
+
+  color: #777777;
+
+  font-size: 12px;
+}
+
+.admin-view-order-error button {
+  border: none;
+
+  background: #000000;
+
+  color: #ffffff;
+
+  padding: 8px 15px;
+
+  border-radius: 3px;
+
+  cursor: pointer;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 900px) {
+  .admin-view-order-container {
+    padding: 18px 20px 30px;
+  }
+
+  .admin-view-summary {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+  .admin-view-main-row {
+    grid-template-columns:
+      minmax(0, 1fr)
+      220px;
+
+    gap: 22px;
+  }
+
+  .admin-view-product {
+    grid-template-columns:
+      120px
+      minmax(0, 1fr);
+
+    gap: 20px;
+  }
+
+  .admin-view-product-image,
+  .admin-view-product-image img {
+    width: 120px;
+    height: 145px;
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-view-summary {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-view-main-row {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-view-action-panel {
+    border-left: none;
+
+    border-top: 1px solid #777777;
+
+    padding-left: 0;
+    padding-top: 18px;
+  }
+
+  .admin-view-timeline {
+    min-width: 700px;
+  }
+
+  .admin-view-timeline-section {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 450px) {
+  .admin-view-order-title {
+    justify-content: flex-start;
+    gap: 20px;
+  }
+
+  .admin-view-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-view-product {
+    grid-template-columns:
+      90px
+      minmax(0, 1fr);
+
+    gap: 15px;
+  }
+
+  .admin-view-product-image,
+  .admin-view-product-image img {
+    width: 90px;
+    height: 120px;
+  }
+}

@@ -1,0 +1,163 @@
+.add-meterial-page {
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+  background: #f8fafc;
+  min-height: 100%;
+}
+
+.add-meterial-header {
+  margin-bottom: 20px;
+}
+
+.add-meterial-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.add-meterial-header p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.add-meterial-card {
+  width: 100%;
+  max-width: 700px;
+  background: white;
+  padding: 28px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.add-meterial-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.add-meterial-field label {
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.add-meterial-field input,
+.add-meterial-field textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  outline: none;
+  font-size: 13px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.add-meterial-field input {
+  height: 42px;
+}
+
+.add-meterial-field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.add-meterial-field input:focus,
+.add-meterial-field textarea:focus {
+  border-color: #55a7e8;
+}
+
+.add-meterial-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.add-meterial-cancel,
+.add-meterial-submit {
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.add-meterial-cancel {
+  background: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.add-meterial-cancel:hover {
+  background: #f3f4f6;
+}
+
+.add-meterial-submit {
+  background: #55a7e8;
+  color: white;
+  border: 1px solid #55a7e8;
+}
+
+.add-meterial-submit:hover {
+  background: #4096d8;
+}
+
+.add-meterial-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.add-meterial-error {
+  margin: 0 0 18px;
+  padding: 10px 12px;
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 768px) {
+
+  .add-meterial-page {
+    padding: 18px;
+  }
+
+  .add-meterial-card {
+    padding: 22px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .add-meterial-page {
+    padding: 12px;
+  }
+
+  .add-meterial-header h2 {
+    font-size: 19px;
+  }
+
+  .add-meterial-card {
+    padding: 18px;
+  }
+
+  .add-meterial-actions {
+    flex-direction: column-reverse;
+  }
+
+  .add-meterial-cancel,
+  .add-meterial-submit {
+    width: 100%;
+  }
+
+}

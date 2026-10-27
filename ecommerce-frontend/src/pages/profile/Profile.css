@@ -1,0 +1,183 @@
+/* =========================
+   PROFILE PAGE
+========================= */
+
+.profile-page {
+  width: 100%;
+  padding: 10px 20px 40px;
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   PROFILE TITLE
+========================= */
+
+.profile-title {
+  margin: 0 0 18px;
+
+  font-size: 14px;
+  font-weight: 400;
+
+  color: #555;
+}
+
+.profile-title span {
+  margin-left: 10px;
+  color: #777;
+}
+
+
+/* =========================
+   PROFILE CARD
+========================= */
+
+.profile-card {
+  width: 100%;
+  max-width: 680px;
+
+  padding: 18px 35px 15px;
+
+  box-sizing: border-box;
+
+  background: #fff;
+
+  border-radius: 16px;
+
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+/* =========================
+   FORM FIELD
+========================= */
+
+.profile-field {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  margin-bottom: 12px;
+}
+
+.profile-field label {
+  margin-bottom: 5px;
+
+  font-size: 9px;
+  font-weight: 400;
+
+  color: #333;
+}
+
+.profile-field input {
+  width: 100%;
+  height: 27px;
+
+  box-sizing: border-box;
+
+  padding: 0 10px;
+
+  border: none;
+  border-radius: 3px;
+
+  outline: none;
+
+  background: #f3f3f3;
+
+  font-size: 9px;
+  color: #999;
+}
+
+
+/* =========================
+   EDIT BUTTON
+========================= */
+
+.edit-profile-btn {
+  display: block;
+
+  width: 90px;
+  height: 28px;
+
+  margin: 15px auto 0;
+
+  border: none;
+  border-radius: 3px;
+
+  background: #000;
+
+  color: #fff;
+
+  font-size: 8px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.edit-profile-btn:hover {
+  background: #333;
+}
+
+
+/* =========================
+   PROFILE LAYOUT
+   This is for App.jsx
+========================= */
+
+.profile-layout {
+  width: 100%;
+  max-width: 1200px;
+
+  margin: 30px auto;
+  padding: 0 20px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 40px;
+}
+
+
+/* =========================
+   RIGHT CONTENT
+========================= */
+
+.profile-layout-content {
+  flex: 1;
+  min-width: 0;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+  .profile-layout {
+    flex-direction: column;
+
+    gap: 25px;
+
+    margin-top: 20px;
+  }
+
+  .profile-layout-content {
+    width: 100%;
+  }
+
+  .profile-card {
+    max-width: 100%;
+
+    padding: 18px 20px;
+  }
+
+  .profile-title {
+    margin-bottom: 15px;
+  }
+}
