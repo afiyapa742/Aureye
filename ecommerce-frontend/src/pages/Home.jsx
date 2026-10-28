@@ -13,7 +13,7 @@ import API from "../api/axios";
 
 import "./Home.css";
 import OfferAnnouncements from "../components/offerpopup";
-
+import bestbg from "../assets/bestbg.png";
 /* =========================================================
    BEST SELLER PRODUCT CARD
 ========================================================= */
@@ -560,17 +560,12 @@ const Home = () => {
         =================================================== */}
 
         <section
-          className="
-            bestsellers
-            container
-            px-4
-            mb-5
-          "
-        >
-
-          <h2 className="section-title">
-            BEST SELLERS
-          </h2>
+     className="bestsellers container px-4 mb-5"
+  style={{ "--best-bg": `url("${bestbg}")` }}
+>
+  <h2 className="section-title">
+    BEST SELLERS
+  </h2>
 
 
           <div className="row g-4">

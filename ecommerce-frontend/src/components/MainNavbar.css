@@ -19,6 +19,8 @@
 
 /* ---------- Sticky header wrapper ---------- */
 
+
+/* Fixed navbar + offer bar */
 .main-navbar-container {
   position: fixed;
   top: 0;
@@ -27,11 +29,13 @@
   z-index: 1100;
   width: 100%;
   background: #ffffff;
+  box-sizing: border-box;
 }
-/* ---------- Navbar ---------- */
+
+/* Navbar stays above the offer bar */
 .main-navbar {
   position: relative;
-  z-index: 1100; /* above the offer bar */
+  z-index: 1101;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -42,20 +46,71 @@
   padding: 10px 40px;
   min-height: 88px;
   box-sizing: border-box;
-  background-color: #ffffff;
+  background: #ffffff;
   border-bottom: 2px solid var(--gold);
   box-shadow: 0 6px 18px rgba(26, 31, 43, 0.06);
-  overflow: visible; /* never clip the dropdown */
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
+  overflow: visible;
 }
 
-/* ---------- Logo ---------- */
-.nav-brand {
-  display: flex;
+/* Offer bar remains below the navbar */
+.main-navbar-container .navbar-offer-wrapper {
+  position: relative;
+  z-index: 1100;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-offer-wrapper .offer-announcement {
+  position: relative !important;
+  display: flex !important;
   align-items: center;
-  flex-shrink: 0;
+  width: 100%;
+  min-height: 48px;
+  height: 48px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: #020405 !important;
+  color: #ffffff !important;
+}
+
+/* Prevent page content from going behind the fixed header */
+:root {
+  --header-h: 136px;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Use this class on the main page content wrapper */
+.page-content {
+  padding-top: var(--header-h);
+  box-sizing: border-box;
+}
+
+/* Responsive header height */
+@media (max-width: 768px) {
+  .main-navbar {
+    flex-wrap: wrap;
+    min-height: 0;
+    padding: 10px 16px;
+    gap: 12px;
+  }
+
+  .navbar-offer-wrapper .offer-announcement {
+    height: 42px;
+    min-height: 42px;
+  }
+
+  :root {
+    --header-h: 150px;
+  }
 }
 
 .logo-link {

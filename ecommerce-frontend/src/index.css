@@ -1,0 +1,6 @@
+.page-content {
+  padding-top: var(--header-h, 136px);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+}

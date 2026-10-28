@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 
 import { AuthProvider } from "./context/AuthContext";
-
+import "./index.css";
 
 // ==========================================
 // COMPONENTS
@@ -137,7 +137,9 @@ location.pathname.startsWith("/trackorder");
       )}
 
 
-      {children}
+ <div className="page-content">
+  {children}
+</div>
 
 
       {showFooter && <Footer />}
