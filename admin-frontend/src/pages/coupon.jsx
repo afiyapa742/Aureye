@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../Api/axios";
-import "./Coupon.css";
+import "./coupon.css";
 
 const Coupon = () => {
   const navigate = useNavigate();
