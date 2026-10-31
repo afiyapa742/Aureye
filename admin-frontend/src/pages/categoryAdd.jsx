@@ -177,7 +177,7 @@ function Addcategory() {
         String(formData.isHomeBanner)
       );
 
-      const response = await API.post(
+      const response = await api.post(
         "/admin/category",
         data
       );
