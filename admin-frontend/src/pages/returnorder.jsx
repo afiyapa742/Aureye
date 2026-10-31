@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-import API from "../Api/axios";
+import api from "../Api/axios";
 
 import SuccessPopup from "../combonent/successpop";
 
@@ -56,7 +56,7 @@ const ReturnOrder = () => {
 
     while (page <= maxPages) {
 
-      const response = await API.get("/admin/returns", {
+      const response = await api.get("/admin/returns", {
 
         params: { page, limit },
 
@@ -187,109 +187,71 @@ const ReturnOrder = () => {
 
 
   const getProductImage = (request) => {
+  let image =
+    request?.variantId?.productImages?.[0]?.imageUrl ||
+    request?.variantId?.productImages?.[0]?.image ||
+    request?.variantId?.productImages?.[0]?.url ||
+    request?.productId?.productImages?.[0]?.imageUrl ||
+    request?.productId?.productImages?.[0]?.image ||
+    request?.productId?.image ||
+    request?.productId?.images?.[0] ||
+    request?.productId?.productImage ||
+    request?.productId?.thumbnail ||
+    request?.variantId?.image ||
+    request?.variantId?.images?.[0] ||
+    request?.variantId?.productImage ||
+    request?.variantId?.thumbnail ||
+    request?.productImage ||
+    request?.image ||
+    "";
 
-    let image =
+  if (typeof image === "object" && image !== null) {
+    image =
+      image.url ||
+      image.imageUrl ||
+      image.path ||
+      image.filename ||
+      image.fileName ||
+      image.location ||
+      "";
+  }
 
-      request?.variantId?.productImages?.[0]?.imageUrl ||
+  if (!image) return "/images/no-image.png";
 
-      request?.variantId?.productImages?.[0]?.image ||
+  let imageString = String(image).trim();
 
-      request?.variantId?.productImages?.[0]?.url ||
+  if (!imageString) return "/images/no-image.png";
 
-      request?.productId?.productImages?.[0]?.imageUrl ||
+  if (/^https?:\/\//i.test(imageString)) {
+    if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(imageString)) {
+      return imageString;
+    }
 
-      request?.productId?.productImages?.[0]?.image ||
+    imageString = imageString.replace(
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
+      ""
+    );
+  }
 
-      request?.productId?.image ||
+  imageString = imageString.replace(/^\/+/, "");
 
-      request?.productId?.images?.[0] ||
+  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
+    /\/api\/?$/,
+    ""
+  );
 
-      request?.productId?.productImage ||
+  if (
+    imageString.startsWith("uploads/") ||
+    imageString.startsWith("images/") ||
+    imageString.startsWith("product-images/") ||
+    imageString.startsWith("products/") ||
+    imageString.startsWith("upload/")
+  ) {
+    return `${API_ORIGIN}/${imageString}`;
+  }
 
-      request?.productId?.thumbnail ||
-
-      request?.variantId?.image ||
-
-      request?.variantId?.images?.[0] ||
-
-      request?.variantId?.productImage ||
-
-      request?.variantId?.thumbnail ||
-
-      request?.productImage ||
-
-      request?.image ||
-
-      "";
-
-
-
-    if (typeof image === "object" && image !== null) {
-
-      image =
-
-        image.url ||
-
-        image.imageUrl ||
-
-        image.path ||
-
-        image.filename ||
-
-        image.fileName ||
-
-        image.location ||
-
-        "";
-
-    }
-
-
-
-    if (!image) return "/images/no-image.png";
-
-
-
-    let imageString = String(image).trim();
-
-    if (!imageString) return "/images/no-image.png";
-
-
-
-    if (/^https?:\/\//i.test(imageString)) return imageString;
-
-
-   imageString = imageString
-  .replace(/^https?:\/\/localhost:\d+\//, "")
-  .replace(/^https?:\/\/127\.0\.0\.1:\d+\//, "")
-  .replace(/^\/+/, "");
-
-
-
-    if (
-
-      imageString.startsWith("uploads/") ||
-
-      imageString.startsWith("images/") ||
-
-      imageString.startsWith("product-images/") ||
-
-      imageString.startsWith("products/") ||
-
-      imageString.startsWith("upload/")
-
-    ) {
-
-      return `http\://localhost:5000/${imageString}`;
-
-    }
-
-
-
-    return `http\://localhost:5000/uploads/${imageString}`;
-
-  };
-
+  return `${API_ORIGIN}/uploads/${imageString}`;
+};
 
 
   const handleImageError = (e) => {
@@ -633,7 +595,7 @@ const ReturnOrder = () => {
 
 
 
-      await API.put(`/admin/returns/${actionPopup._id}/status`, {
+      await api.put(`/admin/returns/${actionPopup._id}/status`, {
 
         status: "return_approved",
 
@@ -697,7 +659,7 @@ const ReturnOrder = () => {
 
 
 
-      await API.put(`/admin/returns/${collectPopup._id}/received`);
+      await api.put(`/admin/returns/${collectPopup._id}/received`);
 
 
 
@@ -795,7 +757,7 @@ const ReturnOrder = () => {
 
 
 
-      const response = await API.put(
+      const response = await api.put(
 
         `/admin/returns/${refundPopup._id}/refund`
 

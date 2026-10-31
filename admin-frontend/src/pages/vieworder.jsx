@@ -216,32 +216,35 @@ const AdminViewOrder = () => {
   };
 
   const getProductImage = () => {
-    const image =
-      item?.variantId
-        ?.productImages?.[0]
-        ?.imageUrl || "";
+  let image =
+    item?.variantId?.productImages?.[0]?.imageUrl || "";
 
-    if (!image) {
-      return "";
-    }
+  if (!image) return "";
 
-    if (
-      String(image).startsWith("http")
-    ) {
+  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
+    /\/api\/?$/,
+    ""
+  );
+
+  if (/^https?:\/\//i.test(image)) {
+    if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(image)) {
       return image;
     }
 
-    if (
-      String(image).startsWith(
-        "/uploads/"
-      )
-    ) {
-      return `http://localhost:5000${image}`;
-    }
+    image = image.replace(
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
+      ""
+    );
+  }
 
-    return `http://localhost:5000/uploads/${image}`;
-  };
+  image = image.replace(/^\/+/, "");
 
+  if (image.startsWith("uploads/")) {
+    return `${API_ORIGIN}/${image}`;
+  }
+
+  return `${API_ORIGIN}/uploads/${image}`;
+};
   const getPrice = () => {
     return Number(
       item?.price ||

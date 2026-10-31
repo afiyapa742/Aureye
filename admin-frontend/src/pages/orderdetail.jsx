@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import API from "../Api/axios";
+import api from "../Api/axios";
 import "./OrderDetail.css";
 
 const OrderDetail = () => {
@@ -23,7 +23,7 @@ const OrderDetail = () => {
       setLoading(true);
       setError("");
 
-      const response = await API.get(
+      const response = await api.get(
         `/admin/orders/${orderId}`
       );
 
@@ -98,26 +98,30 @@ const OrderDetail = () => {
   // PRODUCT IMAGE
   // ==========================================
 
-  const getImage = (item) => {
-    const image =
-      item?.variantId?.productImages?.[0]?.imageUrl ||
-      "";
+ 
+    const getImage = (item) => {
+  const image =
+    item?.variantId?.productImages?.[0]?.imageUrl || "";
 
-    if (!image) {
-      return "";
-    }
+  if (!image) {
+    return "";
+  }
 
-    if (String(image).startsWith("http")) {
-      return image;
-    }
+  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
+    /\/api\/?$/,
+    ""
+  );
 
-    if (String(image).startsWith("/uploads/")) {
-      return `http://localhost:5000${image}`;
-    }
+  if (String(image).startsWith("http")) {
+    return image;
+  }
 
-    return `http://localhost:5000/uploads/${image}`;
-  };
+  if (String(image).startsWith("/uploads/")) {
+    return `${API_ORIGIN}${image}`;
+  }
 
+  return `${API_ORIGIN}/uploads/${image}`;
+};
   // ==========================================
   // PRODUCT NAME
   // ==========================================

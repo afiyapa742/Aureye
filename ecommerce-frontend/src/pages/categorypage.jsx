@@ -293,24 +293,43 @@ const CategoryPage = () => {
   /* ==========================================
      IMAGE
   ========================================== */
+const getHostedImageUrl = (image) => {
+  if (!image) return null;
 
-  const getVariantImage = (variant) => {
-    const imageObject = variant?.productImages?.find(
-      (image) => image?.imageUrl && String(image.imageUrl).trim() !== ""
-    );
+  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
+    /\/api\/?$/,
+    ""
+  );
 
-    const imageUrl = imageObject?.imageUrl;
+  let imagePath = String(image).trim();
 
-    if (!imageUrl) return null;
-
-    if (String(imageUrl).startsWith("http")) return imageUrl;
-
-    if (String(imageUrl).startsWith("/uploads/")) {
-      return `http://localhost:5000${imageUrl}`;
+  if (/^https?:\/\//i.test(imagePath)) {
+    if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(imagePath)) {
+      return imagePath;
     }
 
-    return `http://localhost:5000/uploads/${imageUrl}`;
-  };
+    imagePath = imagePath.replace(
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
+      ""
+    );
+  }
+
+  imagePath = imagePath.replace(/^\/+/, "");
+
+  if (imagePath.startsWith("uploads/")) {
+    return `${API_ORIGIN}/${imagePath}`;
+  }
+
+  return `${API_ORIGIN}/uploads/${imagePath}`;
+};
+
+const getVariantImage = (variant) => {
+  const imageObject = variant?.productImages?.find(
+    (image) => image?.imageUrl && String(image.imageUrl).trim() !== ""
+  );
+
+  return getHostedImageUrl(imageObject?.imageUrl);
+};
 
   /* ==========================================
      OFFERS
@@ -527,7 +546,7 @@ const CategoryPage = () => {
       {category && (
         <div className="category-banner">
           <img
-            src={`http://localhost:5000/uploads/${category.image}`}
+          src={getHostedImageUrl(category.image)}
             alt={category.categoryName}
           />
 

@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "./Addproduct.css";
-const api= axios.create({
-  baseURL: "http://localhost:5000/api",
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  withCredentials: true,
 });
 const EditProduct = () => {
   const { id } = useParams();
@@ -822,11 +823,9 @@ const EditProduct = () => {
                             >
                               <img
                                 src={
-                                  imageUrl?.startsWith(
-                                    "http"
-                                  )
-                                    ? imageUrl
-                                    : `http://localhost:5000/uploads/${imageUrl}`
+                                  imageUrl?.startsWith("http")
+  ? imageUrl
+  : `${import.meta.env.VITE_API_BASE_URL.replace(/\/api\/?$/, "")}/uploads/${imageUrl}`
                                 }
                                 alt={`Existing ${
                                   imageIndex +

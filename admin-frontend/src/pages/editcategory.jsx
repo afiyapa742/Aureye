@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./category.css";
 import api from "../Api/axios";
 import Success from "../combonent/successpop";
+const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(/\/api\/?$/, "");
 
 function EditCategory() {
   const navigate = useNavigate();
@@ -44,8 +45,9 @@ function EditCategory() {
         });
 
         if (category.image) {
-          setImagePreview(
-            `http://localhost:5000/uploads/${category.image}`
+        setImagePreview(
+  `${API_ORIGIN}/uploads/${category.image}`
+
           );
         }
       } catch (error) {

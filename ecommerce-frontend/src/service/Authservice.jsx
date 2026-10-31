@@ -155,6 +155,5 @@ export const googleLogin = async (idToken) => {
     throw error;
   }
 };
-
-export const googleLoginUrl =
-  "http://localhost:5000/api/auth/google";
+ export const googleLoginUrl =
+  `${import.meta.env.VITE_API_BASE_URL}/auth/google`;

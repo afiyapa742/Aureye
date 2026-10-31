@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './addProfileAddress.css';
-
+import API from "../api/axios";
 function AddAddress() {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
@@ -22,43 +22,36 @@ function AddAddress() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAddSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
+ const handleAddSubmit = async (e) => {
+  e.preventDefault();
+  setSubmitting(true);
 
-    try {
-      const token = localStorage.getItem('token');
+  try {
+    const token = localStorage.getItem("token");
 
-      const response = await fetch(
-        'http://localhost:5000/api/auth/address',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.message || 'Failed to add address'
-        );
+    const response = await API.post(
+      "/auth/address",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
+    );
 
-      // Navigate back to address list view upon successful save
-      navigate('/profile/address');
+    navigate("/profile/address");
 
-    } catch (err) {
-      alert(err.message || 'Error saving address');
+  } catch (err) {
+    alert(
+      err.response?.data?.message ||
+      err.message ||
+      "Error saving address"
+    );
 
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <div className="delivery-address-container">

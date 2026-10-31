@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './addProfileAddress.css';
-
+import API from "../api/axios";
 function EditAddress() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,47 +32,36 @@ function EditAddress() {
   };
 
   const handleEditSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setSubmitting(true);
+  setSubmitting(true);
 
-    try {
-      const token = localStorage.getItem('token');
+  try {
+    const token = localStorage.getItem("token");
 
-      const response = await fetch(
-        `http://localhost:5000/api/auth/address/${addressId}`,
-        {
-          method: 'PUT',
-
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-
-          body: JSON.stringify(formData),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.message || 'Failed to update address'
-        );
+    await API.put(
+      `/auth/address/${addressId}`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
+    );
 
-      // Navigate back after successful update
-      navigate('/profile/address');
+    navigate("/profile/address");
 
-    } catch (err) {
-      alert(
-        err.message || 'Error updating address'
-      );
+  } catch (err) {
+    alert(
+      err.response?.data?.message ||
+      err.message ||
+      "Error updating address"
+    );
 
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <div className="delivery-address-container">

@@ -246,37 +246,37 @@ const Home = () => {
      IMAGE URL
   ======================================================= */
 
-  const getImageUrl = (image) => {
+const getImageUrl = (image) => {
+  if (!image) return "";
 
-    if (!image) {
-      return "";
+  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
+    /\/api\/?$/,
+    ""
+  );
+
+  let imagePath = String(image).trim();
+
+  if (!imagePath) return "";
+
+  if (/^https?:\/\//i.test(imagePath)) {
+    if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(imagePath)) {
+      return imagePath;
     }
 
+    imagePath = imagePath.replace(
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
+      ""
+    );
+  }
 
-    if (
-      String(image).startsWith("http")
-    ) {
+  imagePath = imagePath.replace(/^\/+/, "");
 
-      return image;
+  if (imagePath.startsWith("uploads/")) {
+    return `${API_ORIGIN}/${imagePath}`;
+  }
 
-    }
-
-
-    if (
-      String(image).startsWith(
-        "/uploads/"
-      )
-    ) {
-
-      return `http://localhost:5000${image}`;
-
-    }
-
-
-    return `http://localhost:5000/uploads/${image}`;
-
-  };
-
+  return `${API_ORIGIN}/uploads/${imagePath}`;
+};
 
 
   /* =======================================================

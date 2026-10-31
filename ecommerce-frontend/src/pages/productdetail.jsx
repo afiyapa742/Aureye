@@ -105,26 +105,36 @@ const ProductDetails = () => {
   // ==========================================
 
   const getImageUrl = (imageUrl) => {
-    if (!imageUrl) {
-      return null;
+  if (!imageUrl) return null;
+
+  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
+    /\/api\/?$/,
+    ""
+  );
+
+  let imagePath = String(imageUrl).trim();
+
+  if (!imagePath) return null;
+
+  if (/^https?:\/\//i.test(imagePath)) {
+    if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(imagePath)) {
+      return imagePath;
     }
 
-    const value = String(imageUrl).trim();
+    imagePath = imagePath.replace(
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
+      ""
+    );
+  }
 
-    if (!value) {
-      return null;
-    }
+  imagePath = imagePath.replace(/^\/+/, "");
 
-    if (value.startsWith("http")) {
-      return value;
-    }
+  if (imagePath.startsWith("uploads/")) {
+    return `${API_ORIGIN}/${imagePath}`;
+  }
 
-    if (value.startsWith("/uploads/")) {
-      return `http://localhost:5000${value}`;
-    }
-
-    return `http://localhost:5000/uploads/${value}`;
-  };
+  return `${API_ORIGIN}/uploads/${imagePath}`;
+};
 
   // ==========================================
   // FETCH PRODUCT DETAILS
@@ -1660,7 +1670,7 @@ const ProductDetails = () => {
 
                         {reviewImage && (
                           <img
-                            src={reviewImage}
+                            src={getImageUrl(reviewImage)}
                             alt="Customer review"
                             className="review-item-image"
                             onClick={() => {

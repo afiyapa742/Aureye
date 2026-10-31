@@ -74,55 +74,56 @@ const SearchPage = () => {
   // ==========================================
   // GET PRODUCT IMAGE
   // ==========================================
-
-  const getProductImage = (product) => {
-
-    const variantWithImage =
-      product.variants?.find(
-        (variant) =>
-          variant.productImages?.some(
-            (image) =>
-              image?.imageUrl &&
-              String(
-                image.imageUrl
-              ).trim() !== ""
-          )
-      );
-
-    const variant =
-      variantWithImage ||
-      product.variants?.[0];
-
-    const imageObject =
-      variant?.productImages?.find(
+const getProductImage = (product) => {
+  const variantWithImage = product.variants?.find(
+    (variant) =>
+      variant.productImages?.some(
         (image) =>
           image?.imageUrl &&
-          String(
-            image.imageUrl
-          ).trim() !== ""
-      );
+          String(image.imageUrl).trim() !== ""
+      )
+  );
 
-    const imageUrl =
-      imageObject?.imageUrl;
+  const variant = variantWithImage || product.variants?.[0];
 
-    if (!imageUrl) {
-      return null;
+  const imageObject = variant?.productImages?.find(
+    (image) =>
+      image?.imageUrl &&
+      String(image.imageUrl).trim() !== ""
+  );
+
+  const imageUrl = imageObject?.imageUrl;
+
+  if (!imageUrl) return null;
+
+  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
+    /\/api\/?$/,
+    ""
+  );
+
+  let imagePath = String(imageUrl).trim();
+
+  if (!imagePath) return null;
+
+  if (/^https?:\/\//i.test(imagePath)) {
+    if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(imagePath)) {
+      return imagePath;
     }
 
-    if (
-      String(imageUrl).startsWith("http")
-    ) {
-      return imageUrl;
-    }
+    imagePath = imagePath.replace(
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
+      ""
+    );
+  }
 
-    if (
-      String(imageUrl).startsWith("/uploads/")
-    ) {
-      return `http://localhost:5000${imageUrl}`;
-    }
+  imagePath = imagePath.replace(/^\/+/, "");
 
-    return `http://localhost:5000/uploads/${imageUrl}`;
-  };
+  if (imagePath.startsWith("uploads/")) {
+    return `${API_ORIGIN}/${imagePath}`;
+  }
+
+  return `${API_ORIGIN}/uploads/${imagePath}`;
+};
 
 
   // ==========================================

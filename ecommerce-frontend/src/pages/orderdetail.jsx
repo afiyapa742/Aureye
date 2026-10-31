@@ -93,53 +93,39 @@ const OrderDetails = () => {
   }, []);
 
   const getImage = (item) => {
+  const image =
+    item?.variantId?.productImages?.[0]?.imageUrl || "";
 
-    const image =
+  if (!image) return "";
 
-      item?.variantId?.productImages?.[0]?.imageUrl || "";
+  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
+    /\/api\/?$/,
+    ""
+  );
 
-    if (!image) {
+  let imagePath = String(image).trim();
 
-      return "";
+  if (!imagePath) return "";
 
+  if (/^https?:\/\//i.test(imagePath)) {
+    if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(imagePath)) {
+      return imagePath;
     }
 
-    if (String(image).startsWith("http")) {
-
-      return image;
-
-    }
-
-    if (String(image).startsWith("/uploads/")) {
-
-      return `http://localhost:5000${image}`;
-
-    }
-
-    return `http://localhost:5000/uploads/${image}`;
-
-  };
-
-  /* ==========================================
-
-     PRODUCT NAME
-
-  ========================================== */
-
-  const getName = (item) => {
-
-    return (
-
-      item?.productId?.productName ||
-
-      item?.variantId?.variantName ||
-
-      "Product"
-
+    imagePath = imagePath.replace(
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
+      ""
     );
+  }
 
-  };
+  imagePath = imagePath.replace(/^\/+/, "");
 
+  if (imagePath.startsWith("uploads/")) {
+    return `${API_ORIGIN}/${imagePath}`;
+  }
+
+  return `${API_ORIGIN}/uploads/${imagePath}`;
+};
   /* ==========================================
 
      PRICE

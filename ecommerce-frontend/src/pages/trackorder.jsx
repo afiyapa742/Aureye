@@ -104,30 +104,46 @@ const TrackOrder = () => {
     );
   };
 
-  const getProductImage = () => {
-    const image =
-      selectedItem?.variantId?.productImages?.[0]?.imageUrl ||
-      selectedItem?.productId?.image ||
-      selectedItem?.productId?.productImage ||
-      (Array.isArray(selectedItem?.productId?.images)
-        ? selectedItem.productId.images[0]
-        : "") ||
-      "";
+ const getProductImage = () => {
+  const image =
+    selectedItem?.variantId?.productImages?.[0]?.imageUrl ||
+    selectedItem?.productId?.image ||
+    selectedItem?.productId?.productImage ||
+    (Array.isArray(selectedItem?.productId?.images)
+      ? selectedItem.productId.images[0]
+      : "") ||
+    "";
 
-    if (!image) {
-      return "";
+  if (!image) return "";
+
+  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
+    /\/api\/?$/,
+    ""
+  );
+
+  let imagePath = String(image).trim();
+
+  if (!imagePath) return "";
+
+  if (/^https?:\/\//i.test(imagePath)) {
+    if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(imagePath)) {
+      return imagePath;
     }
 
-    if (String(image).startsWith("http")) {
-      return image;
-    }
+    imagePath = imagePath.replace(
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
+      ""
+    );
+  }
 
-    if (String(image).startsWith("/uploads/")) {
-      return `http://localhost:5000${image}`;
-    }
+  imagePath = imagePath.replace(/^\/+/, "");
 
-    return `http://localhost:5000/uploads/${image}`;
-  };
+  if (imagePath.startsWith("uploads/")) {
+    return `${API_ORIGIN}/${imagePath}`;
+  }
+
+  return `${API_ORIGIN}/uploads/${imagePath}`;
+};
 
   const getPaymentMethod = () => {
     return (

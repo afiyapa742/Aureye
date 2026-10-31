@@ -5,7 +5,10 @@ import API from "../api/axios";
 import SuccessPopup from "../components/successpop";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 
-const BASE_URL = "http://localhost:5000";
+const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
+  /\/api\/?$/,
+  ""
+);
 const TAX_RATE = 0.05;
 const PAID_STATUSES = ["COMPLETED", "PAID", "SUCCESS", "SUCCEEDED", "CAPTURED"];
 
@@ -15,11 +18,31 @@ const PAID_STATUSES = ["COMPLETED", "PAID", "SUCCESS", "SUCCEEDED", "CAPTURED"];
 
 const resolveImageUrl = (value) => {
   const imageUrl = value?.imageUrl || value;
+
   if (!imageUrl) return "";
-  const str = String(imageUrl);
-  if (str.startsWith("http")) return str;
-  if (str.startsWith("/uploads/")) return `${BASE_URL}${str}`;
-  return `${BASE_URL}/uploads/${str}`;
+
+  let imagePath = String(imageUrl).trim();
+
+  if (!imagePath) return "";
+
+  if (/^https?:\/\//i.test(imagePath)) {
+    if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(imagePath)) {
+      return imagePath;
+    }
+
+    imagePath = imagePath.replace(
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
+      ""
+    );
+  }
+
+  imagePath = imagePath.replace(/^\/+/, "");
+
+  if (imagePath.startsWith("uploads/")) {
+    return `${API_ORIGIN}/${imagePath}`;
+  }
+
+  return `${API_ORIGIN}/uploads/${imagePath}`;
 };
 
 /*

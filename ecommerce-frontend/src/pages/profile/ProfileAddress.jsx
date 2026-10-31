@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiEdit3 } from 'react-icons/fi';
 import './ProfileAddress.css';
-import DeletePopup from "../../components/delete";
+import API from "../api/axios";
 function ProfileAddress() {
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,58 +13,28 @@ function ProfileAddress() {
   // FETCH ADDRESSES
   // ==========================================
 
-  const fetchAddresses = async () => {
-    try {
-      const token = localStorage.getItem('token');
+const fetchAddresses = async () => {
+  try {
+    const response = await API.get("/auth/address");
 
-      const response = await fetch(
-        'http://localhost:5000/api/auth/address',
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    console.log("ADDRESS RESPONSE:", response.data);
 
-      // First check response before JSON parsing
-      if (!response.ok) {
-        const text = await response.text();
+    const data = response.data;
 
-        console.error(
-          'FETCH ADDRESS ERROR:',
-          response.status,
-          text
-        );
-
-        throw new Error(
-          `Failed to fetch addresses (${response.status})`
-        );
-      }
-
-      const data = await response.json();
-
-      console.log('ADDRESS RESPONSE:', data);
-
-      // Backend getAdress returns the array directly
-      if (Array.isArray(data)) {
-        setAddresses(data);
-      } else {
-        setAddresses(data.addresses || []);
-      }
-
-    } catch (err) {
-      console.error(
-        'Error fetching addresses:',
-        err
-      );
-
-      setAddresses([]);
-
-    } finally {
-      setLoading(false);
+    if (Array.isArray(data)) {
+      setAddresses(data);
+    } else {
+      setAddresses(data.addresses || []);
     }
-  };
+
+  } catch (err) {
+    console.error("Error fetching addresses:", err);
+    setAddresses([]);
+
+  } finally {
+    setLoading(false);
+  }
+};
 
   // ==========================================
   // LOAD ADDRESSES
@@ -77,66 +47,39 @@ function ProfileAddress() {
   // ==========================================
   // DELETE ADDRESS
   // ==========================================
+const handleDelete = async (id) => {
+  if (
+    !window.confirm(
+      "Are you sure you want to delete this address?"
+    )
+  ) {
+    return;
+  }
 
-  const handleDelete = async (id) => {
+  try {
+    const response = await API.delete(
+      `/auth/address/${id}`
+    );
 
-    if (
-      !window.confirm(
-        'Are you sure you want to delete this address?'
-      )
-    ) {
-      return;
-    }
+    console.log(
+      "DELETE ADDRESS RESPONSE:",
+      response.data
+    );
 
-    try {
+    setAddresses((prev) =>
+      prev.filter((addr) => addr._id !== id)
+    );
 
-      const token =
-        localStorage.getItem('token');
+  } catch (err) {
+    console.error("DELETE ADDRESS ERROR:", err);
 
-      const response = await fetch(
-        `http://localhost:5000/api/auth/address/${id}`,
-        {
-          method: 'DELETE',
-
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.message ||
-          'Failed to delete address'
-        );
-      }
-
-      console.log(
-        'DELETE ADDRESS RESPONSE:',
-        data
-      );
-
-      setAddresses((prev) =>
-        prev.filter(
-          (addr) => addr._id !== id
-        )
-      );
-
-    } catch (err) {
-
-      console.error(
-        'DELETE ADDRESS ERROR:',
-        err
-      );
-
-      alert(
-        err.message ||
-        'Failed to delete address'
-      );
-    }
-  };
+    alert(
+      err.response?.data?.message ||
+      err.message ||
+      "Failed to delete address"
+    );
+  }
+};
 
   // ==========================================
   // LOADING

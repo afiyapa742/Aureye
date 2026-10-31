@@ -17,17 +17,33 @@ const Cart = () => {
      IMAGE URL
   ========================================== */
 
-  const getImageUrl = (image) => {
-    if (!image) {
-      return "";
-    }
+ const getImageUrl = (image) => {
+  if (!image) return "";
 
-    if (image.startsWith("http")) {
+  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
+    /\/api\/?$/,
+    ""
+  );
+
+  if (/^https?:\/\//i.test(image)) {
+    if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(image)) {
       return image;
     }
 
-    return `http://localhost:5000/uploads/${image}`;
-  };
+    image = image.replace(
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
+      ""
+    );
+  }
+
+  image = String(image).replace(/^\/+/, "");
+
+  if (image.startsWith("uploads/")) {
+    return `${API_ORIGIN}/${image}`;
+  }
+
+  return `${API_ORIGIN}/uploads/${image}`;
+};
 
   /* ==========================================
      GET CART
