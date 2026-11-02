@@ -13,8 +13,7 @@ const API_BASE_URL =
   "https://aureyaforwomen.shop/api";
 
 const API_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
-
-const CANCELLABLE_STATUSES = ["confirmed", "processing"];
+const CANCELLABLE_STATUSES = ["pending", "confirmed", "processing"];
 const RETURN_WINDOW_MS = 9 * 24 * 60 * 60 * 1000;
 const TAX_RATE = 0.05;
 

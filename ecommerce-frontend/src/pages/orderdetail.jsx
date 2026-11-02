@@ -176,10 +176,8 @@ const OrderDetails = () => {
      STATUS
   ========================================== */
 
-  const getStatus = (item, currentOrder) => {
-    return String(
-      currentOrder?.orderstatus || item?.status || "pending"
-    ).toLowerCase();
+  const getStatus = (item) => {
+    return String(item?.status || "pending").toLowerCase();
   };
 
   const statusLabel = (status) => {
@@ -229,13 +227,13 @@ const OrderDetails = () => {
   };
 
   const canCancelItem = (item) => {
-    const itemStatus = getStatus(item, null);
+    const itemStatus = getStatus(item);
 
-    return ["confirmed", "processing", "shipped"].includes(itemStatus);
+    return ["pending", "confirmed", "processing"].includes(itemStatus);
   };
 
   const canReturnItem = (item) => {
-    const itemStatus = getStatus(item, null);
+    const itemStatus = getStatus(item);
 
     if (itemStatus !== "delivered") {
       return false;
@@ -602,7 +600,7 @@ const OrderDetails = () => {
               <div className="order-card-items">
                 {orderItems.length > 0 ? (
                   orderItems.map((item, itemIndex) => {
-                    const status = getStatus(item, order);
+                    const status = getStatus(item);
 
                     const price = getPrice(item);
 
@@ -708,17 +706,15 @@ const OrderDetails = () => {
 
                             {/* CANCEL */}
 
-                            {status !== "cancelled" &&
-                              status !== "delivered" &&
-                              status !== "shipped" && (
-                                <button
-                                  type="button"
-                                  className="detail-cancel-button"
-                                  onClick={() => openCancelPopup(item)}
-                                >
-                                  Cancel Order
-                                </button>
-                              )}
+                            {canCancelItem(item) && (
+                              <button
+                                type="button"
+                                className="detail-cancel-button"
+                                onClick={() => openCancelPopup(item)}
+                              >
+                                Cancel Order
+                              </button>
+                            )}
                           </div>
 
                           <div className="detail-delivery">

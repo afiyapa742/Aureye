@@ -34,21 +34,15 @@ const Getmyorder = async (
 // CANCEL ORDER ITEM
 // ==========================================
 
-const CancelOrder = async (
-  itemId,
-  reason
-) => {
+const CancelOrder = async (itemId, reason, userId) => {
+  if (!reason?.trim()) {
+    throw new Error("Cancellation reason is required");
+  }
 
-  const cancelledItem =
-    await cancelorder(
-      itemId,
-      reason
-    );
+  const cancelledItem = await cancelorder(itemId, reason.trim(), userId);
 
   if (!cancelledItem) {
-    throw new Error(
-      "Order item not found"
-    );
+    throw new Error("Order item not found");
   }
 
   return cancelledItem;
