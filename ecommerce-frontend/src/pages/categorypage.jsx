@@ -293,43 +293,44 @@ const CategoryPage = () => {
   /* ==========================================
      IMAGE
   ========================================== */
-const getHostedImageUrl = (image) => {
-  if (!image) return null;
 
-  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
-    /\/api\/?$/,
-    ""
-  );
+  const getHostedImageUrl = (image) => {
+    if (!image) return null;
 
-  let imagePath = String(image).trim();
+    const API_ORIGIN = (
+      import.meta.env.VITE_API_BASE_URL ||
+      "https://aureyaforwomen.shop/api"
+    ).replace(/\/api\/?$/, "");
 
-  if (/^https?:\/\//i.test(imagePath)) {
-    if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(imagePath)) {
-      return imagePath;
+    let imagePath = String(image).trim();
+
+    if (/^https?:\/\//i.test(imagePath)) {
+      if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(imagePath)) {
+        return imagePath;
+      }
+
+      imagePath = imagePath.replace(
+        /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
+        ""
+      );
     }
 
-    imagePath = imagePath.replace(
-      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
-      ""
+    imagePath = imagePath.replace(/^\/+/, "");
+
+    if (imagePath.startsWith("uploads/")) {
+      return `${API_ORIGIN}/${imagePath}`;
+    }
+
+    return `${API_ORIGIN}/uploads/${imagePath}`;
+  };
+
+  const getVariantImage = (variant) => {
+    const imageObject = variant?.productImages?.find(
+      (image) => image?.imageUrl && String(image.imageUrl).trim() !== ""
     );
-  }
 
-  imagePath = imagePath.replace(/^\/+/, "");
-
-  if (imagePath.startsWith("uploads/")) {
-    return `${API_ORIGIN}/${imagePath}`;
-  }
-
-  return `${API_ORIGIN}/uploads/${imagePath}`;
-};
-
-const getVariantImage = (variant) => {
-  const imageObject = variant?.productImages?.find(
-    (image) => image?.imageUrl && String(image.imageUrl).trim() !== ""
-  );
-
-  return getHostedImageUrl(imageObject?.imageUrl);
-};
+    return getHostedImageUrl(imageObject?.imageUrl);
+  };
 
   /* ==========================================
      OFFERS
@@ -546,7 +547,7 @@ const getVariantImage = (variant) => {
       {category && (
         <div className="category-banner">
           <img
-          src={getHostedImageUrl(category.image)}
+            src={getHostedImageUrl(category.image)}
             alt={category.categoryName}
           />
 

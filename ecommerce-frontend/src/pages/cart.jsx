@@ -4,6 +4,12 @@ import { X, Minus, Plus } from "lucide-react";
 import API from "../api/axios";
 import "./Cart.css";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://aureyaforwomen.shop/api";
+
+const API_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
+
 const MAX_QTY_PER_PRODUCT = 3;
 
 const Cart = () => {
@@ -17,33 +23,28 @@ const Cart = () => {
      IMAGE URL
   ========================================== */
 
- const getImageUrl = (image) => {
-  if (!image) return "";
+  const getImageUrl = (image) => {
+    if (!image) return "";
 
-  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
-    /\/api\/?$/,
-    ""
-  );
+    if (/^https?:\/\//i.test(image)) {
+      if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(image)) {
+        return image;
+      }
 
-  if (/^https?:\/\//i.test(image)) {
-    if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(image)) {
-      return image;
+      image = image.replace(
+        /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
+        ""
+      );
     }
 
-    image = image.replace(
-      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
-      ""
-    );
-  }
+    image = String(image).replace(/^\/+/, "");
 
-  image = String(image).replace(/^\/+/, "");
+    if (image.startsWith("uploads/")) {
+      return `${API_ORIGIN}/${image}`;
+    }
 
-  if (image.startsWith("uploads/")) {
-    return `${API_ORIGIN}/${image}`;
-  }
-
-  return `${API_ORIGIN}/uploads/${image}`;
-};
+    return `${API_ORIGIN}/uploads/${image}`;
+  };
 
   /* ==========================================
      GET CART
@@ -182,10 +183,7 @@ const Cart = () => {
         )
       );
     } catch (error) {
-      console.error(
-        "UPDATE CART ERROR:",
-        error
-      );
+      console.error("UPDATE CART ERROR:", error);
 
       alert(
         error.response?.data?.message ||
@@ -200,21 +198,13 @@ const Cart = () => {
 
   const removeItem = async (variantId) => {
     try {
-      await API.delete(
-        `/cart/remove/${variantId}`
-      );
+      await API.delete(`/cart/remove/${variantId}`);
 
       setCartItems((prev) =>
-        prev.filter(
-          (item) =>
-            item.variantId !== variantId
-        )
+        prev.filter((item) => item.variantId !== variantId)
       );
     } catch (error) {
-      console.error(
-        "REMOVE CART ERROR:",
-        error
-      );
+      console.error("REMOVE CART ERROR:", error);
 
       alert(
         error.response?.data?.message ||
@@ -268,16 +258,9 @@ const Cart = () => {
      SUBTOTAL
   ========================================== */
 
-  const subtotal = cartItems.reduce(
-    (total, item) => {
-      return (
-        total +
-        getPrice(item) *
-          Number(item.quantity || 0)
-      );
-    },
-    0
-  );
+  const subtotal = cartItems.reduce((total, item) => {
+    return total + getPrice(item) * Number(item.quantity || 0);
+  }, 0);
 
   /* ==========================================
      STOCK ISSUE (blocks checkout)
@@ -298,11 +281,7 @@ const Cart = () => {
   ========================================== */
 
   if (loading) {
-    return (
-      <div className="cart-loading">
-        Loading cart...
-      </div>
-    );
+    return <div className="cart-loading">Loading cart...</div>;
   }
 
   /* ==========================================
@@ -310,68 +289,35 @@ const Cart = () => {
   ========================================== */
 
   if (error) {
-    return (
-      <div className="cart-error">
-        {error}
-      </div>
-    );
+    return <div className="cart-error">{error}</div>;
   }
 
   return (
     <div className="cart-page">
-
-      {/* ======================================
-          SALE BAR
-      ====================================== */}
-
-
-
       {/* ======================================
           CHECKOUT STEPS
       ====================================== */}
 
       <div className="cart-steps">
-
         {/* STEP 01 - ACTIVE */}
-
         <div className="cart-step active">
-
-          <div className="step-number">
-            01
-          </div>
- <p>SHOPPING CART</p>
+          <div className="step-number">01</div>
+          <p>SHOPPING CART</p>
           <div className="step-line"></div>
-
-          
-
         </div>
 
         {/* STEP 02 */}
-
         <div className="cart-step">
-
-          <div className="step-number">
-            02
-          </div>
- <p>CHECKOUT</p>
- 
+          <div className="step-number">02</div>
+          <p>CHECKOUT</p>
           <div className="step-line"></div>
-
-
         </div>
 
         {/* STEP 03 */}
-
         <div className="cart-step">
-
-          <div className="step-number">
-            03
-          </div>
-
+          <div className="step-number">03</div>
           <p>ORDER COMPLETE</p>
-
         </div>
-
       </div>
 
       {/* ======================================
@@ -379,154 +325,76 @@ const Cart = () => {
       ====================================== */}
 
       {cartItems.length === 0 ? (
-
         <div className="empty-cart">
-
           <h2>Your Cart is Empty</h2>
 
-          <button
-            type="button"
-            onClick={() =>
-              navigate("/home")
-            }
-          >
+          <button type="button" onClick={() => navigate("/home")}>
             Continue Shopping
           </button>
-
         </div>
-
       ) : (
-
         <div className="cart-content">
-
-          {/* ==================================
-              TABLE HEADER
-          ================================== */}
-
+          {/* TABLE HEADER */}
           <div className="cart-header">
-
-            <div className="cart-header-product">
-              PRODUCT NAME
-            </div>
-
-            <div>
-              PRICE
-            </div>
-
-            <div>
-              QUANTITY
-            </div>
-
-            <div>
-              TOTAL
-            </div>
-
-            <div>
-              REMOVE
-            </div>
-
+            <div className="cart-header-product">PRODUCT NAME</div>
+            <div>PRICE</div>
+            <div>QUANTITY</div>
+            <div>TOTAL</div>
+            <div>REMOVE</div>
           </div>
 
-          {/* ==================================
-              CART ITEMS
-          ================================== */}
-
+          {/* CART ITEMS */}
           <div className="cart-items">
-
             {cartItems.map((item) => {
-
-              const price =
-                getPrice(item);
-
-              const quantity =
-                Number(item.quantity) || 1;
-
-              const total =
-                price * quantity;
-
-              const maxQty =
-                getMaxQty(item);
-
-              const quantityNote =
-                getQuantityNote(item, quantity);
+              const price = getPrice(item);
+              const quantity = Number(item.quantity) || 1;
+              const total = price * quantity;
+              const maxQty = getMaxQty(item);
+              const quantityNote = getQuantityNote(item, quantity);
 
               return (
-                <div
-                  className="cart-item"
-                  key={item.variantId}
-                >
-
+                <div className="cart-item" key={item.variantId}>
                   {/* PRODUCT */}
-
                   <div className="cart-product">
-
                     <div className="cart-product-image">
-
                       {getProductImage(item) ? (
-
                         <img
                           src={getProductImage(item)}
                           alt={getProductName(item)}
                         />
-
                       ) : (
-
-                        <div className="no-image">
-                          No Image
-                        </div>
-
+                        <div className="no-image">No Image</div>
                       )}
-
                     </div>
 
                     <span className="cart-product-name">
                       {getProductName(item)}
                     </span>
-
                   </div>
 
                   {/* PRICE */}
-
-                  <div className="cart-price">
-                    ₹{price}
-                  </div>
+                  <div className="cart-price">₹{price}</div>
 
                   {/* QUANTITY */}
-
                   <div className="cart-quantity">
-
                     <button
                       type="button"
                       onClick={() =>
-                        updateQuantity(
-                          item.variantId,
-                          quantity - 1,
-                          maxQty
-                        )
+                        updateQuantity(item.variantId, quantity - 1, maxQty)
                       }
-                      disabled={
-                        quantity <= 1
-                      }
+                      disabled={quantity <= 1}
                     >
                       <Minus size={10} />
                     </button>
 
-                    <span>
-                      {quantity}
-                    </span>
+                    <span>{quantity}</span>
 
                     <button
                       type="button"
                       onClick={() =>
-                        updateQuantity(
-                          item.variantId,
-                          quantity + 1,
-                          maxQty
-                        )
+                        updateQuantity(item.variantId, quantity + 1, maxQty)
                       }
-                      disabled={
-                        quantity >= maxQty
-                      }
+                      disabled={quantity >= maxQty}
                     >
                       <Plus size={10} />
                     </button>
@@ -534,68 +402,39 @@ const Cart = () => {
                     {quantityNote && (
                       <div
                         className={`cart-quantity-note ${
-                          quantityNote.warning
-                            ? "warning"
-                            : ""
+                          quantityNote.warning ? "warning" : ""
                         }`}
                       >
                         {quantityNote.text}
                       </div>
                     )}
-
                   </div>
 
                   {/* TOTAL */}
-
-                  <div className="cart-item-total">
-                    ₹{total}
-                  </div>
+                  <div className="cart-item-total">₹{total}</div>
 
                   {/* REMOVE */}
-
                   <div className="cart-remove">
-
                     <button
                       type="button"
-                      onClick={() =>
-                        removeItem(
-                          item.variantId
-                        )
-                      }
+                      onClick={() => removeItem(item.variantId)}
                     >
                       <X size={15} />
                     </button>
-
                   </div>
-
                 </div>
               );
             })}
-
           </div>
 
-          {/* ==================================
-              SUBTOTAL
-          ================================== */}
-
+          {/* SUBTOTAL */}
           <div className="cart-subtotal">
-
-            <span>
-              Sub Total
-            </span>
-
-            <strong>
-              ₹{subtotal}
-            </strong>
-
+            <span>Sub Total</span>
+            <strong>₹{subtotal}</strong>
           </div>
 
-          {/* ==================================
-              BUTTONS
-          ================================== */}
-
+          {/* BUTTONS */}
           <div className="cart-actions">
-
             {hasStockIssue && (
               <div className="cart-stock-warning">
                 Please fix the quantity of the highlighted items to continue.
@@ -606,9 +445,7 @@ const Cart = () => {
               type="button"
               className="checkout-button"
               disabled={hasStockIssue}
-              onClick={() =>
-                navigate("/checkout")
-              }
+              onClick={() => navigate("/checkout")}
             >
               Proceed to checkout
             </button>
@@ -616,18 +453,13 @@ const Cart = () => {
             <button
               type="button"
               className="continue-button"
-              onClick={() =>
-                navigate("/home")
-              }
+              onClick={() => navigate("/home")}
             >
               Continue Shopping
             </button>
-
           </div>
-
         </div>
       )}
-
     </div>
   );
 };
