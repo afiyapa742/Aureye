@@ -4,11 +4,11 @@ import "./Checkout.css";
 import API from "../api/axios";
 import SuccessPopup from "../components/successpop";
 import { PayPalButtons } from "@paypal/react-paypal-js";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://aureyaforwomen.shop/api";
 
-const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
-  /\/api\/?$/,
-  ""
-);
+const API_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
 const TAX_RATE = 0.05;
 const PAID_STATUSES = ["COMPLETED", "PAID", "SUCCESS", "SUCCEEDED", "CAPTURED"];
 
@@ -1535,7 +1535,7 @@ const Checkout = () => {
 
             <span>Wallet</span>
           </label>
-
+a
           <label className="payment-option">
             <input
               type="radio"

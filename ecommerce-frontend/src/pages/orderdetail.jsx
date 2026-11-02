@@ -98,10 +98,10 @@ const OrderDetails = () => {
 
   if (!image) return "";
 
-  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
-    /\/api\/?$/,
-    ""
-  );
+import.meta.env.VITE_API_BASE_URL ||
+  "https://aureyaforwomen.shop/api";
+
+const API_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
 
   let imagePath = String(image).trim();
 
