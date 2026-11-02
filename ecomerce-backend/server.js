@@ -19,7 +19,7 @@ app.set("trust proxy", 1);
 // CORS
 // ===============================
 const allowedOrigins = [
-  process.env.CLIENT_URL,
+  process.env.CLIENT_URL,"https://www.aureyaforwomen.shop",
   process.env.ADMIN_URL,
   ...(isProduction ? [] : ["http://localhost:5175"]),
 ].filter(Boolean);

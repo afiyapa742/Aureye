@@ -18,26 +18,6 @@ const getorder = async (userId) => {
   try {
     const orders = await Order.find({
       userId,
-
-      // COD orders can appear before payment.
-      // ONLINE and WALLET orders appear only after payment.
-      $or: [
-        {
-          paymentmethod: "COD",
-          orderstatus: {
-            $nin: ["failed", "pending"]
-          }
-        },
-        {
-          paymentmethod: {
-            $in: ["ONLINE", "WALLET"]
-          },
-          paymentstatus: "paid",
-          orderstatus: {
-            $nin: ["failed", "pending"]
-          }
-        }
-      ]
     })
       .sort({ createdAt: -1 })
       .lean();
@@ -45,35 +25,31 @@ const getorder = async (userId) => {
     const ordersWithItems = await Promise.all(
       orders.map(async (order) => {
         const items = await OrderItem.find({
-          orderId: order._id
+          orderId: order._id,
         })
           .populate({
             path: "productId",
             model: "Product",
-            select: "productName"
+            select: "productName",
           })
           .populate({
             path: "variantId",
             model: "ProductVarient",
             select:
-              "variantName price size color stock productImages skucode"
+              "variantName price size color stock productImages skucode",
           })
           .lean();
 
         return {
           ...order,
-          items
+          items,
         };
       })
     );
 
     return ordersWithItems;
   } catch (error) {
-    console.error(
-      "GET MY ORDER REPOSITORY ERROR:",
-      error
-    );
-
+    console.error("GET MY ORDER REPOSITORY ERROR:", error);
     throw error;
   }
 };
