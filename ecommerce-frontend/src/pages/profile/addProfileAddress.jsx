@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './addProfileAddress.css';
-import API from "../api/axios";
+import API from "../../api/axios";
 function AddAddress() {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);

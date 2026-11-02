@@ -126,6 +126,16 @@ const OrderDetails = () => {
 
   return `${API_ORIGIN}/uploads/${imagePath}`;
 };
+const getName = (item) => {
+  return (
+    item?.variantId?.productId?.productName ||
+    item?.variantId?.productId?.name ||
+    item?.productName ||
+    item?.product?.name ||
+    item?.name ||
+    "Product"
+  );
+};
   /* ==========================================
 
      PRICE

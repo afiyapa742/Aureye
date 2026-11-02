@@ -18,7 +18,9 @@ const getOrdermy = async (
 ) => {
 
   try {
-
+ console.log("USER FROM TOKEN:", req.user);
+    console.log("USER ID:", req.user?.id);
+    console.log("USER _ID:", req.user?._id);
     const userId =
       req.user.id;
 

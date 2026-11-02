@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiEdit3 } from 'react-icons/fi';
 import './ProfileAddress.css';
-import API from "../api/axios";
+import API from "../../api/axios";
 function ProfileAddress() {
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
