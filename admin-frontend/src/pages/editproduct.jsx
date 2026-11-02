@@ -2,10 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "./Addproduct.css";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://aureyaforwomen.shop/api";
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: API_BASE_URL,
   withCredentials: true,
 });
+
+const API_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
 const EditProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -823,10 +829,10 @@ const EditProduct = () => {
                             >
                               <img
                                 src={
-                                  imageUrl?.startsWith("http")
-  ? imageUrl
-  : `${import.meta.env.VITE_API_BASE_URL.replace(/\/api\/?$/, "")}/uploads/${imageUrl}`
-                                }
+  imageUrl?.startsWith("http")
+    ? imageUrl
+    : `${API_ORIGIN}/uploads/${imageUrl}`
+}
                                 alt={`Existing ${
                                   imageIndex +
                                   1

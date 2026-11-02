@@ -107,11 +107,11 @@ const OrderDetail = () => {
     return "";
   }
 
-  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
-    /\/api\/?$/,
-    ""
-  );
+  const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://aureyaforwomen.shop/api";
 
+const API_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
   if (String(image).startsWith("http")) {
     return image;
   }

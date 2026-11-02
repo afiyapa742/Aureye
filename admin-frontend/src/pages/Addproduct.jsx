@@ -5,7 +5,9 @@ import Cropper from "react-easy-crop";
 import "./Addproduct.css";
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL:
+    import.meta.env.VITE_API_BASE_URL ||
+    "https://aureyaforwomen.shop/api",
   withCredentials: true,
 });
 
