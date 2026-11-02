@@ -1535,7 +1535,7 @@ const Checkout = () => {
 
             <span>Wallet</span>
           </label>
-a
+
           <label className="payment-option">
             <input
               type="radio"

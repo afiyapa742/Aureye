@@ -263,3 +263,73 @@
 .sidebar-logout {
   text-align: left;
 }
+/* Hidden on desktop */
+.profile-menu-toggle,
+.profile-sidebar-close,
+.profile-sidebar-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .profile-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 16px;
+    padding: 9px 16px;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #222;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .profile-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+    width: 260px;
+    max-width: 80vw;
+    height: 100%;
+    border-radius: 0 18px 18px 0;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .profile-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .profile-sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  .profile-sidebar-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    background: #f1f1f1;
+    color: #222;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+  }
+}

@@ -1,26 +1,38 @@
-import React, {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-
-import {
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import API from "../api/axios";
 import "./viewdetails.css";
 
 // ==========================================
-// STATUS CONFIG
+// CONFIG
 // ==========================================
 
-const CANCELLABLE_STATUSES = [
-  "confirmed",
-  "processing",
-];
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://aureyaforwomen.shop/api";
 
+const API_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
+
+const CANCELLABLE_STATUSES = ["confirmed", "processing"];
+const RETURN_WINDOW_MS = 9 * 24 * 60 * 60 * 1000;
+const TAX_RATE = 0.05;
+
+const PAYMENT_METHOD_LABELS = {
+  COD: "Cash on Delivery",
+  ONLINE: "Online Payment",
+  WALLET: "Wallet",
+};
+
+const MONEY_OPTIONS = {
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2,
+};
+
+const formatMoney = (value) =>
+  Number(value || 0).toLocaleString("en-IN", MONEY_OPTIONS);
+
+const getId = (entity) => entity?._id || entity?.id || "";
 
 const ViewDetails = () => {
   const navigate = useNavigate();
@@ -28,42 +40,23 @@ const ViewDetails = () => {
 
   // ------------------------------------------
   // Navigation state
-  // Individual:
-  // { orderId, itemId }
-  //
-  // View all:
-  // { orderId, viewAll: true }
+  // Individual: { orderId, itemId }
+  // View all:   { orderId, viewAll: true }
   // ------------------------------------------
 
-  const navigationState =
-    location.state || {};
-
-  const orderId =
-    navigationState.orderId || "";
-
-  const itemId =
-    navigationState.itemId || "";
-
-  const viewAll =
-    Boolean(
-      navigationState.viewAll
-    );
+  const navigationState = location.state || {};
+  const orderId = navigationState.orderId || "";
+  const itemId = navigationState.itemId || "";
+  const viewAll = Boolean(navigationState.viewAll);
 
   // ==========================================
   // DATA
   // ==========================================
 
-  const [order, setOrder] =
-    useState(null);
-
-  const [item, setItem] =
-    useState(null);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState("");
+  const [order, setOrder] = useState(null);
+  const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   // ==========================================
   // CUSTOM ALERT POPUP
@@ -75,215 +68,120 @@ const ViewDetails = () => {
   });
 
   const showAlert = (message) => {
-    setAlertPopup({
-      open: true,
-      message,
-    });
+    setAlertPopup({ open: true, message });
   };
 
   const closeAlert = () => {
-    setAlertPopup({
-      open: false,
-      message: "",
-    });
+    setAlertPopup({ open: false, message: "" });
   };
 
   // ==========================================
   // PRODUCT REVIEW STATE
   // ==========================================
 
-  const [showReviewForm, setShowReviewForm] =
-    useState(false);
-
-  const [selectedReviewItem, setSelectedReviewItem] =
-    useState(null);
-
-  const [reviewRating, setReviewRating] =
-    useState(0);
-
-  const [reviewText, setReviewText] =
-    useState("");
-
-  const [reviewTitle, setReviewTitle] =
-    useState("");
-
-  const [reviewPublicName, setReviewPublicName] =
-    useState("");
-
-  const [reviewImage, setReviewImage] =
-    useState("");
-
-  const [reviewImageName, setReviewImageName] =
-    useState("");
-
-  const [reviewImageError, setReviewImageError] =
-    useState("");
-
-  const [reviewSubmitting, setReviewSubmitting] =
-    useState(false);
-
-  const [showReviewSuccess, setShowReviewSuccess] =
-    useState(false);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [selectedReviewItem, setSelectedReviewItem] = useState(null);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
+  const [reviewTitle, setReviewTitle] = useState("");
+  const [reviewPublicName, setReviewPublicName] = useState("");
+  const [reviewImage, setReviewImage] = useState("");
+  const [reviewImageName, setReviewImageName] = useState("");
+  const [reviewImageError, setReviewImageError] = useState("");
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [showReviewSuccess, setShowReviewSuccess] = useState(false);
 
   // ==========================================
-  // CANCEL POPUP STATE
+  // CANCEL STATE
   // ==========================================
 
-  const [showCancelPopup, setShowCancelPopup] =
-    useState(false);
-
-  const [selectedCancelItems, setSelectedCancelItems] =
-    useState([]);
-
-  const [cancelReason, setCancelReason] =
-    useState("");
-
-  const [cancelReasonError, setCancelReasonError] =
-    useState("");
-
-  const [cancelling, setCancelling] =
-    useState(false);
+  const [showCancelPopup, setShowCancelPopup] = useState(false);
+  const [selectedCancelItems, setSelectedCancelItems] = useState([]);
+  const [cancelReason, setCancelReason] = useState("");
+  const [cancelReasonError, setCancelReasonError] = useState("");
+  const [cancelling, setCancelling] = useState(false);
+  const [showCancelSuccess, setShowCancelSuccess] = useState(false);
+  const [cancelledItemCount, setCancelledItemCount] = useState(0);
 
   // ==========================================
-  // CANCEL SUCCESS
+  // RETURN STATE
   // ==========================================
 
-  const [showCancelSuccess, setShowCancelSuccess] =
-    useState(false);
-
-  const [cancelledItemCount, setCancelledItemCount] =
-    useState(0);
-
-  // ==========================================
-  // RETURN POPUP STATE
-  // ==========================================
-
-  const [showReturnPopup, setShowReturnPopup] =
-    useState(false);
-
-  const [selectedReturnItems, setSelectedReturnItems] =
-    useState([]);
-
-  const [returnReason, setReturnReason] =
-    useState("");
-
-  const [returnReasonError, setReturnReasonError] =
-    useState("");
-
-  const [returning, setReturning] =
-    useState(false);
-
-  // ==========================================
-  // RETURN SUCCESS
-  // ==========================================
-
-  const [showReturnSuccess, setShowReturnSuccess] =
-    useState(false);
-
-  const [returnedItemCount, setReturnedItemCount] =
-    useState(0);
+  const [showReturnPopup, setShowReturnPopup] = useState(false);
+  const [selectedReturnItems, setSelectedReturnItems] = useState([]);
+  const [returnReason, setReturnReason] = useState("");
+  const [returnReasonError, setReturnReasonError] = useState("");
+  const [returning, setReturning] = useState(false);
+  const [showReturnSuccess, setShowReturnSuccess] = useState(false);
+  const [returnedItemCount, setReturnedItemCount] = useState(0);
 
   // ==========================================
   // FETCH ORDER
+  // showLoader = false -> silent refresh after
+  // cancel / return (no full page flicker)
   // ==========================================
 
-  const fetchOrderDetail = async () => {
+  const fetchOrderDetail = async (showLoader = true) => {
     if (!orderId) {
-      setError(
-        "Order ID is missing"
-      );
+      setError("Order ID is missing");
       setLoading(false);
       return;
     }
 
     try {
-      setLoading(true);
+      if (showLoader) {
+        setLoading(true);
+      }
+
       setError("");
 
-      const response =
-        await API.get("/myorder");
-
-      const orderList =
-        response?.data?.data || [];
+      const response = await API.get("/myorder");
+      const orderList = response?.data?.data || [];
 
       if (!Array.isArray(orderList)) {
-        setError(
-          "Invalid order response"
-        );
+        setError("Invalid order response");
         return;
       }
 
-      const selectedOrder =
-        orderList.find(
-          (currentOrder) =>
-            String(
-              currentOrder?._id ||
-                currentOrder?.id
-            ) ===
-            String(orderId)
-        );
+      const selectedOrder = orderList.find(
+        (currentOrder) => String(getId(currentOrder)) === String(orderId)
+      );
 
       if (!selectedOrder) {
-        setError(
-          "Order not found"
-        );
+        setError("Order not found");
         return;
       }
 
-      const orderItems =
-        Array.isArray(
-          selectedOrder?.items
-        )
-          ? selectedOrder.items
-          : [];
+      const orderItems = Array.isArray(selectedOrder?.items)
+        ? selectedOrder.items
+        : [];
 
-      // In individual mode itemId is required.
       if (!viewAll) {
         if (!itemId) {
-          setError(
-            "Order item ID is missing"
-          );
+          setError("Order item ID is missing");
           return;
         }
 
-        const selectedItem =
-          orderItems.find(
-            (currentItem) =>
-              String(
-                currentItem?._id ||
-                  currentItem?.id
-              ) ===
-              String(itemId)
-          );
+        const selectedItem = orderItems.find(
+          (currentItem) => String(getId(currentItem)) === String(itemId)
+        );
 
         if (!selectedItem) {
-          setError(
-            "Order item not found"
-          );
+          setError("Order item not found");
           return;
         }
 
-        setItem(
-          selectedItem
-        );
+        setItem(selectedItem);
       } else {
-        // View-all mode does not require itemId.
         setItem(null);
       }
 
-      setOrder(
-        selectedOrder
-      );
+      setOrder(selectedOrder);
     } catch (err) {
-      console.error(
-        "VIEW DETAILS ERROR:",
-        err
-      );
+      console.error("VIEW DETAILS ERROR:", err);
 
       setError(
-        err?.response?.data
-          ?.message ||
-          "Unable to load order details"
+        err?.response?.data?.message || "Unable to load order details"
       );
     } finally {
       setLoading(false);
@@ -292,848 +190,449 @@ const ViewDetails = () => {
 
   useEffect(() => {
     fetchOrderDetail();
-  }, [
-    orderId,
-    itemId,
-    viewAll,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId, itemId, viewAll]);
 
   // ==========================================
-  // ALL ORDER ITEMS
+  // ITEMS
   // ==========================================
 
-  const allItems = useMemo(() => {
-    return Array.isArray(
-      order?.items
-    )
-      ? order.items
-      : [];
-  }, [order]);
+  const allItems = useMemo(
+    () => (Array.isArray(order?.items) ? order.items : []),
+    [order]
+  );
 
-  // View-all is only a real bulk page
-  // when the order contains more than 1 item.
-  const isBulkView =
-    viewAll &&
-    allItems.length > 1;
+  // Bulk page only when the order has more than 1 item.
+  const isBulkView = viewAll && allItems.length > 1;
 
-  // Individual page gets exactly one item.
-  const displayItems =
-    isBulkView
-      ? allItems
-      : item
-      ? [item]
-      : [];
+  // In single mode the item comes from the latest order data,
+  // so it always reflects the refreshed status.
+  const displayItems = isBulkView ? allItems : item ? [item] : [];
 
   // ==========================================
   // IMAGE
   // ==========================================
-const getImage = (currentItem) => {
-  const image =
-    currentItem?.variantId?.productImages?.[0]?.imageUrl || "";
 
-  if (!image) return "";
+  const getImage = (currentItem) => {
+    const image =
+      currentItem?.variantId?.productImages?.[0]?.imageUrl || "";
 
-  const API_ORIGIN = import.meta.env.VITE_API_BASE_URL.replace(
-    /\/api\/?$/,
-    ""
-  );
+    if (!image) return "";
 
-  let imagePath = String(image).trim();
+    let imagePath = String(image).trim();
 
-  if (!imagePath) return "";
+    if (!imagePath) return "";
 
-  if (/^https?:\/\//i.test(imagePath)) {
-    if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(imagePath)) {
-      return imagePath;
+    if (/^https?:\/\//i.test(imagePath)) {
+      if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(imagePath)) {
+        return imagePath;
+      }
+
+      imagePath = imagePath.replace(
+        /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
+        ""
+      );
     }
 
-    imagePath = imagePath.replace(
-      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i,
-      ""
-    );
-  }
+    imagePath = imagePath.replace(/^\/+/, "");
 
-  imagePath = imagePath.replace(/^\/+/, "");
+    if (imagePath.startsWith("uploads/")) {
+      return `${API_ORIGIN}/${imagePath}`;
+    }
 
-  if (imagePath.startsWith("uploads/")) {
-    return `${API_ORIGIN}/${imagePath}`;
-  }
-
-  return `${API_ORIGIN}/uploads/${imagePath}`;
-};
-
-  // ==========================================
-  // PRODUCT NAME
-  // ==========================================
-
-  const getProductName = (
-    currentItem
-  ) => {
-    return (
-      currentItem
-        ?.productId
-        ?.productName ||
-      currentItem
-        ?.variantId
-        ?.variantName ||
-      "Product"
-    );
+    return `${API_ORIGIN}/uploads/${imagePath}`;
   };
 
   // ==========================================
-  // PRICE
+  // BASIC GETTERS
   // ==========================================
 
-  const getPrice = (
-    currentItem
-  ) => {
-    return Number(
-      currentItem?.price ??
-        currentItem
-          ?.variantId
-          ?.price ??
-        0
-    );
-  };
+  const getProductName = (currentItem) =>
+    currentItem?.productId?.productName ||
+    currentItem?.variantId?.variantName ||
+    "Product";
 
-  // ==========================================
-  // QUANTITY
-  // ==========================================
+  const getPrice = (currentItem) =>
+    Number(currentItem?.price ?? currentItem?.variantId?.price ?? 0);
 
-  const getQuantity = (
-    currentItem
-  ) => {
-    return Number(
-      currentItem?.quantity ||
-        1
-    );
-  };
+  const getQuantity = (currentItem) => Number(currentItem?.quantity || 1);
 
   // ==========================================
   // STATUS
+  // The ITEM status has priority. The order
+  // status is only a fallback. This is what
+  // makes Cancel / Return buttons disappear
+  // after the item is cancelled or returned.
   // ==========================================
 
-
-const getStatus = (currentItem) => {
-  return String(
-    order?.orderstatus ||
+  const getStatus = (currentItem) =>
+    String(
       currentItem?.status ||
-      "pending"
-  ).toLowerCase();
-};
+        currentItem?.itemstatus ||
+        currentItem?.itemStatus ||
+        currentItem?.orderstatus ||
+        order?.orderstatus ||
+        "pending"
+    ).toLowerCase();
 
-
-  const getStatusLabel = (
-    currentStatus
-  ) => {
-    return String(
-      currentStatus
-    )
-      .replaceAll(
-        "_",
-        " "
-      )
-      .replace(
-        /\b\w/g,
-        (letter) =>
-          letter.toUpperCase()
-      );
-  };
+  const getStatusLabel = (currentStatus) =>
+    String(currentStatus)
+      .replaceAll("_", " ")
+      .replace(/\b\w/g, (letter) => letter.toUpperCase());
 
   // ==========================================
   // DATE
   // ==========================================
 
-  const formatDate = (
-    date
-  ) => {
-    if (!date) {
-      return "-";
-    }
+  const formatDate = (date) => {
+    if (!date) return "-";
 
-    const parsedDate =
-      new Date(date);
+    const parsedDate = new Date(date);
 
-    if (
-      Number.isNaN(
-        parsedDate.getTime()
-      )
-    ) {
-      return "-";
-    }
+    if (Number.isNaN(parsedDate.getTime())) return "-";
 
-    return parsedDate.toLocaleDateString(
-      "en-IN",
-      {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      }
-    );
+    return parsedDate.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
   };
 
   // ==========================================
-  // CANCEL ELIGIBILITY
+  // ELIGIBILITY
   // ==========================================
 
-  const canCancelItem = (
-    currentItem
-  ) => {
-    const currentStatus =
-      getStatus(
-        currentItem
-      );
+  const canCancelItem = (currentItem) =>
+    Boolean(currentItem) &&
+    CANCELLABLE_STATUSES.includes(getStatus(currentItem));
 
-    return CANCELLABLE_STATUSES.includes(
-      currentStatus
-    );
+  // Only delivered items within 9 days of delivery.
+  const canReturnItem = (currentItem) => {
+    if (!currentItem) return false;
+
+    if (getStatus(currentItem) !== "delivered") return false;
+
+    const deliveredAt = currentItem?.deliveredAt;
+
+    if (!deliveredAt) return false;
+
+    const deliveredTime = new Date(deliveredAt).getTime();
+
+    if (Number.isNaN(deliveredTime)) return false;
+
+    return Date.now() < deliveredTime + RETURN_WINDOW_MS;
   };
 
-  // ==========================================
-  // RETURN ELIGIBILITY
-  // Only delivered + within 9 days
-  // ==========================================
+  const cancellableItems = useMemo(
+    () => allItems.filter((currentItem) => canCancelItem(currentItem)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [allItems, order]
+  );
 
-const canReturnItem = (currentItem) => {
-  const currentStatus = getStatus(currentItem);
-
-  if (currentStatus !== "delivered") {
-    return false;
-  }
-
-  const deliveredAt = currentItem?.deliveredAt;
-
-  if (!deliveredAt) {
-    return false;
-  }
-
-  const deliveredTime = new Date(deliveredAt).getTime();
-
-  if (Number.isNaN(deliveredTime)) {
-    return false;
-  }
-
-  const returnWindow = 9 * 24 * 60 * 60 * 1000;
-  const returnDeadline = deliveredTime + returnWindow;
-
-  return Date.now() < returnDeadline;
-};
-
-
-  // ==========================================
-  // ELIGIBLE ITEMS
-  // ==========================================
-
-  const cancellableItems =
-    useMemo(() => {
-      return allItems.filter(
-        (currentItem) =>
-          canCancelItem(
-            currentItem
-          )
-      );
-    }, [
-      allItems,
-      order,
-    ]);
-
-  const returnableItems =
-    useMemo(() => {
-      return allItems.filter(
-        (currentItem) =>
-          canReturnItem(
-            currentItem
-          )
-      );
-    }, [
-      allItems,
-      order,
-    ]);
+  const returnableItems = useMemo(
+    () => allItems.filter((currentItem) => canReturnItem(currentItem)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [allItems, order]
+  );
 
   // ==========================================
   // TOTALS
   // ==========================================
 
-  const calculatedItemsTotal =
-    allItems.reduce(
-      (total, currentItem) =>
-        total +
-        getPrice(currentItem) *
-        getQuantity(currentItem),
-      0
-    );
-
-  const bulkItemsTotal = Number(
-    order?.subtotal ?? calculatedItemsTotal
+  const calculatedItemsTotal = allItems.reduce(
+    (total, currentItem) =>
+      total + getPrice(currentItem) * getQuantity(currentItem),
+    0
   );
 
-  const singleItemTotal = item
-    ? getPrice(item) * getQuantity(item)
-    : 0;
+  const bulkItemsTotal = Number(order?.subtotal ?? calculatedItemsTotal);
 
-  const deliveryCharge = Number(
-    order?.deliverycharge || 0
-  );
+  const singleItemTotal = item ? getPrice(item) * getQuantity(item) : 0;
+
+  const deliveryCharge = Number(order?.deliverycharge || 0);
 
   const discount = Number(
-    order?.discountamount ||
-      order?.coupondiscount ||
-      0
+    order?.discountamount || order?.coupondiscount || 0
   );
 
-  const itemsTotal = isBulkView
-    ? bulkItemsTotal
-    : singleItemTotal;
+  const itemsTotal = isBulkView ? bulkItemsTotal : singleItemTotal;
 
-  const taxableAmount = Math.max(
-    itemsTotal - discount,
-    0
-  );
+  const taxableAmount = Math.max(itemsTotal - discount, 0);
 
   // 5% tax, calculated after discount.
-  const tax = Number(
-    (taxableAmount * 0.05).toFixed(2)
-  );
+  const tax = Number((taxableAmount * TAX_RATE).toFixed(2));
 
   const calculatedTotal = Math.max(
-    taxableAmount +
-      deliveryCharge +
-      tax,
+    taxableAmount + deliveryCharge + tax,
     0
   );
 
-  const displayedTotal = Number(
-    order?.total ?? calculatedTotal
-  );
+  const displayedTotal = Number(order?.total ?? calculatedTotal);
 
-  // Customer-paid amount for each item.
-  // Discount, tax and delivery are distributed
-  // proportionally when an order has multiple items.
-  const getCustomerPaidItemTotal = (currentItem) => {
-    const lineTotal =
-      getPrice(currentItem) *
-      getQuantity(currentItem);
-
-    if (lineTotal <= 0) {
-      return 0;
-    }
+  // Share of the order that belongs to one item.
+  const getItemShare = (currentItem) => {
+    const lineTotal = getPrice(currentItem) * getQuantity(currentItem);
 
     const orderSubtotal =
-      bulkItemsTotal > 0
-        ? bulkItemsTotal
-        : calculatedItemsTotal;
+      bulkItemsTotal > 0 ? bulkItemsTotal : calculatedItemsTotal;
 
-    const itemShare =
-      orderSubtotal > 0
-        ? lineTotal / orderSubtotal
-        : 0;
+    return orderSubtotal > 0 ? lineTotal / orderSubtotal : 0;
+  };
 
-    const itemDiscount =
-      discount * itemShare;
+  // Customer-paid amount for one item. Discount, tax and
+  // delivery are distributed proportionally.
+  const getCustomerPaidItemTotal = (currentItem) => {
+    const lineTotal = getPrice(currentItem) * getQuantity(currentItem);
 
-    const itemTax = tax * itemShare;
-    const itemDelivery =
-      deliveryCharge * itemShare;
+    if (lineTotal <= 0) return 0;
+
+    const share = getItemShare(currentItem);
 
     return Number(
       Math.max(
-        lineTotal -
-          itemDiscount +
-          itemTax +
-          itemDelivery,
+        lineTotal - discount * share + tax * share + deliveryCharge * share,
         0
       ).toFixed(2)
     );
   };
 
   // ==========================================
-  // TRACK INDIVIDUAL ITEM
+  // TRACK
   // ==========================================
 
-  const handleTrack = (
-    currentItem
-  ) => {
-    const currentItemId =
-      currentItem?._id ||
-      currentItem?.id;
+  const handleTrack = (currentItem) => {
+    const currentItemId = getId(currentItem);
 
-    if (
-      !orderId ||
-      !currentItemId
-    ) {
-      return;
-    }
+    if (!orderId || !currentItemId) return;
 
-    navigate(
-      `/profile/orders/${orderId}/track/${currentItemId}`
-    );
+    navigate(`/profile/orders/${orderId}/track/${currentItemId}`);
   };
 
   // ==========================================
-  // OPEN CANCEL POPUP
+  // CANCEL FLOW
   // ==========================================
 
-  const openCancelPopup = (
-    itemOrItems
-  ) => {
-    const itemList =
-      Array.isArray(
-        itemOrItems
-      )
-        ? itemOrItems
-        : [itemOrItems];
+  const openCancelPopup = (itemOrItems) => {
+    const itemList = Array.isArray(itemOrItems)
+      ? itemOrItems
+      : [itemOrItems];
 
-    const ids =
-      itemList
-        .map(
-          (currentItem) =>
-            currentItem?._id ||
-            currentItem?.id
-        )
-        .filter(Boolean)
-        .map(String);
+    const ids = itemList
+      .map((currentItem) => getId(currentItem))
+      .filter(Boolean)
+      .map(String);
 
-    if (
-      ids.length === 0
-    ) {
-      return;
-    }
+    if (ids.length === 0) return;
 
-    setSelectedCancelItems(
-      ids
-    );
-
+    setSelectedCancelItems(ids);
     setCancelReason("");
     setCancelReasonError("");
-    setShowCancelPopup(
-      true
-    );
+    setShowCancelPopup(true);
   };
-
-  // ==========================================
-  // CLOSE CANCEL POPUP
-  // ==========================================
 
   const closeCancelPopup = () => {
-    if (cancelling) {
-      return;
-    }
+    if (cancelling) return;
 
-    setShowCancelPopup(
-      false
-    );
-
-    setSelectedCancelItems(
-      []
-    );
-
+    setShowCancelPopup(false);
+    setSelectedCancelItems([]);
     setCancelReason("");
     setCancelReasonError("");
   };
 
-  // ==========================================
-  // TOGGLE CANCEL ITEM
-  // ==========================================
+  const toggleCancelItem = (currentItemId) => {
+    const id = String(currentItemId);
 
-  const toggleCancelItem = (
-    currentItemId
-  ) => {
-    const id = String(
-      currentItemId
-    );
-
-    setSelectedCancelItems(
-      (currentItems) => {
-        if (
-          currentItems.includes(
-            id
-          )
-        ) {
-          return currentItems.filter(
-            (selectedId) =>
-              selectedId !== id
-          );
-        }
-
-        return [
-          ...currentItems,
-          id,
-        ];
-      }
+    setSelectedCancelItems((currentItems) =>
+      currentItems.includes(id)
+        ? currentItems.filter((selectedId) => selectedId !== id)
+        : [...currentItems, id]
     );
   };
 
-  // ==========================================
-  // CONFIRM CANCEL
-  // ==========================================
+  const confirmCancel = async () => {
+    const reason = cancelReason.trim();
 
-  const confirmCancel =
-    async () => {
-      const reason =
-        cancelReason.trim();
-
-      if (!reason) {
-        setCancelReasonError(
-          "Cancellation reason is required."
-        );
-        return;
-      }
-
-      if (
-        selectedCancelItems.length ===
-        0
-      ) {
-        setCancelReasonError(
-          "Please select at least one item."
-        );
-        return;
-      }
-
-      try {
-        setCancelling(
-          true
-        );
-        setCancelReasonError(
-          ""
-        );
-
-        let successCount = 0;
-
-        for (
-          const currentItemId of selectedCancelItems
-        ) {
-          try {
-           await API.post(
-  `/cancel-refund/${orderId}/${currentItemId}`,
-  { reason }
-), successCount += 1;
-          } catch (itemError) {
-            console.error(
-              "CANCEL ITEM ERROR:",
-              currentItemId,
-              itemError
-            );
-          }
-        }
-
-        if (
-          successCount ===
-          0
-        ) {
-          throw new Error(
-            "Unable to cancel the selected item(s)."
-          );
-        }
-
-        setShowCancelPopup(
-          false
-        );
-
-        setSelectedCancelItems(
-          []
-        );
-
-        setCancelReason("");
-
-        setCancelledItemCount(
-          successCount
-        );
-
-        setShowCancelSuccess(
-          true
-        );
-
-        await fetchOrderDetail();
-
-      } catch (err) {
-        console.error(
-          "CANCEL ORDER ERROR:",
-          err
-        );
-
-        setCancelReasonError(
-          err?.response?.data
-            ?.message ||
-            err?.message ||
-            "Unable to cancel the selected item(s)."
-        );
-      } finally {
-        setCancelling(
-          false
-        );
-      }
-    };
-
-  // ==========================================
-  // CLOSE CANCEL SUCCESS
-  // ==========================================
-
-  const closeCancelSuccess =
-    () => {
-      setShowCancelSuccess(
-        false
-      );
-
-      setCancelledItemCount(
-        0
-      );
-    };
-
-  // ==========================================
-  // OPEN RETURN POPUP
-  // ==========================================
-
-  const openReturnPopup = (
-    itemOrItems
-  ) => {
-    const itemList =
-      Array.isArray(
-        itemOrItems
-      )
-        ? itemOrItems
-        : [itemOrItems];
-
-    const eligibleItems =
-      itemList.filter(
-        (currentItem) =>
-          canReturnItem(
-            currentItem
-          )
-      );
-
-    const ids =
-      eligibleItems
-        .map(
-          (currentItem) =>
-            currentItem?._id ||
-            currentItem?.id
-        )
-        .filter(Boolean)
-        .map(String);
-
-    if (
-      ids.length === 0
-    ) {
+    if (!reason) {
+      setCancelReasonError("Cancellation reason is required.");
       return;
     }
 
-    setSelectedReturnItems(
-      ids
-    );
+    if (selectedCancelItems.length === 0) {
+      setCancelReasonError("Please select at least one item.");
+      return;
+    }
 
-    setReturnReason("");
-    setReturnReasonError("");
-    setShowReturnPopup(
-      true
-    );
+    try {
+      setCancelling(true);
+      setCancelReasonError("");
+
+      let successCount = 0;
+
+      for (const currentItemId of selectedCancelItems) {
+        try {
+          await API.post(`/cancel-refund/${orderId}/${currentItemId}`, {
+            reason,
+          });
+
+          successCount += 1;
+        } catch (itemError) {
+          console.error("CANCEL ITEM ERROR:", currentItemId, itemError);
+        }
+      }
+
+      if (successCount === 0) {
+        throw new Error("Unable to cancel the selected item(s).");
+      }
+
+      setShowCancelPopup(false);
+      setSelectedCancelItems([]);
+      setCancelReason("");
+      setCancelledItemCount(successCount);
+      setShowCancelSuccess(true);
+
+      // Silent refresh so the new item status is shown.
+      await fetchOrderDetail(false);
+    } catch (err) {
+      console.error("CANCEL ORDER ERROR:", err);
+
+      setCancelReasonError(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Unable to cancel the selected item(s)."
+      );
+    } finally {
+      setCancelling(false);
+    }
+  };
+
+  const closeCancelSuccess = () => {
+    setShowCancelSuccess(false);
+    setCancelledItemCount(0);
   };
 
   // ==========================================
-  // CLOSE RETURN POPUP
+  // RETURN FLOW
   // ==========================================
+
+  const openReturnPopup = (itemOrItems) => {
+    const itemList = Array.isArray(itemOrItems)
+      ? itemOrItems
+      : [itemOrItems];
+
+    const ids = itemList
+      .filter((currentItem) => canReturnItem(currentItem))
+      .map((currentItem) => getId(currentItem))
+      .filter(Boolean)
+      .map(String);
+
+    if (ids.length === 0) return;
+
+    setSelectedReturnItems(ids);
+    setReturnReason("");
+    setReturnReasonError("");
+    setShowReturnPopup(true);
+  };
 
   const closeReturnPopup = () => {
-    if (returning) {
-      return;
-    }
+    if (returning) return;
 
-    setShowReturnPopup(
-      false
-    );
-
-    setSelectedReturnItems(
-      []
-    );
-
+    setShowReturnPopup(false);
+    setSelectedReturnItems([]);
     setReturnReason("");
     setReturnReasonError("");
   };
 
-  // ==========================================
-  // TOGGLE RETURN ITEM
-  // ==========================================
+  const toggleReturnItem = (currentItemId) => {
+    const id = String(currentItemId);
 
-  const toggleReturnItem = (
-    currentItemId
-  ) => {
-    const id = String(
-      currentItemId
-    );
-
-    setSelectedReturnItems(
-      (currentItems) => {
-        if (
-          currentItems.includes(
-            id
-          )
-        ) {
-          return currentItems.filter(
-            (selectedId) =>
-              selectedId !== id
-          );
-        }
-
-        return [
-          ...currentItems,
-          id,
-        ];
-      }
+    setSelectedReturnItems((currentItems) =>
+      currentItems.includes(id)
+        ? currentItems.filter((selectedId) => selectedId !== id)
+        : [...currentItems, id]
     );
   };
 
-  // ==========================================
-  // CONFIRM RETURN
-  // ==========================================
+  const confirmReturn = async () => {
+    const reason = returnReason.trim();
 
-  const confirmReturn =
-    async () => {
-      const reason =
-        returnReason.trim();
+    if (!reason) {
+      setReturnReasonError("Return reason is required.");
+      return;
+    }
 
-      if (!reason) {
-        setReturnReasonError(
-          "Return reason is required."
+    if (selectedReturnItems.length === 0) {
+      setReturnReasonError("Please select at least one item.");
+      return;
+    }
+
+    try {
+      setReturning(true);
+      setReturnReasonError("");
+
+      if (selectedReturnItems.length === 1) {
+        await API.put(
+          `/myorder/order-item/return/${selectedReturnItems[0]}`,
+          { reason }
         );
-        return;
+      } else {
+        await API.put("/myorder/order-items/return", {
+          itemIds: selectedReturnItems,
+          reason,
+        });
       }
 
-      if (
-        selectedReturnItems.length ===
-        0
-      ) {
-        setReturnReasonError(
-          "Please select at least one item."
-        );
-        return;
-      }
+      const count = selectedReturnItems.length;
 
-      try {
-        setReturning(true);
-        setReturnReasonError("");
+      setShowReturnPopup(false);
+      setSelectedReturnItems([]);
+      setReturnReason("");
+      setReturnedItemCount(count);
+      setShowReturnSuccess(true);
 
-        if (
-          selectedReturnItems.length ===
-          1
-        ) {
-          await API.put(
-            `/myorder/order-item/return/${selectedReturnItems[0]}`,
-            {
-              reason,
-            }
-          );
-        } else {
-          await API.put(
-            "/myorder/order-items/return",
-            {
-              itemIds:
-                selectedReturnItems,
-              reason,
-            }
-          );
-        }
+      // Silent refresh so the new item status is shown.
+      await fetchOrderDetail(false);
+    } catch (err) {
+      console.error("RETURN ITEM ERROR:", err?.response?.data || err);
 
-        const count =
-          selectedReturnItems.length;
-
-        setShowReturnPopup(
-          false
-        );
-
-        setSelectedReturnItems(
-          []
-        );
-
-        setReturnReason("");
-
-        setReturnedItemCount(
-          count
-        );
-
-        setShowReturnSuccess(
-          true
-        );
-
-        await fetchOrderDetail();
-
-      } catch (err) {
-        console.error(
-          "RETURN ITEM ERROR:",
-          err?.response?.data ||
-            err
-        );
-
-        setReturnReasonError(
-          err?.response?.data
-            ?.message ||
-            "Unable to submit return request."
-        );
-      } finally {
-        setReturning(
-          false
-        );
-      }
-    };
-
-  // ==========================================
-  // CLOSE RETURN SUCCESS
-  // ==========================================
-
-  const closeReturnSuccess =
-    () => {
-      setShowReturnSuccess(
-        false
+      setReturnReasonError(
+        err?.response?.data?.message || "Unable to submit return request."
       );
+    } finally {
+      setReturning(false);
+    }
+  };
 
-      setReturnedItemCount(
-        0
-      );
-    };
+  const closeReturnSuccess = () => {
+    setShowReturnSuccess(false);
+    setReturnedItemCount(0);
+  };
 
   // ==========================================
   // PRODUCT REVIEW HELPERS
   // ==========================================
 
-  const getReviewProductId = (
-    currentItem
-  ) => {
-    return (
-      currentItem?.productId?._id ||
-      currentItem?.productId?.id ||
-      currentItem?.productId ||
-      ""
-    );
-  };
+  const getReviewProductId = (currentItem) =>
+    currentItem?.productId?._id ||
+    currentItem?.productId?.id ||
+    currentItem?.productId ||
+    "";
 
-  const getReviewVariantId = (
-    currentItem
-  ) => {
-    return (
-      currentItem?.variantId?._id ||
-      currentItem?.variantId?.id ||
-      currentItem?.variantId ||
-      ""
-    );
-  };
+  const getReviewVariantId = (currentItem) =>
+    currentItem?.variantId?._id ||
+    currentItem?.variantId?.id ||
+    currentItem?.variantId ||
+    "";
 
   const getStoredPublicName = () => {
-    const possibleKeys = [
-      "user",
-      "userData",
-      "currentUser",
-      "profile",
-    ];
+    const possibleKeys = ["user", "userData", "currentUser", "profile"];
 
     for (const key of possibleKeys) {
       try {
-        const raw =
-          localStorage.getItem(key);
+        const raw = localStorage.getItem(key);
 
-        if (!raw) {
-          continue;
-        }
+        if (!raw) continue;
 
-        const parsed =
-          JSON.parse(raw);
+        const parsed = JSON.parse(raw);
 
         const name =
           parsed?.FullName ||
@@ -1146,10 +645,7 @@ const canReturnItem = (currentItem) => {
           return String(name).trim();
         }
       } catch (storageError) {
-        console.error(
-          "PUBLIC NAME READ ERROR:",
-          storageError
-        );
+        console.error("PUBLIC NAME READ ERROR:", storageError);
       }
     }
 
@@ -1158,64 +654,20 @@ const canReturnItem = (currentItem) => {
 
   const getStoredReviews = () => {
     try {
-      const raw =
-        localStorage.getItem(
-          "productReviews"
-        );
+      const raw = localStorage.getItem("productReviews");
 
-      if (!raw) {
-        return [];
-      }
+      if (!raw) return [];
 
-      const parsed =
-        JSON.parse(raw);
+      const parsed = JSON.parse(raw);
 
-      return Array.isArray(parsed)
-        ? parsed
-        : [];
+      return Array.isArray(parsed) ? parsed : [];
     } catch (storageError) {
-      console.error(
-        "REVIEW STORAGE READ ERROR:",
-        storageError
-      );
-
+      console.error("REVIEW STORAGE READ ERROR:", storageError);
       return [];
     }
   };
 
-  const openReviewForm = (
-    currentItem
-  ) => {
-    if (
-      getStatus(currentItem) !==
-      "delivered"
-    ) {
-      return;
-    }
-
-    setSelectedReviewItem(
-      currentItem
-    );
-
-    setReviewRating(0);
-    setReviewText("");
-    setReviewTitle("");
-    setReviewPublicName(
-      getStoredPublicName()
-    );
-    setReviewImage("");
-    setReviewImageName("");
-    setReviewImageError("");
-    setShowReviewForm(true);
-  };
-
-  const closeReviewForm = () => {
-    if (reviewSubmitting) {
-      return;
-    }
-
-    setShowReviewForm(false);
-    setSelectedReviewItem(null);
+  const resetReviewFields = () => {
     setReviewRating(0);
     setReviewText("");
     setReviewTitle("");
@@ -1225,70 +677,60 @@ const canReturnItem = (currentItem) => {
     setReviewImageError("");
   };
 
-  const handleReviewImageChange = (
-    event
-  ) => {
-    const file =
-      event.target.files?.[0];
+  const openReviewForm = (currentItem) => {
+    if (getStatus(currentItem) !== "delivered") return;
+
+    resetReviewFields();
+    setSelectedReviewItem(currentItem);
+    setReviewPublicName(getStoredPublicName());
+    setShowReviewForm(true);
+  };
+
+  const closeReviewForm = () => {
+    if (reviewSubmitting) return;
+
+    setShowReviewForm(false);
+    setSelectedReviewItem(null);
+    resetReviewFields();
+  };
+
+  const handleReviewImageChange = (event) => {
+    const file = event.target.files?.[0];
 
     setReviewImageError("");
     setReviewImage("");
     setReviewImageName("");
 
-    if (!file) {
+    if (!file) return;
+
+    if (!String(file.type).startsWith("image/")) {
+      setReviewImageError("Please select an image file.");
       return;
     }
 
-    if (
-      !String(file.type).startsWith(
-        "image/"
-      )
-    ) {
-      setReviewImageError(
-        "Please select an image file."
-      );
+    if (file.size > 5 * 1024 * 1024) {
+      setReviewImageError("Image size must be 5 MB or less.");
       return;
     }
 
-    if (
-      file.size >
-      5 * 1024 * 1024
-    ) {
-      setReviewImageError(
-        "Image size must be 5 MB or less."
-      );
-      return;
-    }
-
-    const reader =
-      new FileReader();
+    const reader = new FileReader();
 
     reader.onload = () => {
       setReviewImage(
-        typeof reader.result ===
-          "string"
-          ? reader.result
-          : ""
+        typeof reader.result === "string" ? reader.result : ""
       );
-
-      setReviewImageName(
-        file.name
-      );
+      setReviewImageName(file.name);
     };
 
     reader.onerror = () => {
-      setReviewImageError(
-        "Unable to read the selected image."
-      );
+      setReviewImageError("Unable to read the selected image.");
     };
 
     reader.readAsDataURL(file);
   };
 
   const submitProductReview = () => {
-    if (!selectedReviewItem) {
-      return;
-    }
+    if (!selectedReviewItem) return;
 
     if (reviewRating < 1) {
       showAlert("Please select a star rating.");
@@ -1305,10 +747,7 @@ const canReturnItem = (currentItem) => {
       return;
     }
 
-    const productId =
-      getReviewProductId(
-        selectedReviewItem
-      );
+    const productId = getReviewProductId(selectedReviewItem);
 
     if (!productId) {
       showAlert("Product information is missing.");
@@ -1318,110 +757,65 @@ const canReturnItem = (currentItem) => {
     try {
       setReviewSubmitting(true);
 
-      const reviews =
-        getStoredReviews();
+      const reviews = getStoredReviews();
 
       const review = {
         id: `${Date.now()}-${Math.random()}`,
         orderId,
-        productId:
-          String(productId),
-        variantId: String(
-          getReviewVariantId(
-            selectedReviewItem
-          ) || ""
-        ),
-        productName:
-          getProductName(
-            selectedReviewItem
-          ),
+        productId: String(productId),
+        variantId: String(getReviewVariantId(selectedReviewItem) || ""),
+        productName: getProductName(selectedReviewItem),
         rating: reviewRating,
-        reviewText:
-          reviewText.trim(),
-        title:
-          reviewTitle.trim(),
-        publicName:
-          reviewPublicName.trim(),
-        image:
-          reviewImage || "",
-        imageName:
-          reviewImageName || "",
-        createdAt:
-          new Date().toISOString(),
+        reviewText: reviewText.trim(),
+        title: reviewTitle.trim(),
+        publicName: reviewPublicName.trim(),
+        image: reviewImage || "",
+        imageName: reviewImageName || "",
+        createdAt: new Date().toISOString(),
       };
 
       localStorage.setItem(
         "productReviews",
-        JSON.stringify([
-          review,
-          ...reviews,
-        ])
+        JSON.stringify([review, ...reviews])
       );
 
       setShowReviewForm(false);
       setShowReviewSuccess(true);
     } catch (reviewError) {
-      console.error(
-        "SUBMIT REVIEW ERROR:",
-        reviewError
-      );
-
+      console.error("SUBMIT REVIEW ERROR:", reviewError);
       showAlert("Unable to submit your review. Please try again.");
     } finally {
       setReviewSubmitting(false);
     }
   };
 
-  const handleBuyAgain = (
-    currentItem
-  ) => {
-    const productId =
-      getReviewProductId(
-        currentItem
-      );
+  const handleBuyAgain = (currentItem) => {
+    const productId = getReviewProductId(currentItem);
 
-    if (!productId) {
-      return;
-    }
+    if (!productId) return;
 
-    navigate(
-      `/productdetail/${productId}`
-    );
+    navigate(`/productdetail/${productId}`);
   };
 
   const closeReviewSuccess = () => {
-    const productId =
-      getReviewProductId(
-        selectedReviewItem
-      );
+    const productId = getReviewProductId(selectedReviewItem);
 
     setShowReviewSuccess(false);
     setSelectedReviewItem(null);
-    setReviewRating(0);
-    setReviewText("");
-    setReviewTitle("");
-    setReviewPublicName("");
-    setReviewImage("");
-    setReviewImageName("");
-    setReviewImageError("");
+    resetReviewFields();
 
     if (productId) {
-      navigate(
-        `/productdetail/${productId}`,
-        {
-          state: {
-            activeTab: "review",
-            reviewSubmitted: true,
-          },
-        }
-      );
+      navigate(`/productdetail/${productId}`, {
+        state: {
+          activeTab: "review",
+          reviewSubmitted: true,
+        },
+      });
 
       return;
     }
 
-    navigate(
-      "/profile/orders"
-    );
+    navigate("/profile/orders");
   };
 
   // ==========================================
@@ -1429,9 +823,7 @@ const canReturnItem = (currentItem) => {
   // ==========================================
 
   const handleInvoice = async (currentItemId) => {
-    if (!orderId || (!isBulkView && !currentItemId)) {
-      return;
-    }
+    if (!orderId || (!isBulkView && !currentItemId)) return;
 
     const invoiceWindow = window.open("", "_blank");
 
@@ -1458,8 +850,8 @@ const canReturnItem = (currentItem) => {
     `);
 
     try {
-      // Bulk order: request one invoice for the complete order.
-      // Individual order item: keep the existing item invoice endpoint.
+      // Bulk: one invoice for the complete order.
+      // Single: invoice for the individual order item.
       const invoiceEndpoint = isBulkView
         ? `/myorder/order/${orderId}/invoice`
         : `/myorder/order/${orderId}/invoice/${currentItemId}`;
@@ -1489,6 +881,7 @@ const canReturnItem = (currentItem) => {
     } catch (err) {
       console.error("INVOICE ERROR:", err);
       invoiceWindow.close();
+
       showAlert(
         err?.response?.data?.message ||
           "Unable to open the invoice. Please try again."
@@ -1500,12 +893,9 @@ const canReturnItem = (currentItem) => {
   // BACK
   // ==========================================
 
-  const handleBack =
-    () => {
-      navigate(
-        "/profile/orders"
-      );
-    };
+  const handleBack = () => {
+    navigate("/profile/orders");
+  };
 
   // ==========================================
   // LOADING
@@ -1514,9 +904,7 @@ const canReturnItem = (currentItem) => {
   if (loading) {
     return (
       <div className="view-details-page">
-        <div className="order-detail-loading">
-          Loading order details...
-        </div>
+        <div className="order-detail-loading">Loading order details...</div>
       </div>
     );
   }
@@ -1525,34 +913,17 @@ const canReturnItem = (currentItem) => {
   // ERROR
   // ==========================================
 
-  if (
-    error ||
-    !order ||
-    displayItems.length ===
-      0
-  ) {
+  if (error || !order || displayItems.length === 0) {
     return (
       <div className="view-details-page">
         <div className="order-detail-error">
+          <h2>Order Details</h2>
 
-          <h2>
-            Order Details
-          </h2>
+          <p>{error || "Order details not found"}</p>
 
-          <p>
-            {error ||
-              "Order details not found"}
-          </p>
-
-          <button
-            type="button"
-            onClick={
-              handleBack
-            }
-          >
+          <button type="button" onClick={handleBack}>
             Back to My Orders
           </button>
-
         </div>
       </div>
     );
@@ -1565,668 +936,306 @@ const canReturnItem = (currentItem) => {
   return (
     <div className="view-details-page">
       <div className="order-detail-container">
-
         {/* PAGE HEADER */}
 
         <div className="order-detail-topbar">
-          <h1>
-            Order Details
-          </h1>
+          <h1>Order Details</h1>
         </div>
 
-        {/* ======================================
-            MAIN ORDER CARD
-        ======================================= */}
+        {/* MAIN ORDER CARD */}
 
         <div
           className={`order-detail-card ${
-            isBulkView
-              ? "bulk-order-detail-card"
-              : "single-order-detail-card"
+            isBulkView ? "bulk-order-detail-card" : "single-order-detail-card"
           }`}
         >
-
-          {/* ====================================
-              PRODUCTS
-          ===================================== */}
+          {/* PRODUCTS */}
 
           <div className="order-detail-left">
+            {displayItems.map((currentItem, index) => {
+              const currentItemId = getId(currentItem);
+              const currentStatus = getStatus(currentItem);
+              const currentQuantity = getQuantity(currentItem);
+              const currentShare = getItemShare(currentItem);
 
-            {displayItems.map(
-              (
-                currentItem,
-                index
-              ) => {
+              const currentCustomerPaidTotal =
+                getCustomerPaidItemTotal(currentItem);
 
-                const currentItemId =
-                  currentItem?._id ||
-                  currentItem?.id;
+              const currentCustomerPaidPrice =
+                currentQuantity > 0
+                  ? currentCustomerPaidTotal / currentQuantity
+                  : currentCustomerPaidTotal;
 
-                const currentStatus =
-                  getStatus(
-                    currentItem
-                  );
+              const imageUrl = getImage(currentItem);
 
-                const currentPrice =
-                  getPrice(
-                    currentItem
-                  );
+              return (
+                <div
+                  className={`view-detail-product ${
+                    index === displayItems.length - 1 ? "last-product" : ""
+                  }`}
+                  key={currentItemId || index}
+                >
+                  {/* IMAGE */}
 
-                const currentQuantity =
-                  getQuantity(
-                    currentItem
-                  );
+                  <div className="order-detail-product-image">
+                    {imageUrl ? (
+                      <img src={imageUrl} alt={getProductName(currentItem)} />
+                    ) : (
+                      <div className="order-detail-no-image">No Image</div>
+                    )}
+                  </div>
 
-                const currentBaseTotal =
-                  currentPrice *
-                  currentQuantity;
+                  {/* PRODUCT INFORMATION */}
 
-                const currentCustomerPaidTotal =
-                  getCustomerPaidItemTotal(
-                    currentItem
-                  );
+                  <div className="order-detail-product-info">
+                    <h2>{getProductName(currentItem)}</h2>
 
-                const currentCustomerPaidPrice =
-                  currentQuantity > 0
-                    ? currentCustomerPaidTotal /
-                      currentQuantity
-                    : currentCustomerPaidTotal;
+                    <p className="order-detail-variant">
+                      {currentItem?.variantId?.variantName || "Product"}
+                    </p>
 
-                return (
-                  <div
-                    className={`view-detail-product ${
-                      index ===
-                      displayItems.length -
-                        1
-                        ? "last-product"
-                        : ""
-                    }`}
-                    key={
-                      currentItemId ||
-                      index
-                    }
-                  >
+                    <div className="order-detail-info-row">
+                      <span>Size</span>
+                      <strong>{currentItem?.variantId?.size || "-"}</strong>
+                    </div>
 
-                    {/* IMAGE */}
+                    <div className="order-detail-info-row">
+                      <span>Color</span>
+                      <strong>{currentItem?.variantId?.color || "-"}</strong>
+                    </div>
 
-                    <div className="order-detail-product-image">
+                    <div className="order-detail-info-row">
+                      <span>Quantity</span>
+                      <strong>{currentQuantity}</strong>
+                    </div>
 
-                      {getImage(
-                        currentItem
-                      ) ? (
-                        <img
-                          src={getImage(
-                            currentItem
-                          )}
-                          alt={getProductName(
-                            currentItem
-                          )}
-                        />
-                      ) : (
-                        <div className="order-detail-no-image">
-                          No Image
+                    <div className="order-detail-info-row">
+                      <span>Price</span>
+                      <strong>₹{formatMoney(currentCustomerPaidPrice)}</strong>
+                    </div>
+
+                    <div className="order-detail-info-row">
+                      <span>Discount</span>
+                      <strong>- ₹{formatMoney(discount * currentShare)}</strong>
+                    </div>
+
+                    <div className="order-detail-info-row">
+                      <span>Tax</span>
+                      <strong>₹{formatMoney(tax * currentShare)}</strong>
+                    </div>
+
+                    <div className="order-detail-info-row">
+                      <span>Delivery</span>
+                      <strong>
+                        ₹{formatMoney(deliveryCharge * currentShare)}
+                      </strong>
+                    </div>
+
+                    <div className="order-detail-info-row">
+                      <span>Customer Paid</span>
+                      <strong>₹{formatMoney(currentCustomerPaidTotal)}</strong>
+                    </div>
+
+                    <div className="order-detail-status">
+                      Status :
+                      <span className={`status-badge status-${currentStatus}`}>
+                        {getStatusLabel(currentStatus)}
+                      </span>
+                    </div>
+
+                    {currentStatus === "delivered" &&
+                      currentItem?.deliveredAt && (
+                        <div className="order-detail-delivered">
+                          Delivered {formatDate(currentItem.deliveredAt)}
                         </div>
                       )}
+                  </div>
 
-                    </div>
+                  {/* ITEM ACTIONS (bulk view only) */}
 
-                    {/* PRODUCT INFORMATION */}
-
-                    <div className="order-detail-product-info">
-
-                      <h2>
-                        {getProductName(
-                          currentItem
-                        )}
-                      </h2>
-
-                      <p className="order-detail-variant">
-                        {
-                          currentItem
-                            ?.variantId
-                            ?.variantName ||
-                          "Product"
-                        }
-                      </p>
-
-                      <div className="order-detail-info-row">
-                        <span>
-                          Size
-                        </span>
-
-                        <strong>
-                          {
-                            currentItem
-                              ?.variantId
-                              ?.size ||
-                            "-"
-                          }
-                        </strong>
-                      </div>
-
-                      <div className="order-detail-info-row">
-                        <span>
-                          Color
-                        </span>
-
-                        <strong>
-                          {
-                            currentItem
-                              ?.variantId
-                              ?.color ||
-                            "-"
-                          }
-                        </strong>
-                      </div>
-
-                      <div className="order-detail-info-row">
-                        <span>
-                          Quantity
-                        </span>
-
-                        <strong>
-                          {
-                            currentQuantity
-                          }
-                        </strong>
-                      </div>
-
-                      <div className="order-detail-info-row">
-                        <span>
-                          Price
-                        </span>
-
-                        <strong>
-                          ₹
-                          {currentCustomerPaidPrice.toLocaleString(
-                            "en-IN",
-                            {
-                              minimumFractionDigits: 0,
-                              maximumFractionDigits: 2,
-                            }
-                          )}
-                        </strong>
-                      </div>
-
-                      <div className="order-detail-info-row">
-                        <span>
-                          Discount
-                        </span>
-
-                        <strong>
-                          - ₹
-                          {(discount *
-                            (bulkItemsTotal > 0
-                              ? currentBaseTotal / bulkItemsTotal
-                              : 0)
-                          ).toLocaleString(
-                            "en-IN",
-                            {
-                              minimumFractionDigits: 0,
-                              maximumFractionDigits: 2,
-                            }
-                          )}
-                        </strong>
-                      </div>
-
-                      <div className="order-detail-info-row">
-                        <span>
-                          Tax
-                        </span>
-
-                        <strong>
-                          ₹
-                          {(tax *
-                            (bulkItemsTotal > 0
-                              ? currentBaseTotal / bulkItemsTotal
-                              : 0)
-                          ).toLocaleString(
-                            "en-IN",
-                            {
-                              minimumFractionDigits: 0,
-                              maximumFractionDigits: 2,
-                            }
-                          )}
-                        </strong>
-                      </div>
-
-                      <div className="order-detail-info-row">
-                        <span>
-                          Delivery
-                        </span>
-
-                        <strong>
-                          ₹
-                          {(deliveryCharge *
-                            (bulkItemsTotal > 0
-                              ? currentBaseTotal / bulkItemsTotal
-                              : 0)
-                          ).toLocaleString(
-                            "en-IN",
-                            {
-                              minimumFractionDigits: 0,
-                              maximumFractionDigits: 2,
-                            }
-                          )}
-                        </strong>
-                      </div>
-
-                      <div className="order-detail-info-row">
-                        <span>
-                          Customer Paid
-                        </span>
-
-                        <strong>
-                          ₹
-                          {currentCustomerPaidTotal.toLocaleString(
-                            "en-IN",
-                            {
-                              minimumFractionDigits: 0,
-                              maximumFractionDigits: 2,
-                            }
-                          )}
-                        </strong>
-                      </div>
-
-                      <div className="order-detail-status">
-                        Status :
-
-                        <span
-                          className={`status-badge status-${currentStatus}`}
-                        >
-                          {
-                            getStatusLabel(
-                              currentStatus
-                            )
-                          }
-                        </span>
-                      </div>
-
-                      {currentStatus ===
-                        "delivered" &&
-                        currentItem?.deliveredAt && (
-                          <div className="order-detail-delivered">
-                            Delivered{" "}
-                            {formatDate(
-                              currentItem.deliveredAt
-                            )}
-                          </div>
-                        )}
-
-                    </div>
-
-                    {/* ITEM ACTIONS */}
-
-                    {isBulkView && (
-                      <div className="view-product-actions">
-
-                        {canCancelItem(
-                          currentItem
-                        ) && (
-                          <button
-                            type="button"
-                            className="product-cancel-button"
-                            onClick={() =>
-                              openCancelPopup(
-                                currentItem
-                              )
-                            }
-                          >
-                            Cancel
-                          </button>
-                        )}
-
-                        {canReturnItem(
-                          currentItem
-                        ) && (
-                          <button
-                            type="button"
-                            className="product-return-button"
-                            onClick={() =>
-                              openReturnPopup(
-                                currentItem
-                              )
-                            }
-                          >
-                            Return
-                          </button>
-                        )}
-
+                  {isBulkView && (
+                    <div className="view-product-actions">
+                      {canCancelItem(currentItem) && (
                         <button
                           type="button"
-                          className="product-track-button"
-                          onClick={() =>
-                            handleTrack(
-                              currentItem
-                            )
-                          }
+                          className="product-cancel-button"
+                          onClick={() => openCancelPopup(currentItem)}
                         >
-                          Track Order
+                          Cancel
                         </button>
+                      )}
 
-                      </div>
-                    )}
+                      {canReturnItem(currentItem) && (
+                        <button
+                          type="button"
+                          className="product-return-button"
+                          onClick={() => openReturnPopup(currentItem)}
+                        >
+                          Return
+                        </button>
+                      )}
 
-                  </div>
-                );
-              }
-            )}
-
+                      <button
+                        type="button"
+                        className="product-track-button"
+                        onClick={() => handleTrack(currentItem)}
+                      >
+                        Track Order
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
-          {/* ====================================
-              MIDDLE INFORMATION
-          ===================================== */}
+          {/* MIDDLE INFORMATION */}
 
           <div className="order-detail-middle">
-
             <div className="detail-section">
-
-              <h3>
-                Shipping Address
-              </h3>
+              <h3>Shipping Address</h3>
 
               <p>
-                <strong>
-                  {
-                    order?.address
-                      ?.name ||
-                    "Customer Name"
-                  }
-                </strong>
+                <strong>{order?.address?.name || "Customer Name"}</strong>
               </p>
 
-              <p>
-                {
-                  order?.address
-                    ?.address ||
-                  "Address"
-                }
-              </p>
+              <p>{order?.address?.address || "Address"}</p>
 
-              <p>
-                State - Pin Code
-              </p>
+              <p>State - Pin Code</p>
 
-              <p>
-                Pin Code :{" "}
-                {
-                  order?.address
-                    ?.pincode ||
-                  "-"
-                }
-              </p>
-
+              <p>Pin Code : {order?.address?.pincode || "-"}</p>
             </div>
 
             <div className="detail-section">
-
-              <h3>
-                Payment Method
-              </h3>
+              <h3>Payment Method</h3>
 
               <p className="payment-method">
-                {
-                  {
-                    COD:
-                      "Cash on Delivery",
-                    ONLINE:
-                      "Online Payment",
-                    WALLET:
-                      "Wallet",
-                  }[
-                    String(
-                      order?.paymentmethod ||
-                        ""
-                    ).toUpperCase()
-                  ] ||
+                {PAYMENT_METHOD_LABELS[
+                  String(order?.paymentmethod || "").toUpperCase()
+                ] ||
                   order?.paymentmethod ||
-                  "-"
-                }
+                  "-"}
               </p>
 
               <p className="payment-status">
-                {
-                  String(
-                    order?.paymentstatus ||
-                      "pending"
-                  )
-                    .replaceAll(
-                      "_",
-                      " "
-                    )
-                    .toUpperCase()
-                }
+                {String(order?.paymentstatus || "pending")
+                  .replaceAll("_", " ")
+                  .toUpperCase()}
               </p>
-
             </div>
 
             <div className="detail-section">
+              <h3>Order Date</h3>
 
-              <h3>
-                Order Date
-              </h3>
-
-              <p>
-                {
-                  formatDate(
-                    order?.createdAt
-                  )
-                }
-              </p>
-
+              <p>{formatDate(order?.createdAt)}</p>
             </div>
-
           </div>
 
-          {/* ====================================
-              ORDER SUMMARY
-          ===================================== */}
+          {/* ORDER SUMMARY */}
 
           <div className="order-detail-summary">
-
-            <h3>
-              Order Summary
-            </h3>
+            <h3>Order Summary</h3>
 
             <div className="summary-row">
-
-              <span>
-                Items Total
-              </span>
-
-              <strong>
-                ₹
-                {itemsTotal.toLocaleString(
-                  "en-IN"
-                )}
-              </strong>
-
+              <span>Items Total</span>
+              <strong>₹{itemsTotal.toLocaleString("en-IN")}</strong>
             </div>
 
-            {discount >
-              0 && (
+            {discount > 0 && (
               <div className="summary-row summary-discount">
-
-                <span>
-                  Discount
-                </span>
-
-                <strong>
-                  - ₹
-                  {discount.toLocaleString(
-                    "en-IN"
-                  )}
-                </strong>
-
+                <span>Discount</span>
+                <strong>- ₹{discount.toLocaleString("en-IN")}</strong>
               </div>
             )}
 
             <div className="summary-row">
-
-              <span>
-                Delivery Charge
-              </span>
-
+              <span>Delivery Charge</span>
               <strong>
-                {deliveryCharge ===
-                0
+                {deliveryCharge === 0
                   ? "Free"
-                  : `₹${deliveryCharge.toLocaleString(
-                      "en-IN"
-                    )}`}
+                  : `₹${deliveryCharge.toLocaleString("en-IN")}`}
               </strong>
-
             </div>
 
             <div className="summary-row">
-
-              <span>
-                Tax
-              </span>
-
-              <strong>
-                ₹
-                {tax.toLocaleString(
-                  "en-IN",
-                  {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 2,
-                  }
-                )}
-              </strong>
-
+              <span>Tax</span>
+              <strong>₹{formatMoney(tax)}</strong>
             </div>
 
             <div className="summary-line" />
 
             <div className="summary-row summary-total">
-
-              <span>
-                Total
-              </span>
-
-              <strong>
-                ₹
-                {calculatedTotal.toLocaleString(
-                  "en-IN"
-                )}
-              </strong>
-
+              <span>Total</span>
+              <strong>₹{calculatedTotal.toLocaleString("en-IN")}</strong>
             </div>
 
             <div className="summary-grand-line" />
 
             <div className="summary-grand-total">
-
-              <span>
-                Customer Paid
-              </span>
-
-              <strong>
-                ₹
-                {displayedTotal.toLocaleString(
-                  "en-IN"
-                )}
-              </strong>
-
+              <span>Customer Paid</span>
+              <strong>₹{displayedTotal.toLocaleString("en-IN")}</strong>
             </div>
-
           </div>
-
         </div>
 
-        {/* ======================================
-            PRODUCT REVIEW / BUY AGAIN
-            ONLY FOR DELIVERED INDIVIDUAL ITEM
-        ======================================= */}
+        {/* PRODUCT REVIEW / BUY AGAIN
+            ONLY FOR DELIVERED INDIVIDUAL ITEM */}
 
-        {!isBulkView &&
-          item &&
-          getStatus(item) ===
-            "delivered" && (
-            <div className="view-details-review-section">
-
-              <div className="view-details-review-heading">
-                How's your item?
-              </div>
-
-              <div className="view-details-review-product">
-
-                <div className="view-details-review-image">
-                  {getImage(item) ? (
-                    <img
-                      src={getImage(item)}
-                      alt={getProductName(item)}
-                    />
-                  ) : (
-                    <span>No image</span>
-                  )}
-                </div>
-
-                <div className="view-details-review-product-info">
-                  <strong>
-                    {getProductName(item)}
-                  </strong>
-
-                  <span>
-                    {item?.variantId?.variantName ||
-                      "Product"}
-                  </span>
-                </div>
-
-              </div>
-
-              <div className="view-details-review-actions">
-
-                <button
-                  type="button"
-                  className="view-details-buy-again-button"
-                  onClick={() =>
-                    handleBuyAgain(item)
-                  }
-                >
-                  Buy it again
-                </button>
-
-                <button
-                  type="button"
-                  className="view-details-write-review-button"
-                  onClick={() =>
-                    openReviewForm(item)
-                  }
-                >
-                  Write a product review
-                </button>
-
-              </div>
-
+        {!isBulkView && item && getStatus(item) === "delivered" && (
+          <div className="view-details-review-section">
+            <div className="view-details-review-heading">
+              How's your item?
             </div>
-          )}
 
-        {/* ======================================
-            COMMON ACTIONS FOR 2+ ITEMS
-        ======================================= */}
+            <div className="view-details-review-product">
+              <div className="view-details-review-image">
+                {getImage(item) ? (
+                  <img src={getImage(item)} alt={getProductName(item)} />
+                ) : (
+                  <span>No image</span>
+                )}
+              </div>
+
+              <div className="view-details-review-product-info">
+                <strong>{getProductName(item)}</strong>
+
+                <span>{item?.variantId?.variantName || "Product"}</span>
+              </div>
+            </div>
+
+            <div className="view-details-review-actions">
+              <button
+                type="button"
+                className="view-details-buy-again-button"
+                onClick={() => handleBuyAgain(item)}
+              >
+                Buy it again
+              </button>
+
+              <button
+                type="button"
+                className="view-details-write-review-button"
+                onClick={() => openReviewForm(item)}
+              >
+                Write a product review
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* COMMON ACTIONS FOR 2+ ITEMS */}
 
         {isBulkView && (
           <div className="common-order-actions">
-
             <div className="common-order-info">
-
-              <strong>
-                {displayItems.length} Items
-              </strong>
+              <strong>{displayItems.length} Items</strong>
 
               <span>
-                Each item can be cancelled,
-                returned or tracked
-                individually.
+                Each item can be cancelled, returned or tracked individually.
               </span>
-
             </div>
 
             <div className="common-order-buttons">
-
               <button
                 type="button"
                 className="product-invoice-button"
@@ -2235,85 +1244,58 @@ const canReturnItem = (currentItem) => {
                 Invoice for Entire Order
               </button>
 
-              {cancellableItems.length >
-                0 && (
+              {cancellableItems.length > 0 && (
                 <button
                   type="button"
                   className="common-cancel-button"
-                  onClick={() =>
-                    openCancelPopup(
-                      cancellableItems
-                    )
-                  }
+                  onClick={() => openCancelPopup(cancellableItems)}
                 >
-                  Cancel All 
+                  Cancel All
                 </button>
               )}
 
-              {returnableItems.length >
-                0 && (
+              {returnableItems.length > 0 && (
                 <button
                   type="button"
                   className="common-return-button"
-                  onClick={() =>
-                    openReturnPopup(
-                      returnableItems
-                    )
-                  }
+                  onClick={() => openReturnPopup(returnableItems)}
                 >
                   Return All Eligible
                 </button>
               )}
-
             </div>
-
           </div>
         )}
 
-        {/* ======================================
-            SINGLE ITEM ACTIONS
-        ======================================= */}
+        {/* SINGLE ITEM ACTIONS */}
 
         {!isBulkView && (
           <div className="single-order-actions">
-
             {item && (
               <button
                 type="button"
                 className="product-invoice-button"
-                onClick={() => handleInvoice(item?._id || item?.id)}
+                onClick={() => handleInvoice(getId(item))}
               >
                 Invoice
               </button>
             )}
 
-            {canCancelItem(
-              item
-            ) && (
+            {canCancelItem(item) && (
               <button
                 type="button"
                 className="order-cancel-button"
-                onClick={() =>
-                  openCancelPopup(
-                    item
-                  )
-                }
+                onClick={() => openCancelPopup(item)}
               >
                 Cancel Order
               </button>
             )}
 
-            {canReturnItem(
-              item
-            ) && (
+            {canReturnItem(item) && (
               <button
                 type="button"
                 className="order-return-button"
-                onClick={() =>
-                  openReturnPopup(
-                    item
-                  )
-                }
+                onClick={() => openReturnPopup(item)}
               >
                 Return Item
               </button>
@@ -2322,50 +1304,27 @@ const canReturnItem = (currentItem) => {
             <button
               type="button"
               className="order-track-button"
-              onClick={() =>
-                handleTrack(
-                  item
-                )
-              }
+              onClick={() => handleTrack(item)}
             >
               Track Order
             </button>
-
           </div>
         )}
 
         {/* ORDER ID */}
 
         <div className="order-detail-order-id">
-
-          Order ID :{" "}
-
-          <span>
-            {
-              order?.orderId ||
-              order?._id ||
-              orderId
-            }
-          </span>
-
+          Order ID : <span>{order?.orderId || order?._id || orderId}</span>
         </div>
-
       </div>
 
-      {/* ==========================================
-          PRODUCT REVIEW FORM
-      ========================================== */}
+      {/* PRODUCT REVIEW FORM */}
 
       {showReviewForm && (
-        <div
-          className="product-review-overlay"
-          onClick={closeReviewForm}
-        >
+        <div className="product-review-overlay" onClick={closeReviewForm}>
           <div
             className="product-review-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
           >
             <button
               type="button"
@@ -2379,89 +1338,53 @@ const canReturnItem = (currentItem) => {
 
             <div className="product-review-product">
               <div className="product-review-product-image">
-                {selectedReviewItem &&
-                getImage(
-                  selectedReviewItem
-                ) ? (
+                {selectedReviewItem && getImage(selectedReviewItem) ? (
                   <img
-                    src={getImage(
-                      selectedReviewItem
-                    )}
-                    alt={getProductName(
-                      selectedReviewItem
-                    )}
+                    src={getImage(selectedReviewItem)}
+                    alt={getProductName(selectedReviewItem)}
                   />
                 ) : (
-                  <span>
-                    No image
-                  </span>
+                  <span>No image</span>
                 )}
               </div>
 
               <div>
-                <h2>
-                  How was the item?
-                </h2>
+                <h2>How was the item?</h2>
 
                 <p>
                   {selectedReviewItem
-                    ? getProductName(
-                        selectedReviewItem
-                      )
+                    ? getProductName(selectedReviewItem)
                     : "Product"}
                 </p>
               </div>
             </div>
 
             <div className="product-review-stars">
-              {[1, 2, 3, 4, 5].map(
-                (star) => (
-                  <button
-                    key={star}
-                    type="button"
-                    className={
-                      star <=
-                      reviewRating
-                        ? "selected"
-                        : ""
-                    }
-                    onClick={() =>
-                      setReviewRating(
-                        star
-                      )
-                    }
-                    aria-label={`${star} star${
-                      star > 1
-                        ? "s"
-                        : ""
-                    }`}
-                  >
-                    ★
-                  </button>
-                )
-              )}
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  className={star <= reviewRating ? "selected" : ""}
+                  onClick={() => setReviewRating(star)}
+                  aria-label={`${star} star${star > 1 ? "s" : ""}`}
+                >
+                  ★
+                </button>
+              ))}
             </div>
 
-            <label className="product-review-label">
-              Write a review
-            </label>
+            <label className="product-review-label">Write a review</label>
 
             <textarea
               className="product-review-textarea"
               value={reviewText}
-              onChange={(event) =>
-                setReviewText(
-                  event.target.value
-                )
-              }
+              onChange={(event) => setReviewText(event.target.value)}
               placeholder="What should other customers know?"
               rows={5}
               disabled={reviewSubmitting}
             />
 
-            <label className="product-review-label">
-              Share a photo
-            </label>
+            <label className="product-review-label">Share a photo</label>
 
             <label className="product-review-image-box">
               {reviewImage ? (
@@ -2472,9 +1395,7 @@ const canReturnItem = (currentItem) => {
                     className="product-review-image-preview"
                   />
 
-                  <span>
-                    {reviewImageName}
-                  </span>
+                  <span>{reviewImageName}</span>
                 </div>
               ) : (
                 <span className="product-review-image-placeholder">
@@ -2485,59 +1406,39 @@ const canReturnItem = (currentItem) => {
               <input
                 type="file"
                 accept="image/*"
-                onChange={
-                  handleReviewImageChange
-                }
-                disabled={
-                  reviewSubmitting
-                }
+                onChange={handleReviewImageChange}
+                disabled={reviewSubmitting}
               />
             </label>
 
             {reviewImageError && (
-              <p className="product-review-image-error">
-                {reviewImageError}
-              </p>
+              <p className="product-review-image-error">{reviewImageError}</p>
             )}
 
             <label className="product-review-label">
               Title your review
-              <span>
-                {" "}
-                (required)
-              </span>
+              <span> (required)</span>
             </label>
 
             <input
               type="text"
               className="product-review-input"
               value={reviewTitle}
-              onChange={(event) =>
-                setReviewTitle(
-                  event.target.value
-                )
-              }
+              onChange={(event) => setReviewTitle(event.target.value)}
               placeholder="What's most important to know?"
               disabled={reviewSubmitting}
             />
 
             <label className="product-review-label">
               What's your public name?
-              <span>
-                {" "}
-                (required)
-              </span>
+              <span> (required)</span>
             </label>
 
             <input
               type="text"
               className="product-review-input"
               value={reviewPublicName}
-              onChange={(event) =>
-                setReviewPublicName(
-                  event.target.value
-                )
-              }
+              onChange={(event) => setReviewPublicName(event.target.value)}
               placeholder="Enter your public name"
               disabled={reviewSubmitting}
             />
@@ -2547,9 +1448,7 @@ const canReturnItem = (currentItem) => {
                 type="button"
                 className="product-review-cancel-button"
                 onClick={closeReviewForm}
-                disabled={
-                  reviewSubmitting
-                }
+                disabled={reviewSubmitting}
               >
                 Cancel
               </button>
@@ -2557,263 +1456,143 @@ const canReturnItem = (currentItem) => {
               <button
                 type="button"
                 className="product-review-submit-button"
-                onClick={
-                  submitProductReview
-                }
+                onClick={submitProductReview}
                 disabled={
                   reviewSubmitting ||
-                  reviewRating <
-                    1 ||
+                  reviewRating < 1 ||
                   !reviewTitle.trim() ||
                   !reviewPublicName.trim()
                 }
               >
-                {reviewSubmitting
-                  ? "Submitting..."
-                  : "Submit"}
+                {reviewSubmitting ? "Submitting..." : "Submit"}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* ==========================================
-          PRODUCT REVIEW SUCCESS POPUP
-      ========================================== */}
+      {/* PRODUCT REVIEW SUCCESS POPUP */}
 
       {showReviewSuccess && (
         <div className="product-review-success-overlay">
           <div className="product-review-success-popup">
+            <div className="product-review-success-icon">✓</div>
 
-            <div className="product-review-success-icon">
-              ✓
-            </div>
+            <h2>Review Submitted</h2>
 
-            <h2>
-              Review Submitted
-            </h2>
-
-            <p>
-              Your product review has
-              been submitted successfully.
-            </p>
+            <p>Your product review has been submitted successfully.</p>
 
             <button
               type="button"
               className="product-review-success-button"
-              onClick={
-                closeReviewSuccess
-              }
+              onClick={closeReviewSuccess}
             >
               View Product Reviews
             </button>
-
           </div>
         </div>
       )}
 
-      {/* ==========================================
-          CANCEL POPUP
-      ========================================== */}
+      {/* CANCEL POPUP */}
 
       {showCancelPopup && (
-        <div
-          className="action-popup-overlay"
-          onClick={
-            closeCancelPopup
-          }
-        >
-
+        <div className="action-popup-overlay" onClick={closeCancelPopup}>
           <div
             className="action-popup"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
           >
-
             <button
               type="button"
               className="action-popup-close"
-              onClick={
-                closeCancelPopup
-              }
-              disabled={
-                cancelling
-              }
+              onClick={closeCancelPopup}
+              disabled={cancelling}
             >
               ×
             </button>
 
-            <div className="action-popup-icon cancel-icon">
-              !
-            </div>
+            <div className="action-popup-icon cancel-icon">!</div>
 
             <h2>
-              {
-                selectedCancelItems.length >
-                1
-                  ? "Cancel Items"
-                  : "Cancel Order"
-              }
+              {selectedCancelItems.length > 1 ? "Cancel Items" : "Cancel Order"}
             </h2>
 
             <p className="action-popup-message">
-              {
-                selectedCancelItems.length >
-                1
-                  ? "Select the items you want to cancel and provide one reason."
-                  : "Please provide a reason for cancelling this order item."
-              }
+              {selectedCancelItems.length > 1
+                ? "Select the items you want to cancel and provide one reason."
+                : "Please provide a reason for cancelling this order item."}
             </p>
 
-            {selectedCancelItems.length >
-              1 && (
+            {selectedCancelItems.length > 1 && (
               <div className="action-popup-item-list">
+                {cancellableItems.map((currentItem) => {
+                  const currentId = String(getId(currentItem));
+                  const checked = selectedCancelItems.includes(currentId);
 
-                {cancellableItems.map(
-                  (
-                    currentItem
-                  ) => {
+                  return (
+                    <label
+                      key={currentId}
+                      className={`action-popup-item ${
+                        checked ? "selected" : ""
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggleCancelItem(currentId)}
+                        disabled={cancelling}
+                      />
 
-                    const currentId =
-                      String(
-                        currentItem?._id ||
-                          currentItem?.id
-                      );
+                      <span className="action-popup-check">✓</span>
 
-                    const checked =
-                      selectedCancelItems.includes(
-                        currentId
-                      );
-
-                    return (
-                      <label
-                        key={
-                          currentId
-                        }
-                        className={`action-popup-item ${
-                          checked
-                            ? "selected"
-                            : ""
-                        }`}
-                      >
-
-                        <input
-                          type="checkbox"
-                          checked={
-                            checked
-                          }
-                          onChange={() =>
-                            toggleCancelItem(
-                              currentId
-                            )
-                          }
-                          disabled={
-                            cancelling
-                          }
-                        />
-
-                        <span className="action-popup-check">
-                          ✓
-                        </span>
-
-                        <span>
-                          {
-                            getProductName(
-                              currentItem
-                            )
-                          }
-                        </span>
-
-                      </label>
-                    );
-                  }
-                )}
-
+                      <span>{getProductName(currentItem)}</span>
+                    </label>
+                  );
+                })}
               </div>
             )}
 
-            {selectedCancelItems.length ===
-              1 && (
+            {selectedCancelItems.length === 1 && (
               <div className="action-popup-product-name">
-
-                {
-                  getProductName(
-                    allItems.find(
-                      (
-                        currentItem
-                      ) =>
-                        String(
-                          currentItem?._id ||
-                            currentItem?.id
-                        ) ===
-                        String(
-                          selectedCancelItems[0]
-                        )
-                    ) || {}
-                  )
-                }
-
+                {getProductName(
+                  allItems.find(
+                    (currentItem) =>
+                      String(getId(currentItem)) ===
+                      String(selectedCancelItems[0])
+                  ) || {}
+                )}
               </div>
             )}
 
-            <label
-              className="action-popup-label"
-              htmlFor="cancelReason"
-            >
-
+            <label className="action-popup-label" htmlFor="cancelReason">
               Cancellation Reason
-
-              <span>
-                *
-              </span>
-
+              <span>*</span>
             </label>
 
             <textarea
               id="cancelReason"
-              value={
-                cancelReason
-              }
+              value={cancelReason}
               onChange={(event) => {
-                setCancelReason(
-                  event.target.value
-                );
+                setCancelReason(event.target.value);
 
-                if (
-                  event.target.value.trim()
-                ) {
-                  setCancelReasonError(
-                    ""
-                  );
+                if (event.target.value.trim()) {
+                  setCancelReasonError("");
                 }
               }}
               placeholder="Please provide your cancellation reason..."
               rows={4}
-              disabled={
-                cancelling
-              }
+              disabled={cancelling}
             />
 
             {cancelReasonError && (
-              <p className="action-popup-error">
-                {
-                  cancelReasonError
-                }
-              </p>
+              <p className="action-popup-error">{cancelReasonError}</p>
             )}
 
             <div className="action-popup-buttons">
-
               <button
                 type="button"
                 className="action-popup-keep"
-                onClick={
-                  closeCancelPopup
-                }
-                disabled={
-                  cancelling
-                }
+                onClick={closeCancelPopup}
+                disabled={cancelling}
               >
                 No, Keep Order
               </button>
@@ -2821,48 +1600,31 @@ const canReturnItem = (currentItem) => {
               <button
                 type="button"
                 className="action-popup-confirm cancel-confirm"
-                onClick={
-                  confirmCancel
-                }
+                onClick={confirmCancel}
                 disabled={
                   cancelling ||
                   !cancelReason.trim() ||
-                  selectedCancelItems.length ===
-                    0
+                  selectedCancelItems.length === 0
                 }
               >
-                {cancelling
-                  ? "Cancelling..."
-                  : "Yes, Cancel"}
+                {cancelling ? "Cancelling..." : "Yes, Cancel"}
               </button>
-
             </div>
-
           </div>
-
         </div>
       )}
 
-      {/* ==========================================
-          CANCEL SUCCESS POPUP
-      ========================================== */}
+      {/* CANCEL SUCCESS POPUP */}
 
       {showCancelSuccess && (
         <div className="action-success-overlay">
-
           <div className="action-success-popup">
+            <div className="action-success-icon">✓</div>
 
-            <div className="action-success-icon">
-              ✓
-            </div>
-
-            <h2>
-              Cancellation Successful
-            </h2>
+            <h2>Cancellation Successful</h2>
 
             <p>
-              {cancelledItemCount ===
-              1
+              {cancelledItemCount === 1
                 ? "The order item has been cancelled successfully."
                 : `${cancelledItemCount} order items have been cancelled successfully.`}
             </p>
@@ -2870,189 +1632,98 @@ const canReturnItem = (currentItem) => {
             <button
               type="button"
               className="action-success-button"
-              onClick={
-                closeCancelSuccess
-              }
+              onClick={closeCancelSuccess}
             >
               OK
             </button>
-
           </div>
-
         </div>
       )}
 
-      {/* ==========================================
-          RETURN POPUP
-      ========================================== */}
+      {/* RETURN POPUP */}
 
       {showReturnPopup && (
-        <div
-          className="action-popup-overlay"
-          onClick={
-            closeReturnPopup
-          }
-        >
-
+        <div className="action-popup-overlay" onClick={closeReturnPopup}>
           <div
             className="action-popup"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
           >
-
             <button
               type="button"
               className="action-popup-close"
-              onClick={
-                closeReturnPopup
-              }
-              disabled={
-                returning
-              }
+              onClick={closeReturnPopup}
+              disabled={returning}
             >
               ×
             </button>
 
-            <div className="action-popup-icon return-icon">
-              ↩
-            </div>
+            <div className="action-popup-icon return-icon">↩</div>
 
             <h2>
-              {
-                selectedReturnItems.length >
-                1
-                  ? "Return Items"
-                  : "Return Item"
-              }
+              {selectedReturnItems.length > 1 ? "Return Items" : "Return Item"}
             </h2>
 
             <p className="action-popup-message">
-              Select the item(s) and provide
-              one mandatory return reason.
+              Select the item(s) and provide one mandatory return reason.
             </p>
 
             <div className="action-popup-item-list">
+              {returnableItems.map((currentItem) => {
+                const currentId = String(getId(currentItem));
+                const checked = selectedReturnItems.includes(currentId);
 
-              {returnableItems.map(
-                (
-                  currentItem
-                ) => {
+                return (
+                  <label
+                    key={currentId}
+                    className={`action-popup-item ${
+                      checked ? "selected" : ""
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggleReturnItem(currentId)}
+                      disabled={returning}
+                    />
 
-                  const currentId =
-                    String(
-                      currentItem?._id ||
-                        currentItem?.id
-                    );
+                    <span className="action-popup-check">✓</span>
 
-                  const checked =
-                    selectedReturnItems.includes(
-                      currentId
-                    );
-
-                  return (
-                    <label
-                      key={
-                        currentId
-                      }
-                      className={`action-popup-item ${
-                        checked
-                          ? "selected"
-                          : ""
-                      }`}
-                    >
-
-                      <input
-                        type="checkbox"
-                        checked={
-                          checked
-                        }
-                        onChange={() =>
-                          toggleReturnItem(
-                            currentId
-                          )
-                        }
-                        disabled={
-                          returning
-                        }
-                      />
-
-                      <span className="action-popup-check">
-                        ✓
-                      </span>
-
-                      <span>
-                        {
-                          getProductName(
-                            currentItem
-                          )
-                        }
-                      </span>
-
-                    </label>
-                  );
-                }
-              )}
-
+                    <span>{getProductName(currentItem)}</span>
+                  </label>
+                );
+              })}
             </div>
 
-            <label
-              className="action-popup-label"
-              htmlFor="returnReason"
-            >
-
+            <label className="action-popup-label" htmlFor="returnReason">
               Return Reason
-
-              <span>
-                *
-              </span>
-
+              <span>*</span>
             </label>
 
             <textarea
               id="returnReason"
-              value={
-                returnReason
-              }
+              value={returnReason}
               onChange={(event) => {
-                setReturnReason(
-                  event.target.value
-                );
+                setReturnReason(event.target.value);
 
-                if (
-                  event.target.value.trim()
-                ) {
-                  setReturnReasonError(
-                    ""
-                  );
+                if (event.target.value.trim()) {
+                  setReturnReasonError("");
                 }
               }}
               placeholder="Please provide your return reason..."
               rows={4}
-              disabled={
-                returning
-              }
+              disabled={returning}
             />
 
             {returnReasonError && (
-              <p className="action-popup-error">
-                {
-                  returnReasonError
-                }
-              </p>
+              <p className="action-popup-error">{returnReasonError}</p>
             )}
 
             <div className="action-popup-buttons">
-
               <button
                 type="button"
                 className="action-popup-keep"
-                onClick={
-                  closeReturnPopup
-                }
-                disabled={
-                  returning
-                }
+                onClick={closeReturnPopup}
+                disabled={returning}
               >
                 Cancel
               </button>
@@ -3060,48 +1731,31 @@ const canReturnItem = (currentItem) => {
               <button
                 type="button"
                 className="action-popup-confirm return-confirm"
-                onClick={
-                  confirmReturn
-                }
+                onClick={confirmReturn}
                 disabled={
                   returning ||
                   !returnReason.trim() ||
-                  selectedReturnItems.length ===
-                    0
+                  selectedReturnItems.length === 0
                 }
               >
-                {returning
-                  ? "Submitting..."
-                  : "Submit Return"}
+                {returning ? "Submitting..." : "Submit Return"}
               </button>
-
             </div>
-
           </div>
-
         </div>
       )}
 
-      {/* ==========================================
-          RETURN SUCCESS POPUP
-      ========================================== */}
+      {/* RETURN SUCCESS POPUP */}
 
       {showReturnSuccess && (
         <div className="action-success-overlay">
-
           <div className="action-success-popup">
+            <div className="action-success-icon return-success">✓</div>
 
-            <div className="action-success-icon return-success">
-              ✓
-            </div>
-
-            <h2>
-              Return Request Submitted
-            </h2>
+            <h2>Return Request Submitted</h2>
 
             <p>
-              {returnedItemCount ===
-              1
+              {returnedItemCount === 1
                 ? "Your return request has been submitted successfully."
                 : `Return requests for ${returnedItemCount} items have been submitted successfully.`}
             </p>
@@ -3109,19 +1763,16 @@ const canReturnItem = (currentItem) => {
             <button
               type="button"
               className="action-success-button"
-              onClick={
-                closeReturnSuccess
-              }
+              onClick={closeReturnSuccess}
             >
               OK
             </button>
-
           </div>
-
         </div>
       )}
 
       {/* CUSTOM ALERT POPUP */}
+
       {alertPopup.open && (
         <div
           className="custom-alert-overlay"
@@ -3136,8 +1787,11 @@ const canReturnItem = (currentItem) => {
             onClick={(event) => event.stopPropagation()}
           >
             <div className="custom-alert-icon">!</div>
+
             <h2 id="custom-alert-title">Notice</h2>
+
             <p>{alertPopup.message}</p>
+
             <button
               type="button"
               className="custom-alert-button"
@@ -3149,7 +1803,6 @@ const canReturnItem = (currentItem) => {
           </div>
         </div>
       )}
-
     </div>
   );
 };
