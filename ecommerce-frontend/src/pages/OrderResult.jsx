@@ -1139,7 +1139,7 @@ const paymentFailed =
 
                   className="figma-view-button"
 
-                  onClick={() => navigate(`/order-details/${orderId}`)}
+                  onClick={() => navigate("/profile/myorder")}
 
                 >
 

@@ -5,6 +5,90 @@ const OrderItem = require("../models/orderitems");
 const Payment = require("../models/payment");
 
 // ==========================================
+// SHARED CONSTANTS + HELPERS
+// ==========================================
+
+// Normal delivery flow, in order
+const STATUS_FLOW = [
+  "pending",
+  "confirmed",
+  "processing",
+  "shipped",
+  "out_for_delivery",
+  "delivered",
+];
+
+// Statuses in which a customer may still cancel
+const CANCELLABLE_STATUSES = ["pending", "confirmed", "processing"];
+
+// Which timestamp field belongs to which status
+const TIMESTAMP_FIELD = {
+  confirmed: "confirmedAt",
+  processing: "processingAt",
+  shipped: "shippedAt",
+  out_for_delivery: "outForDeliveryAt",
+  delivered: "deliveredAt",
+};
+
+// "Confirmed" / "CONFIRMED" / "Out for Delivery" -> "confirmed" / "out_for_delivery"
+const normalizeStatus = (value) =>
+  String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "_");
+
+// ------------------------------------------
+// Recalculate Order.orderstatus from its items.
+// Item status is the source of truth.
+// Use this after ANY item status change
+// (admin update, user cancel, return, ...).
+// ------------------------------------------
+const recalculateOrderStatus = async (orderId, session = null) => {
+  const itemQuery = OrderItem.find({ orderId }).select("status");
+
+  if (session) {
+    itemQuery.session(session);
+  }
+
+  const items = await itemQuery;
+
+  if (!items.length) {
+    return null;
+  }
+
+  const statuses = items.map((item) => normalizeStatus(item.status));
+
+  const cancelledCount = statuses.filter(
+    (value) => value === "cancelled"
+  ).length;
+
+  let orderstatus;
+
+  if (cancelledCount === statuses.length) {
+    orderstatus = "cancelled";
+  } else if (cancelledCount > 0) {
+    orderstatus = "partially_cancelled";
+  } else {
+    // The order is only as far along as its slowest item.
+    // return_* statuses count as delivered.
+    const positions = statuses.map((value) => {
+      const index = STATUS_FLOW.indexOf(value);
+      return index === -1 ? STATUS_FLOW.length - 1 : index;
+    });
+
+    orderstatus = STATUS_FLOW[Math.min(...positions)];
+  }
+
+  await Order.findByIdAndUpdate(
+    orderId,
+    { orderstatus },
+    session ? { session } : {}
+  );
+
+  return orderstatus;
+};
+
+// ==========================================
 // GET ALL ADMIN ORDERS
 // ==========================================
 
@@ -184,16 +268,7 @@ const updateOrderItemStatus = async (
   itemId,
   status
 ) => {
-  const allowedStatuses = [
-    "pending",
-    "confirmed",
-    "processing",
-    "shipped",
-    "out_for_delivery",
-    "delivered",
-  ];
-
-  const nextStatus = String(status || "").toLowerCase();
+  const nextStatus = normalizeStatus(status);
 
   if (
     !mongoose.Types.ObjectId.isValid(orderId) ||
@@ -202,7 +277,7 @@ const updateOrderItemStatus = async (
     throw new Error("Invalid order or item ID");
   }
 
-  if (!allowedStatuses.includes(nextStatus)) {
+  if (!STATUS_FLOW.includes(nextStatus)) {
     throw new Error("Invalid order status");
   }
 
@@ -226,21 +301,9 @@ const updateOrderItemStatus = async (
         order.paymentstatus || ""
       ).toLowerCase();
 
-      // Do not process unpaid online or wallet orders.
-
-      if (
-        ["ONLINE", "WALLET"].includes(method) &&
-        paymentStatus !== "paid"
-      ) {
-        throw new Error(
-          "Payment is not verified. This order cannot be processed or delivered."
-        );
-      }
-
-      // Verify both the order and payment record.
-
-      
-      // Verify payment before processing online or wallet orders.
+      // ------------------------------------------
+      // PAYMENT VERIFICATION (ONLINE / WALLET)
+      // ------------------------------------------
 
       if (["ONLINE", "WALLET"].includes(method)) {
         if (paymentStatus !== "paid") {
@@ -249,7 +312,7 @@ const updateOrderItemStatus = async (
           );
         }
 
-        // ONLINE payments require a verified Payment document.
+        // ONLINE payments also need a verified Payment document.
         // WALLET payments are verified through the Order document.
         if (method === "ONLINE") {
           const payment = await Payment.findOne({
@@ -269,7 +332,6 @@ const updateOrderItemStatus = async (
         }
       }
 
-
       if (
         ["cancelled", "failed"].includes(
           String(order.orderstatus || "").toLowerCase()
@@ -280,6 +342,10 @@ const updateOrderItemStatus = async (
         );
       }
 
+      // ------------------------------------------
+      // FIND THE ITEM
+      // ------------------------------------------
+
       const item = await OrderItem.findOne({
         _id: itemId,
         orderId: order._id,
@@ -289,101 +355,56 @@ const updateOrderItemStatus = async (
         throw new Error("Order item not found");
       }
 
-      const currentItemStatus = String(
-        item.status || ""
-      ).toLowerCase();
+      const currentItemStatus = normalizeStatus(item.status);
 
-      if (
-        ["cancelled", "returned"].includes(currentItemStatus)
-      ) {
+      if (currentItemStatus === "cancelled") {
+        throw new Error("Cancelled items cannot be processed.");
+      }
+
+      // return_requested / return_approved / returned are not part of
+      // the delivery flow, so they cannot be changed from here.
+      const currentIndex = STATUS_FLOW.indexOf(currentItemStatus);
+      const nextIndex = STATUS_FLOW.indexOf(nextStatus);
+
+      if (currentIndex === -1) {
         throw new Error(
-          "Cancelled or returned items cannot be processed."
+          "Items in a return process cannot be updated here."
         );
       }
 
-      // Prevent moving an item backwards in the delivery workflow.
-
-      const progression = [
-        "pending",
-        "confirmed",
-        "processing",
-        "shipped",
-        "out_for_delivery",
-        "delivered",
-      ];
-
-      const currentIndex = progression.indexOf(currentItemStatus);
-      const nextIndex = progression.indexOf(nextStatus);
-
-      if (
-        currentIndex !== -1 &&
-        nextIndex < currentIndex
-      ) {
+      if (nextIndex <= currentIndex) {
         throw new Error(
-          "Order status cannot move backwards."
+          nextIndex === currentIndex
+            ? "Item is already in this status."
+            : "Order status cannot move backwards."
         );
+      }
+
+      // ------------------------------------------
+      // UPDATE ITEM + TIMESTAMPS
+      // (also fills timestamps of any skipped steps,
+      //  so the tracking page can show a date for each)
+      // ------------------------------------------
+
+      const now = new Date();
+
+      for (let i = currentIndex + 1; i <= nextIndex; i++) {
+        const field = TIMESTAMP_FIELD[STATUS_FLOW[i]];
+
+        if (field && !item[field]) {
+          item[field] = now;
+        }
       }
 
       item.status = nextStatus;
 
-      const now = new Date();
-
-      if (nextStatus === "confirmed") {
-        item.confirmedAt = now;
-      }
-
-      if (nextStatus === "processing") {
-        item.processingAt = now;
-      }
-
-      if (nextStatus === "shipped") {
-        item.shippedAt = now;
-      }
-
-      if (nextStatus === "out_for_delivery") {
-        item.outForDeliveryAt = now;
-      }
-
-      if (nextStatus === "delivered") {
-        item.deliveredAt = now;
-      }
-
       await item.save({ session });
 
-      const items = await OrderItem.find({
-        orderId: order._id,
-      })
-        .select("status")
-        .session(session);
+      // ------------------------------------------
+      // UPDATE ORDER STATUS FROM ALL ITEMS
+      // ------------------------------------------
 
-      const statuses = items.map((entry) =>
-        String(entry.status || "").toLowerCase()
-      );
-
-      const allCancelled =
-        statuses.length > 0 &&
-        statuses.every((value) => value === "cancelled");
-
-      const someCancelled = statuses.some(
-        (value) => value === "cancelled"
-      );
-
-      let parentStatus = order.orderstatus;
-
-      if (allCancelled) {
-        parentStatus = "cancelled";
-      } else if (someCancelled) {
-        parentStatus = "partially_cancelled";
-      } else if (
-        statuses.length > 0 &&
-        statuses.every((value) => value === nextStatus)
-      ) {
-        parentStatus = nextStatus;
-      }
-
-      order.orderstatus = parentStatus;
-
-      await order.save({ session });
+      await recalculateOrderStatus(order._id, session);
 
       updatedItem = item;
     });
@@ -441,4 +462,10 @@ module.exports = {
   getvieworder,
   updateOrderItemStatus,
   updateDeliveryDate,
+
+  // shared with the user-side cancel / return code
+  recalculateOrderStatus,
+  STATUS_FLOW,
+  CANCELLABLE_STATUSES,
+  normalizeStatus,
 };

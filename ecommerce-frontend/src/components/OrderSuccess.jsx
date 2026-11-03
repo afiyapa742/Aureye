@@ -642,9 +642,7 @@ const OrderSuccess = () => {
               <button
                 type="button"
                 className="success-primary-button"
-                onClick={() =>
-                  navigate(`/order-details/${orderId}`)
-                }
+                onClick={() => navigate("/profile/myorder")}
               >
                 View order details
                 <ArrowRight size={17} />

@@ -1,14 +1,20 @@
+const mongoose = require("mongoose");
+
 const Order = require("../models/order");
 const OrderItem = require("../models/orderitems");
 const ProductVarient = require("../models/productvarient");
 const Payment = require("../models/payment");
 const { creditWallet } = require("./wallet");
+
+// Shared with the admin status code (repositories/adminorder.js)
+const {
+  recalculateOrderStatus,
+  CANCELLABLE_STATUSES,
+  normalizeStatus,
+} = require("./adminorder");
+
 const RETURN_WINDOW_DAYS = 9;
 const RETURN_WINDOW_MS = RETURN_WINDOW_DAYS * 24 * 60 * 60 * 1000;
-// ==========================================
-// GET MY ORDERS
-// ==========================================
-
 
 // ==========================================
 // GET MY ORDERS
@@ -54,50 +60,65 @@ const getorder = async (userId) => {
   }
 };
 
-
 // ==========================================
 // CANCEL ORDER ITEM
 // ==========================================
 
-
-const cancelorder = async (itemId, reason) => {
+const cancelorder = async (itemId, reason, userId) => {
   try {
-    if (!itemId) {
-      throw new Error("Order item ID is required");
+    if (!itemId || !mongoose.Types.ObjectId.isValid(itemId)) {
+      throw new Error("Valid order item ID is required");
     }
 
-    const orderItem = await OrderItem.findById(itemId);
+    if (!userId) {
+      throw new Error("User ID is required");
+    }
 
-    if (!orderItem) {
+    // --------------------------------------
+    // LOAD + VALIDATE (before changing anything)
+    // --------------------------------------
+
+    const existingItem = await OrderItem.findById(itemId);
+
+    if (!existingItem) {
       throw new Error("Order item not found");
     }
 
-    if (orderItem.status === "cancelled") {
-      throw new Error("This item is already cancelled");
-    }
-
-    const cancellableStatuses = [
-      "pending",
-      "confirmed",
-      "processing",
-    ];
-
-    if (
-      !cancellableStatuses.includes(
-        String(orderItem.status || "").toLowerCase()
-      )
-    ) {
-      throw new Error(
-        "This order item cannot be cancelled after shipping"
-      );
-    }
-
-    const order = await Order.findById(orderItem.orderId);
+    const order = await Order.findById(existingItem.orderId);
 
     if (!order) {
       throw new Error("Order not found");
     }
 
+    // The item must belong to the logged-in user
+    if (String(order.userId) !== String(userId)) {
+      throw new Error("You are not allowed to cancel this item");
+    }
+
+    const currentStatus = normalizeStatus(existingItem.status);
+
+    if (currentStatus === "cancelled") {
+      throw new Error("This item is already cancelled");
+    }
+
+    if (!CANCELLABLE_STATUSES.includes(currentStatus)) {
+      throw new Error(
+        "This order item cannot be cancelled after shipping"
+      );
+    }
+
+    // Variant must exist so the stock can be restored
+    if (existingItem.variantId) {
+      const variantExists = await ProductVarient.exists({
+        _id: existingItem.variantId,
+      });
+
+      if (!variantExists) {
+        throw new Error("Product variant not found");
+      }
+    }
+
+    // Work out the refund before cancelling
     const paymentMethod = String(
       order.paymentmethod || ""
     ).toUpperCase();
@@ -107,93 +128,112 @@ const cancelorder = async (itemId, reason) => {
       paymentStatus: "paid",
     });
 
-    // Only credit the wallet for WALLET payments.
-    // PayPal refunds require the actual capture ID and PayPal refund API.
     const orderIsPaid =
-  String(order.paymentstatus || "").toLowerCase() === "paid" ||
-  String(payment?.paymentStatus || "").toLowerCase() === "paid";
+      String(order.paymentstatus || "").toLowerCase() === "paid" ||
+      String(payment?.paymentStatus || "").toLowerCase() === "paid";
 
-if (
-  ["WALLET", "ONLINE"].includes(paymentMethod) &&
-  orderIsPaid
-) {
-  if (orderItem.refundStatus === "REFUNDED") {
-    throw new Error("This item has already been refunded");
-  }
+    const needsRefund =
+      ["WALLET", "ONLINE"].includes(paymentMethod) && orderIsPaid;
 
-  const refundAmount = Number(
-    orderItem.paidAmount ??
-    orderItem.refundAmount ??
-    0
-  );
+    let refundAmount = 0;
 
-  if (!Number.isFinite(refundAmount) || refundAmount <= 0) {
-    throw new Error(
-      "Invalid refund amount. Check the order item's paidAmount."
-    );
-  }
-
-  await creditWallet(order.userId, {
-    amount: refundAmount,
-    type: "credit",
-    paymentProvider: "REFUND",
-    description: `Cancellation refund for ${paymentMethod} order item ${orderItem._id}`,
-    orderId: order._id,
-    transactionId: `CANCEL-REFUND-${orderItem._id}`,
-  });
-
-  orderItem.refundAmount = refundAmount;
-  orderItem.refundStatus = "REFUNDED";
-  orderItem.refundedAt = new Date();
-}
-
-    // Restore stock only after validating the item.
-    if (orderItem.variantId) {
-      const variant = await ProductVarient.findById(
-        orderItem.variantId
-      );
-
-      if (!variant) {
-        throw new Error("Product variant not found");
+    if (needsRefund) {
+      if (existingItem.refundStatus === "REFUNDED") {
+        throw new Error("This item has already been refunded");
       }
 
-      variant.stock =
-        Number(variant.stock || 0) +
-        Number(orderItem.quantity || 0);
-
-      await variant.save();
-    }
-
-    orderItem.status = "cancelled";
-    orderItem.cancelReason = reason?.trim() || null;
-    orderItem.cancelledBy = "user";
-    orderItem.cancelledAt = new Date();
-
-    await orderItem.save();
-
-    const remainingItems = await OrderItem.find({
-      orderId: orderItem.orderId,
-    }).select("status");
-
-    const allCancelled =
-      remainingItems.length > 0 &&
-      remainingItems.every(
-        (item) =>
-          String(item.status || "").toLowerCase() === "cancelled"
+      refundAmount = Number(
+        existingItem.paidAmount ?? existingItem.refundAmount ?? 0
       );
 
-    const someCancelled = remainingItems.some(
-      (item) =>
-        String(item.status || "").toLowerCase() === "cancelled"
-    );
-
-    if (allCancelled) {
-      order.orderstatus = "cancelled";
-    } else if (someCancelled) {
-      order.orderstatus = "partially_cancelled";
+      if (!Number.isFinite(refundAmount) || refundAmount <= 0) {
+        throw new Error(
+          "Invalid refund amount. Check the order item's paidAmount."
+        );
+      }
     }
 
-    await order.save();
+    // --------------------------------------
+    // CLAIM THE CANCELLATION (atomic)
+    // Only ONE request can move the item from a
+    // cancellable status to "cancelled". A second or
+    // double-click request gets null here and stops.
+    // --------------------------------------
+
+    const orderItem = await OrderItem.findOneAndUpdate(
+      {
+        _id: itemId,
+        status: { $in: CANCELLABLE_STATUSES },
+      },
+      {
+        $set: {
+          status: "cancelled",
+          cancelReason: reason?.trim() || null,
+          cancelledBy: "user",
+          cancelledAt: new Date(),
+        },
+      },
+      { new: true }
+    );
+
+    if (!orderItem) {
+      throw new Error("This item is already cancelled");
+    }
+
+    // --------------------------------------
+    // REFUND TO WALLET
+    // If the refund fails, undo the cancellation
+    // so the customer can try again.
+    // --------------------------------------
+
+    if (needsRefund) {
+      try {
+        await creditWallet(order.userId, {
+          amount: refundAmount,
+          type: "credit",
+          paymentProvider: "REFUND",
+          description: `Cancellation refund for ${paymentMethod} order item ${orderItem._id}`,
+          orderId: order._id,
+          transactionId: `CANCEL-REFUND-${orderItem._id}`,
+        });
+      } catch (refundError) {
+        await OrderItem.updateOne(
+          { _id: itemId },
+          {
+            $set: {
+              status: existingItem.status,
+              cancelReason: null,
+              cancelledBy: null,
+              cancelledAt: null,
+            },
+          }
+        );
+
+        throw refundError;
+      }
+
+      orderItem.refundAmount = refundAmount;
+      orderItem.refundStatus = "REFUNDED";
+      orderItem.refundedAt = new Date();
+
+      await orderItem.save();
+    }
+
+    // --------------------------------------
+    // RESTORE STOCK
+    // --------------------------------------
+
+    if (orderItem.variantId) {
+      await ProductVarient.findByIdAndUpdate(orderItem.variantId, {
+        $inc: { stock: Number(orderItem.quantity || 0) },
+      });
+    }
+
+    // --------------------------------------
+    // UPDATE ORDER STATUS FROM ALL ITEMS
+    // --------------------------------------
+
+    await recalculateOrderStatus(order._id);
 
     return {
       success: true,
@@ -208,8 +248,6 @@ if (
     throw error;
   }
 };
-
-
 
 // ==========================================
 // RETURN ORDER ITEM / BULK RETURN
@@ -355,19 +393,16 @@ const returnorder = async (itemIds, reason) => {
     }
 
     return updatedItems;
-
   } catch (error) {
     console.error("RETURN ORDER REPOSITORY ERROR:", error);
 
     throw error;
   }
 };
- 
- 
+
 // ==========================================
 // GET INDIVIDUAL INVOICE
 // ==========================================
-
 
 const invoiceget = async (orderId, itemId = null) => {
   const order = await Order.findById(orderId)

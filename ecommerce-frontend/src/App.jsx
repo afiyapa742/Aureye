@@ -362,7 +362,10 @@ function App() {
                 </ProtectedRoute>
               }
             >
-
+<Route
+  path="/verify-otp"
+  element={<VerifyOtp />}
+/>
               <Route
                 index
                 element={<Profile />}
@@ -488,6 +491,7 @@ element={
     </ProtectedRoute>
   }
 />
+
 
 
             <Route
