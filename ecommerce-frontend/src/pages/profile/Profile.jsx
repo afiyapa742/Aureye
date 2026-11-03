@@ -4,7 +4,7 @@ import API from "../../api/axios";
 import "./Profile.css";
 
 
-const VERIFY_EMAIL_OTP_URL = "/profile/profile/email-verify";
+const VERIFY_EMAIL_OTP_URL = "/profile/profile/email-change/verify";
 
 const OTP_LENGTH = 6;
 const RESEND_SECONDS = 30;

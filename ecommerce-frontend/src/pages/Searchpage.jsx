@@ -203,11 +203,11 @@ const getProductImage = (product) => {
               <div
                 className="search-product-card"
                 key={product._id}
-                onClick={() =>
-                  navigate(
-                    `/product/${product._id}`
-                  )
-                }
+               onClick={() =>
+  navigate(
+    `/productdetail/${product._id}`
+  )
+}
               >
 
                 {/* PRODUCT IMAGE */}
