@@ -1,0 +1,13 @@
+[33mcommit eda4e2d2613efb57bdc8e8847ee525214d4144d4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: afiyapa742 <paafiya742@gmail.com>
+Date:   Tue Nov 3 14:28:37 2026 +0530
+
+    Fix customer order status
+
+ ecomerce-backend/scr/repositories/adminorder.js    | 235 [32m+++++++++++[m[31m---------[m
+ ecomerce-backend/scr/repositories/orderdetail.js   | 237 [32m++++++++++++[m[31m---------[m
+ ecommerce-frontend/src/App.jsx                     |   6 [32m+[m[31m-[m
+ ecommerce-frontend/src/components/OrderSuccess.jsx |   4 [32m+[m[31m-[m
+ ecommerce-frontend/src/components/Sidebar.css      |  68 [32m+++[m[31m---[m
+ ecommerce-frontend/src/pages/OrderResult.jsx       |   2 [32m+[m[31m-[m
+ 6 files changed, 310 insertions(+), 242 deletions(-)
