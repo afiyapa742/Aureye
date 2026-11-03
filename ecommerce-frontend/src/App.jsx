@@ -224,7 +224,12 @@ function App() {
             {/* ======================================
                 LOGIN
             ====================================== */}
-
+   <Route
+              path="/verify-otp"
+              element={ <PublicRoute>
+                <VerifyOtp /> </PublicRoute>
+              }
+            />
             <Route
               path="/"
               element={
@@ -263,12 +268,7 @@ function App() {
                 SIGNUP / FORGOT OTP
             ====================================== */}
 
-            <Route
-              path="/verify-otp"
-              element={ <PublicRoute>
-                <VerifyOtp /> </PublicRoute>
-              }
-            />
+          
 
 
             {/* ======================================
@@ -362,10 +362,7 @@ function App() {
                 </ProtectedRoute>
               }
             >
-<Route
-  path="/verify-otp"
-  element={<VerifyOtp />}
-/>
+
               <Route
                 index
                 element={<Profile />}
