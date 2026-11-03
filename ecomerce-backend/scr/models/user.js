@@ -80,6 +80,25 @@ changePasswordOtpExpiry: {
 pendingPassword: {
   type: String,
 },
+pendingEmail: {
+  type: String,
+  lowercase: true,
+  trim: true,
+},
+emailChangeOtp: {
+  type: String,
+},
+emailChangeOtpExpiry: {
+  type: Date,
+},
+// recommended for the hardening I suggested
+emailChangeOtpAttempts: {
+  type: Number,
+  default: 0,
+},
+emailChangeOtpSentAt: {
+  type: Date,
+},
   },
   {
     timestamps: true,

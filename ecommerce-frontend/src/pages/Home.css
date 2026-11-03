@@ -712,34 +712,39 @@ body {
   transition: scale 0.5s ease !important;
 }
 
+
+/* =========================================================
+   BEST SELLERS HOVER EFFECT
+========================================================= */
+
 @media (hover: hover) {
   .bestsellers .product-card:hover .product-img-wrap img {
-    scale: 1.06;                 /* small zoom: change to 1.04 to 1.1 */
+    scale: 1.06;
   }
 }
 
-/* Remove the tan border and any card movement from other styles */
+/* Remove tan border and card movement */
+
 .bestsellers .product-card,
 .bestsellers .product-card:hover {
   border: 1px solid rgba(255, 255, 255, 0.9) !important;
   transform: none !important;
 }
+
 /* Mouse hover */
+
 @media (hover: hover) {
   .bestsellers .product-card:hover .product-img-wrap img {
     transform: scale(1.15) !important;
   }
 }
 
-
 .bestsellers .product-image {
   display: block;
   width: 100%;
   height: 100%;
-
   object-fit: contain;
   object-position: center;
-
   transform: scale(1);
   transition: transform 0.6s ease;
 }
@@ -748,11 +753,12 @@ body {
   transform: scale(1.12);
 }
 
+/* Product information */
+
 .bestsellers .product-info {
   display: flex;
   flex: 1;
   flex-direction: column;
-
   padding: 12px 10px 8px;
   text-align: left;
 }
@@ -760,7 +766,6 @@ body {
 .bestsellers .product-name {
   margin: 0 0 10px;
   color: #30251c;
-
   font-family: "Cormorant Garamond", Georgia, serif;
   font-size: clamp(17px, 1.5vw, 22px);
   font-weight: 700;
@@ -777,15 +782,18 @@ body {
 .bestsellers .product-price {
   margin: auto 0 8px;
   padding-bottom: 4px;
-
   color: #925718;
   font-family: "Cormorant Garamond", Georgia, serif;
   font-size: 28px;
   font-weight: 700;
 }
 
-/* Tablet */
+/* =========================================================
+   TABLET
+========================================================= */
+
 @media (max-width: 900px) {
+
   .bestsellers {
     padding: 0 24px 50px !important;
   }
@@ -801,15 +809,231 @@ body {
   .bestsellers .product-img-wrap {
     height: 200px;
   }
+
 }
 
-/* Mobile */
-@media (max-width: 600px) {
+/* =========================================================
+   NAVBAR ICON FIX
+========================================================= */
+
+.navbar-aureya .nav-icon-btn i,
+.navbar-aureya .nav-icon-btn svg,
+.navbar-aureya .search-toggle-btn i,
+.navbar-aureya .search-toggle-btn svg {
+  color: var(--navy) !important;
+}
+
+.navbar-aureya .nav-icon-btn:hover i,
+.navbar-aureya .nav-icon-btn:hover svg,
+.navbar-aureya .search-toggle-btn:hover i,
+.navbar-aureya .search-toggle-btn:hover svg {
+  color: var(--gold) !important;
+}
+
+/* =========================================================
+   ACTIVE NAVIGATION LINK
+========================================================= */
+
+.navbar-aureya .nav-link.active {
+  color: var(--navy) !important;
+  font-weight: 600;
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 2px;
+}
+
+/* =========================================================
+   TABLET RESPONSIVE
+========================================================= */
+
+@media (max-width: 991.98px) {
+
+  .hero-section {
+    height: 360px;
+  }
+
+  .hero-content {
+    left: 6%;
+  }
+
+  .hero-title {
+    font-size: 50px;
+  }
+
+  .category-section {
+    padding: 30px 20px 0;
+  }
+
+  .category-section .row {
+    gap: 15px;
+  }
+
+  .cat-card {
+    height: 240px;
+  }
+
+  .section-title {
+    font-size: 21px;
+  }
+
+  .bestsellers .row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px 16px;
+  }
+
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .announcement-bar {
+    font-size: 10px;
+    padding: 7px 10px;
+  }
+
+  .hero-section {
+    height: 300px;
+  }
+
+  .hero-content {
+    left: 6%;
+    right: 6%;
+    max-width: 90%;
+  }
+
+  .hero-eyebrow {
+    font-size: 10px;
+  }
+
+  .hero-title {
+    font-size: 40px;
+  }
+
+  .hero-sub {
+    font-size: 11px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .btn-hero {
+    padding: 9px 17px;
+    font-size: 10px;
+  }
+
+  .tagline-strip {
+    padding: 22px 15px;
+  }
+
+  .tagline-strip p {
+    font-size: 15px;
+  }
+
+  /* TWO CATEGORIES SIDE BY SIDE */
+
+  .category-section {
+    padding: 25px 15px 0;
+    margin-bottom: 35px;
+  }
+
+  .category-section .row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+  }
+
+  .cat-card {
+    height: 210px;
+    min-width: 0;
+  }
+
+  .cat-label {
+    left: 12px;
+    bottom: 12px;
+  }
+
+  .cat-link {
+    padding: 8px 12px;
+    font-size: 9px;
+  }
+
+  /* BEST SELLERS - TWO COLUMNS */
+
+  .bestsellers {
+    padding-top: 35px;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  .bestsellers .row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 14px;
+  }
+
+  .section-title {
+    font-size: 19px;
+    margin-bottom: 22px;
+  }
+
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .hero-section {
+    height: 250px;
+  }
+
+  .hero-content {
+    left: 5%;
+  }
+
+  .hero-eyebrow {
+    font-size: 9px;
+    margin-bottom: 5px;
+  }
+
+  .hero-title {
+    font-size: 31px;
+  }
+
+  .hero-sub {
+    font-size: 10px;
+    line-height: 1.5;
+    margin-bottom: 13px;
+  }
+
+  .btn-hero {
+    padding: 8px 14px;
+    font-size: 9px;
+  }
+
+  .cat-card {
+    height: 190px;
+  }
+
+  .cat-link {
+    padding: 7px 10px;
+    font-size: 8px;
+  }
+
+  .section-title {
+    font-size: 17px;
+    letter-spacing: 0.14em;
+  }
+
+  /* BEST SELLERS SIZE */
+
   .bestsellers {
     padding: 0 13px 36px !important;
   }
 
-  .bestsellers > .row {
+  .bestsellers .row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
@@ -817,6 +1041,7 @@ body {
   .bestsellers .product-card {
     min-height: 330px;
     padding: 7px 7px 14px;
+    min-width: 0;
   }
 
   .bestsellers .product-img-wrap {
@@ -834,433 +1059,8 @@ body {
   .bestsellers .product-price {
     font-size: 22px;
   }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .bestsellers .product-image {
-    transition: none;
-  }
-}
-/* =========================================================
-   NAVBAR ICON FIX
-========================================================= */
-
-.navbar-aureya .nav-icon-btn i,
-.navbar-aureya .nav-icon-btn svg,
-.navbar-aureya .search-toggle-btn i,
-.navbar-aureya .search-toggle-btn svg {
-
-  color:
-    var(--navy) !important;
 
 }
-
-
-.navbar-aureya .nav-icon-btn:hover i,
-.navbar-aureya .nav-icon-btn:hover svg,
-.navbar-aureya .search-toggle-btn:hover i,
-.navbar-aureya .search-toggle-btn:hover svg {
-
-  color:
-    var(--gold) !important;
-
-}
-
-
-
-/* =========================================================
-   ACTIVE NAVIGATION LINK
-========================================================= */
-
-.navbar-aureya .nav-link.active {
-
-  color:
-    var(--navy) !important;
-
-  font-weight:
-    600;
-
-  border-bottom:
-    2px solid var(--gold);
-
-  padding-bottom:
-    2px;
-
-}
-
-
-
-/* =========================================================
-   TABLET
-========================================================= */
-
-@media (max-width: 991.98px) {
-
-  .hero-section {
-
-    height:
-      360px;
-
-  }
-
-
-  .hero-content {
-
-    left:
-      6%;
-
-  }
-
-
-  .hero-title {
-
-    font-size:
-      50px;
-
-  }
-
-
-  .category-section {
-
-    padding:
-      30px 20px 0;
-
-  }
-
-
-  .category-section .row {
-
-    gap:
-      15px;
-
-  }
-
-
-  .cat-card {
-
-    height:
-      240px;
-
-  }
-
-
-  .section-title {
-
-    font-size:
-      21px;
-
-  }
-
-
-  .bestsellers .row {
-
-    grid-template-columns:
-      repeat(3, minmax(0, 1fr));
-
-    gap:
-      24px 16px;
-
-  }
-
-
-}
-
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 767.98px) {
-
-  .announcement-bar {
-
-    font-size:
-      10px;
-
-    padding:
-      7px 10px;
-
-  }
-
-
-  .hero-section {
-
-    height:
-      300px;
-
-  }
-
-
-  .hero-content {
-
-    left:
-      6%;
-
-    right:
-      6%;
-
-    max-width:
-      90%;
-
-  }
-
-
-  .hero-eyebrow {
-
-    font-size:
-      10px;
-
-  }
-
-
-  .hero-title {
-
-    font-size:
-      40px;
-
-  }
-
-
-  .hero-sub {
-
-    font-size:
-      11px;
-
-    line-height:
-      1.6;
-
-    margin-bottom:
-      16px;
-
-  }
-
-
-  .btn-hero {
-
-    padding:
-      9px 17px;
-
-    font-size:
-      10px;
-
-  }
-
-
-  .tagline-strip {
-
-    padding:
-      22px 15px;
-
-  }
-
-
-  .tagline-strip p {
-
-    font-size:
-      15px;
-
-  }
-
-
-  .category-section {
-
-    padding:
-      25px 15px 0;
-
-    margin-bottom:
-      35px;
-
-  }
-
-
-  .category-section .row {
-
-    grid-template-columns:
-      1fr;
-
-    gap:
-      15px;
-
-  }
-
-
-  .cat-card {
-
-    height:
-      210px;
-
-  }
-
-
-  .cat-label {
-
-    left:
-      12px;
-
-    bottom:
-      12px;
-
-  }
-
-
-  .cat-link {
-
-    padding:
-      8px 12px;
-
-    font-size:
-      9px;
-
-  }
-
-
-  .bestsellers {
-
-    padding-top:
-      35px;
-
-    padding-left:
-      15px !important;
-
-    padding-right:
-      15px !important;
-
-  }
-
-
-  .bestsellers .row {
-
-   
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap:
-      20px 14px;
-
-  }
-
-
-  .section-title {
-
-    font-size:
-      19px;
-
-    margin-bottom:
-      22px;
-
-  }
-
-
-}
-
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 575.98px) {
-
-  .hero-section {
-
-    height:
-      250px;
-
-  }
-
-
-  .hero-content {
-
-    left:
-      5%;
-
-  }
-
-
-  .hero-eyebrow {
-
-    font-size:
-      9px;
-
-    margin-bottom:
-      5px;
-
-  }
-
-
-  .hero-title {
-
-    font-size:
-      31px;
-
-  }
-
-
-  .hero-sub {
-
-    font-size:
-      10px;
-
-    line-height:
-      1.5;
-
-    margin-bottom:
-      13px;
-
-  }
-
-
-  .btn-hero {
-
-    padding:
-      8px 14px;
-
-    font-size:
-      9px;
-
-  }
-
-
-  .cat-card {
-
-    height:
-      190px;
-
-  }
-
-
-  .cat-link {
-
-    padding:
-      7px 10px;
-
-    font-size:
-      8px;
-
-  }
-
-
-  .section-title {
-
-    font-size:
-      17px;
-
-    letter-spacing:
-      0.14em;
-
-  }
-
-
-  .bestsellers .product-info {
-
-    padding-top:
-      7px;
-
-  }
-
-}
-
-
 
 /* =========================================================
    VERY SMALL DEVICES
@@ -1269,53 +1069,43 @@ body {
 @media (max-width: 400px) {
 
   .hero-section {
-
-    height:
-      230px;
-
+    height: 230px;
   }
-
 
   .hero-title {
-
-    font-size:
-      27px;
-
+    font-size: 27px;
   }
-
 
   .hero-sub {
-
-    font-size:
-      9px;
-
+    font-size: 9px;
   }
-
 
   .cat-card {
-
-    height:
-      170px;
-
+    height: 170px;
   }
-
 
   .cat-link {
-
-    padding:
-      6px 9px;
-
-    font-size:
-      8px;
-
+    padding: 6px 9px;
+    font-size: 8px;
   }
 
+  /* KEEP TWO BEST SELLERS COLUMNS */
 
   .bestsellers .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 10px;
+  }
 
-    gap:
-      16px 10px;
+}
 
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .bestsellers .product-image {
+    transition: none;
   }
 
 }

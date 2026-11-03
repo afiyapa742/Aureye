@@ -1,32 +1,49 @@
+// ==========================================================
+// FILE:  services/userprofile.js   (REPLACE THE WHOLE FILE)
+// ==========================================================
+
 const crypto = require("crypto");
 
 const profilerepository = require("../repositories/profilerepositories");
 
-// Keep your existing address repository import here
-// Example:
-// const addressrepository = require("../repositories/addressrepositories");
+// ⚠️ Check this path. Use the same path your project already has
+// for the address repository file.
+const addressrepository = require("../repositories/addressrepositories");
 
 const mailer = require("../utils/sendEmail");
 const referralService = require("./referal");
-// OTP expiry = 10 minutes
-const OTP_EXPIRY_MS = 10 * 60 * 1000;
+
+// ==========================================
+// SETTINGS
+// ==========================================
+const OTP_EXPIRY_MS = 10 * 60 * 1000;       // OTP valid for 10 minutes
+const OTP_RESEND_COOLDOWN_MS = 30 * 1000;   // wait 30 seconds before new OTP
+const OTP_MAX_ATTEMPTS = 5;                 // max wrong OTP tries
+
+// ==========================================
+// HELPERS
+// ==========================================
+const hashOtp = (otp) =>
+  crypto.createHash("sha256").update(String(otp)).digest("hex");
+
+const makeError = (message, statusCode) => {
+  const err = new Error(message);
+  err.statusCode = statusCode;
+  return err;
+};
 
 
 // ==========================================
 // GET PROFILE
 // ==========================================
-
 const getProfile = async (userId) => {
   const user = await profilerepository.findById(userId);
 
   if (!user) {
-    const err = new Error("User not found");
-    err.statusCode = 404;
-    throw err;
+    throw makeError("User not found", 404);
   }
 
-  const addresses =
-    await addressrepository.findAllByUserId(userId);
+  const addresses = await addressrepository.findAllByUserId(userId);
 
   return {
     _id: user._id,
@@ -42,15 +59,10 @@ const getProfile = async (userId) => {
 
 
 // ==========================================
-// UPDATE PROFILE
+// UPDATE PROFILE (name, phone, image)
 // ==========================================
-
 const updateProfile = async (userId, updates) => {
-  const allowedUpdates = [
-    "FullName",
-    "MobileNumber",
-    "profileImage",
-  ];
+  const allowedUpdates = ["FullName", "MobileNumber", "profileImage"];
 
   const filteredUpdates = {};
 
@@ -60,16 +72,26 @@ const updateProfile = async (userId, updates) => {
     }
   }
 
-  const user =
-    await profilerepository.updateById(
-      userId,
-      filteredUpdates
-    );
+  // Empty phone -> remove the field (a unique index does not allow
+  // two users with an empty string "")
+  if (filteredUpdates.MobileNumber === "") {
+    delete filteredUpdates.MobileNumber;
+    filteredUpdates.$unset = { MobileNumber: 1 };
+  }
+
+  let user;
+
+  try {
+    user = await profilerepository.updateById(userId, filteredUpdates);
+  } catch (error) {
+    if (error.code === 11000) {
+      throw makeError("Mobile number already in use", 409);
+    }
+    throw error;
+  }
 
   if (!user) {
-    const err = new Error("User not found");
-    err.statusCode = 404;
-    throw err;
+    throw makeError("User not found", 404);
   }
 
   return {
@@ -85,176 +107,143 @@ const updateProfile = async (userId, updates) => {
 
 
 // ==========================================
-// REQUEST EMAIL CHANGE
+// REQUEST EMAIL CHANGE (send OTP)
 // ==========================================
-
-const requestEmailChange = async (
-  userId,
-  newEmail
-) => {
-
-  // Find current user
-  const user =
-    await profilerepository.findById(userId);
+const requestEmailChange = async (userId, newEmail) => {
+  const user = await profilerepository.findById(userId);
 
   if (!user) {
-    const err = new Error("User not found");
-    err.statusCode = 404;
-    throw err;
+    throw makeError("User not found", 404);
   }
 
+  // Google accounts cannot change email
+  if (user.AuthProvider === "GOOGLE") {
+    throw makeError("Email cannot be changed for Google accounts", 400);
+  }
 
-  // Check new email
   if (!newEmail || !newEmail.trim()) {
-    const err = new Error("New email is required");
-    err.statusCode = 400;
-    throw err;
+    throw makeError("New email is required", 400);
   }
 
-
-  // Remove spaces and convert to lowercase
   newEmail = newEmail.trim().toLowerCase();
 
-
-  // Check same email
   if (user.email === newEmail) {
-    const err = new Error(
-      "New email must be different from current email"
-    );
-
-    err.statusCode = 400;
-    throw err;
+    throw makeError("New email must be different from current email", 400);
   }
 
+  // Wait 30 seconds between OTP requests
+  if (
+    user.emailChangeOtpSentAt &&
+    Date.now() - new Date(user.emailChangeOtpSentAt).getTime() <
+      OTP_RESEND_COOLDOWN_MS
+  ) {
+    throw makeError(
+      "Please wait 30 seconds before requesting another OTP",
+      429
+    );
+  }
 
-  // Check whether email already exists
-  const existing =
-    await profilerepository.findByEmail(newEmail);
+  // Email already used by someone else?
+  const existing = await profilerepository.findByEmail(newEmail);
 
   if (existing) {
-    const err = new Error(
-      "Email already in use"
-    );
-
-    err.statusCode = 409;
-    throw err;
+    throw makeError("Email already in use", 409);
   }
 
+  // Create 6 digit OTP
+  const otp = crypto.randomInt(100000, 1000000).toString();
 
-  // Generate 6 digit OTP
-  const otp =
-    crypto.randomInt(100000, 1000000).toString();
+  // Save pending email + hashed OTP
+  await profilerepository.updateById(userId, {
+    pendingEmail: newEmail,
+    emailChangeOtp: hashOtp(otp),
+    emailChangeOtpExpiry: new Date(Date.now() + OTP_EXPIRY_MS),
+    emailChangeOtpAttempts: 0,
+    emailChangeOtpSentAt: new Date(),
+  });
 
+  // Send the OTP to the NEW email
+  await mailer(newEmail, otp);
 
-  // OTP expires after 10 minutes
-  const otpExpiry =
-    new Date(Date.now() + OTP_EXPIRY_MS);
-
-
-  // Save pending email + OTP
-  await profilerepository.updateById(
-    userId,
-    {
-      pendingEmail: newEmail,
-      emailChangeOtp: otp,
-      emailChangeOtpExpiry: otpExpiry,
-    }
-  );
-
-
-  // Send OTP to new email
-  await mailer(
-    newEmail,
-    otp
-  );
-
-
-  return {
-    message: "OTP sent to your new email address",
-  };
+  return { message: "OTP sent to your new email address" };
 };
 
 
 // ==========================================
-// VERIFY EMAIL CHANGE
+// VERIFY EMAIL CHANGE (check OTP, save email)
 // ==========================================
-
-const verifyEmailChange = async (
-  userId,
-  otp
-) => {
-
-  // Find user
-  const user =
-    await profilerepository.findById(userId);
+const verifyEmailChange = async (userId, otp) => {
+  const user = await profilerepository.findById(userId);
 
   if (!user) {
-    const err = new Error("User not found");
-    err.statusCode = 404;
-    throw err;
+    throw makeError("User not found", 404);
   }
 
-
-  // Check pending email change
-  if (
-    !user.pendingEmail ||
-    !user.emailChangeOtp
-  ) {
-    const err = new Error(
-      "No pending email change request"
-    );
-
-    err.statusCode = 400;
-    throw err;
+  if (!user.pendingEmail || !user.emailChangeOtp) {
+    throw makeError("No pending email change request", 400);
   }
 
-
-  // Check OTP expiry
   if (
     !user.emailChangeOtpExpiry ||
     user.emailChangeOtpExpiry < new Date()
   ) {
-    const err = new Error(
-      "OTP has expired"
-    );
-
-    err.statusCode = 400;
-    throw err;
+    throw makeError("OTP has expired. Please request a new one.", 400);
   }
 
+  // Too many wrong tries
+  if ((user.emailChangeOtpAttempts || 0) >= OTP_MAX_ATTEMPTS) {
+    await profilerepository.updateById(userId, {
+      pendingEmail: null,
+      emailChangeOtp: null,
+      emailChangeOtpExpiry: null,
+      emailChangeOtpAttempts: 0,
+    });
 
-  // Check OTP
-  if (
-    String(user.emailChangeOtp) !==
-    String(otp)
-  ) {
-    const err = new Error(
-      "Invalid OTP"
+    throw makeError(
+      "Too many wrong attempts. Please request a new OTP.",
+      429
     );
-
-    err.statusCode = 400;
-    throw err;
   }
 
+  // Compare OTP (safe compare)
+  const given = Buffer.from(hashOtp(String(otp).trim()), "hex");
+  const stored = Buffer.from(String(user.emailChangeOtp), "hex");
 
-  // OTP is correct
-  // Now update the actual email
-  const updatedUser =
-    await profilerepository.updateById(
-      userId,
-      {
-        email: user.pendingEmail,
+  const isMatch =
+    given.length === stored.length && crypto.timingSafeEqual(given, stored);
 
-        pendingEmail: null,
+  if (!isMatch) {
+    await profilerepository.updateById(userId, {
+      $inc: { emailChangeOtpAttempts: 1 },
+    });
 
-        emailChangeOtp: null,
+    throw makeError("Invalid OTP", 400);
+  }
 
-        emailChangeOtpExpiry: null,
+  // Check again that nobody took this email meanwhile
+  const taken = await profilerepository.findByEmail(user.pendingEmail);
 
-        isVerified: true,
-      }
-    );
+  if (taken && String(taken._id) !== String(userId)) {
+    throw makeError("Email already in use", 409);
+  }
 
+  let updatedUser;
+
+  try {
+    updatedUser = await profilerepository.updateById(userId, {
+      email: user.pendingEmail,
+      pendingEmail: null,
+      emailChangeOtp: null,
+      emailChangeOtpExpiry: null,
+      emailChangeOtpAttempts: 0,
+      isVerified: true,
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      throw makeError("Email already in use", 409);
+    }
+    throw error;
+  }
 
   return {
     _id: updatedUser._id,
@@ -267,14 +256,13 @@ const verifyEmailChange = async (
   };
 };
 
+
 // ==========================================
 // EXPORT
 // ==========================================
-
 module.exports = {
   getProfile,
   updateProfile,
   requestEmailChange,
   verifyEmailChange,
- 
 };

@@ -152,7 +152,167 @@
   min-width: 0;
 }
 
+/* ==========================================
+   OTP POPUP - add this to the bottom of Profile.css
+   If your Change Password modal uses different
+   colors/radius, change the values below to match.
+========================================== */
 
+.otp-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.otp-modal {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  background: #000;
+  color: #fff;
+  border-radius: 18px;
+  padding: 32px 26px 26px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: otpPop 0.2s ease-out;
+}
+
+@keyframes otpPop {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.otp-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.otp-close:hover {
+  color: #fff;
+}
+
+.otp-title {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.otp-subtitle {
+  margin: 0 0 22px;
+  font-size: 13px;
+  color: #b5b5b5;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.otp-subtitle strong {
+  color: #fff;
+  font-weight: 500;
+}
+
+.otp-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.otp-box {
+  width: 44px;
+  height: 52px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 20px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.otp-box:focus {
+  border-color: #fff;
+  background: #222;
+}
+
+.otp-error {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #ff6b6b;
+}
+
+.otp-verify-btn {
+  width: 100%;
+  padding: 13px;
+  background: #fff;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.otp-verify-btn:hover:not(:disabled) {
+  opacity: 0.88;
+}
+
+.otp-verify-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.otp-resend-btn {
+  margin-top: 14px;
+  background: none;
+  border: none;
+  color: #b5b5b5;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.otp-resend-btn:hover:not(:disabled) {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.otp-resend-btn:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+@media (max-width: 400px) {
+  .otp-box {
+    width: 38px;
+    height: 46px;
+    font-size: 18px;
+  }
+  .otp-inputs {
+    gap: 6px;
+  }
+}
 /* =========================
    MOBILE
 ========================= */

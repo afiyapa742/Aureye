@@ -1,17 +1,15 @@
+// ==========================================================
+// FILE:  your profile CONTROLLER file   (REPLACE THE WHOLE FILE)
+// (the one that has getProfile, updateProfile,
+//  requestEmailChange, verifyEmailChange)
+// ==========================================================
+
 const profileService = require("../services/userprofile");
+
 
 // ==========================================
 // GET PROFILE
 // ==========================================
-const updateById = async (id, data) => {
-  return await User.findByIdAndUpdate(
-    id,
-    data,
-    {
-      new: true,
-    }
-  );
-};
 const getProfile = async (req, res) => {
   try {
     const user = await profileService.getProfile(req.user.id);
@@ -28,7 +26,6 @@ const getProfile = async (req, res) => {
 // ==========================================
 // UPDATE PROFILE
 // ==========================================
-
 const updateProfile = async (req, res) => {
   try {
     const { FullName, MobileNumber } = req.body;
@@ -61,7 +58,6 @@ const updateProfile = async (req, res) => {
     res.status(200).json({
       user: updatedUser,
     });
-
   } catch (error) {
     res.status(error.statusCode || 500).json({
       message: error.message,
@@ -71,9 +67,8 @@ const updateProfile = async (req, res) => {
 
 
 // ==========================================
-// REQUEST EMAIL CHANGE
+// REQUEST EMAIL CHANGE (send OTP)
 // ==========================================
-
 const requestEmailChange = async (req, res) => {
   try {
     const { newEmail } = req.body;
@@ -90,7 +85,6 @@ const requestEmailChange = async (req, res) => {
     );
 
     res.status(200).json(result);
-
   } catch (error) {
     res.status(error.statusCode || 500).json({
       message: error.message,
@@ -100,14 +94,13 @@ const requestEmailChange = async (req, res) => {
 
 
 // ==========================================
-// VERIFY EMAIL CHANGE
+// VERIFY EMAIL CHANGE (check OTP)
 // ==========================================
-
 const verifyEmailChange = async (req, res) => {
   try {
     const { otp } = req.body;
 
-    if (!otp || !otp.trim()) {
+    if (!otp || !String(otp).trim()) {
       return res.status(400).json({
         message: "OTP is required",
       });
@@ -115,11 +108,10 @@ const verifyEmailChange = async (req, res) => {
 
     const result = await profileService.verifyEmailChange(
       req.user.id,
-      otp
+      String(otp)
     );
 
     res.status(200).json(result);
-
   } catch (error) {
     res.status(error.statusCode || 500).json({
       message: error.message,
@@ -131,11 +123,9 @@ const verifyEmailChange = async (req, res) => {
 // ==========================================
 // EXPORT
 // ==========================================
-
 module.exports = {
   getProfile,
   updateProfile,
   requestEmailChange,
   verifyEmailChange,
-  updateById
 };
