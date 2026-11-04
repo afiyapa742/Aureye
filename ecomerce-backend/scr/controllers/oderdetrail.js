@@ -68,6 +68,10 @@ const getOrdermy = async (
 // CANCEL ORDER ITEM
 // ==========================================
 
+// ==========================================
+// CANCEL ORDER ITEM
+// ==========================================
+
 const cancelOrderItem = async (req, res) => {
   try {
     const userId = req.user?.id || req.user?._id;
@@ -90,7 +94,8 @@ const cancelOrderItem = async (req, res) => {
       });
     }
 
-    const cancelledItem = await CancelOrder(userId, itemId, reason);
+    // Order must match the service: (itemId, reason, userId)
+    const cancelledItem = await CancelOrder(itemId, reason, userId);
 
     return res.status(200).json({
       message: "Order item cancelled successfully",
