@@ -126,7 +126,7 @@ const EditOffer = () => {
   // =========================
   const fetchProducts = async () => {
     try {
-      const response = await api.get("/admin/product");
+      const response = await api.get("/product");
 
       console.log("PRODUCT RESPONSE:", response.data);
 
@@ -399,6 +399,7 @@ const EditOffer = () => {
                   <option value="">
                     Enter offer type
                   </option>
+                   <option value="common">Common (All Products)</option>
 
                   <option value="product">
                     Product
@@ -407,6 +408,7 @@ const EditOffer = () => {
                   <option value="category">
                     Category
                   </option>
+
                 </select>
               </div>
 

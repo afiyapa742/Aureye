@@ -5,7 +5,7 @@ const findByEmail = async (email) => {
 };
 
 const findById = async (id) => {
-  return await User.findById(id).select("+password");
+  return await User.findById(id);
 };
 
 const createUser = async (userData) => {
