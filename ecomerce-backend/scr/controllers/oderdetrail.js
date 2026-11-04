@@ -64,73 +64,44 @@ const getOrdermy = async (
 // ==========================================
 // CANCEL ORDER ITEM
 // ==========================================
+// ==========================================
+// CANCEL ORDER ITEM
+// ==========================================
 
-const cancelOrderItem = async (
-  req,
-  res
-) => {
-
+const cancelOrderItem = async (req, res) => {
   try {
+    const userId = req.user?.id || req.user?._id;
+    const { itemId } = req.params;
+    const { reason } = req.body;
 
-    const {
-      itemId,
-    } = req.params;
+    console.log("CANCEL USER ID:", userId);
+    console.log("CANCEL ITEM ID:", itemId);
+    console.log("CANCEL REASON:", reason);
 
-    const {
-      reason,
-    } = req.body;
-
-
-    console.log(
-      "CANCEL ITEM ID:",
-      itemId
-    );
-
-    console.log(
-      "CANCEL REASON:",
-      reason
-    );
-
-
-    if (!itemId) {
-
-      return res.status(400).json({
-        message:
-          "Order item ID is required",
+    if (!userId) {
+      return res.status(401).json({
+        message: "Please login to cancel an item",
       });
-
     }
 
+    if (!itemId) {
+      return res.status(400).json({
+        message: "Order item ID is required",
+      });
+    }
 
-    const cancelledItem =
-      await CancelOrder(
-        itemId,
-        reason
-      );
-
+    const cancelledItem = await CancelOrder(userId, itemId, reason);
 
     return res.status(200).json({
-
-      message:
-        "Order item cancelled successfully",
-
-      data:
-        cancelledItem,
+      message: "Order item cancelled successfully",
+      data: cancelledItem,
     });
-
-
   } catch (error) {
-
-    console.error(
-      "CANCEL ORDER ITEM ERROR:",
-      error
-    );
+    console.error("CANCEL ORDER ITEM ERROR:", error);
 
     return res.status(400).json({
-      message:
-        error.message,
+      message: error.message,
     });
-
   }
 };
 
